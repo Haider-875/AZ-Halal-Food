@@ -13,7 +13,31 @@ use App\Http\Controllers\Admin\SectionController as AdminSectionController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Admin\InquiryAdminController;
 use App\Http\Middleware\AdminMiddleware;
+use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
+
+// Helper route to run migrations and seeds on Vercel
+Route::get('/setup-database', function () {
+    try {
+        Artisan::call('migrate --force');
+        $migrateOutput = Artisan::output();
+
+        Artisan::call('db:seed --force');
+        $seedOutput = Artisan::output();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Database successfully migrated and seeded on TiDB Cloud!',
+            'migrate_output' => $migrateOutput,
+            'seed_output' => $seedOutput,
+        ]);
+    } catch (\Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+        ], 500);
+    }
+});
 
 // Public Customer Website Routes
 Route::get('/', [PageController::class, 'home'])->name('home');
