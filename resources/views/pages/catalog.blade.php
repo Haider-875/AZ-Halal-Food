@@ -11,7 +11,7 @@
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 75%);"></div>
     </div>
 
-    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;">
+    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;" data-aos="fade-down" data-aos-duration="700">
         <p class="section-label mb-3">Our Offerings</p>
         <h1 class="font-heading font-black text-uppercase text-parchment mb-3" style="font-size: clamp(2.5rem, 6vw, 5rem); line-height: 1.1;">
             Product <span class="text-gold">Catalog</span>
@@ -23,10 +23,10 @@
 </section>
 
 <!-- Search & Live Filter Controls -->
-<section class="py-4">
+<section class="py-4 overflow-hidden">
     <div class="container-xl">
-        
-        <div class="row g-3 justify-content-between align-items-center mb-4">
+
+        <div class="row g-3 justify-content-between align-items-center mb-4" data-aos="fade-down" data-aos-duration="700">
             <!-- Search Bar -->
             <div class="col-md-5">
                 <div class="position-relative">
@@ -54,13 +54,13 @@
         <!-- Inventory Grid -->
         <div class="row g-4" id="catalogProductsGrid">
             @foreach($products as $p)
-            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? '' }}" data-name="{{ strtolower($p->name) }}" data-desc="{{ strtolower($p->desc) }}">
+            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? '' }}" data-name="{{ strtolower($p->name) }}" data-desc="{{ strtolower($p->desc) }}" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 220px;">
                         <img src="{{ $p->img }}" alt="{{ $p->name }}" class="w-100 h-100 object-fit-cover">
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent 40%, rgba(13,23,13,0.9));"></div>
-                        
-                        {{-- 
+
+                        {{--
                         <!-- Stock Status Badge (Commented out per request) -->
                         @if($p->stock > 5)
                         <span class="position-absolute top-3 end-3 badge fw-bold" style="background-color: var(--gold); color: #0D170D; font-size: 8px; letter-spacing: 0.25em;">
@@ -91,20 +91,20 @@
                     <div class="p-4 d-flex flex-column flex-grow-1">
                         <h3 class="font-heading text-uppercase text-gold fw-bold fs-6 mb-2" style="letter-spacing: 0.05em;">{{ $p->name }}</h3>
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7; font-size: 13px;">{{ $p->desc }}</p>
-                        
+
                         <div class="d-flex align-items-center justify-content-between pt-3 border-top" style="border-color: rgba(212,175,55,0.15) !important;">
                             <span class="font-heading fw-bold fs-5 text-parchment">${{ number_format($p->price, 2) }}</span>
-                            <div class="card-action-container" 
-                                data-id="{{ $p->id }}" 
-                                data-name="{{ $p->name }}" 
-                                data-price="{{ $p->price }}" 
-                                data-sku="{{ $p->sku }}" 
+                            <div class="card-action-container"
+                                data-id="{{ $p->id }}"
+                                data-name="{{ $p->name }}"
+                                data-price="{{ $p->price }}"
+                                data-sku="{{ $p->sku }}"
                                 data-img="{{ $p->img }}">
-                                <button type="button" class="btn-gold-outline py-2 px-3 btn-add-to-cart" 
-                                    data-id="{{ $p->id }}" 
-                                    data-name="{{ $p->name }}" 
-                                    data-price="{{ $p->price }}" 
-                                    data-sku="{{ $p->sku }}" 
+                                <button type="button" class="btn-gold-outline py-2 px-3 btn-add-to-cart"
+                                    data-id="{{ $p->id }}"
+                                    data-name="{{ $p->name }}"
+                                    data-price="{{ $p->price }}"
+                                    data-sku="{{ $p->sku }}"
                                     data-img="{{ $p->img }}"
                                     style="font-size: 10px; letter-spacing: 0.2em;">
                                     <span>Add to Cart</span>

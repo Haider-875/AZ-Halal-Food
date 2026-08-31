@@ -90,6 +90,65 @@ class PageTest extends TestCase
         $response->assertStatus(200);
         $response->assertSee('Complete');
         $response->assertSee('Checkout');
+        $response->assertSee('Cash on Delivery');
+        $response->assertSee('Online Payment');
+    }
+
+    public function test_order_can_be_placed_with_cash_on_delivery(): void
+    {
+        $response = $this->post('/checkout', [
+            'customer_name' => 'Farhan Qureshi',
+            'customer_email' => 'farhan@example.com',
+            'customer_phone' => '919-555-8821',
+            'delivery_address' => '104 Stonegate Way',
+            'city' => 'Cary',
+            'postal_code' => '27519',
+            'delivery_type' => 'delivery',
+            'payment_method' => 'cash_on_delivery',
+            'notes' => 'Leave near front door',
+            'items' => [
+                [
+                    'id' => 1,
+                    'name' => 'T-Bone Steak',
+                    'price' => 18.99,
+                    'quantity' => 2,
+                    'img' => 'https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80',
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('orders', [
+            'customer_name' => 'Farhan Qureshi',
+            'payment_method' => 'cash_on_delivery',
+            'delivery_type' => 'delivery',
+        ]);
+    }
+
+    public function test_order_can_be_placed_with_online_payment(): void
+    {
+        $response = $this->post('/checkout', [
+            'customer_name' => 'Aisha Siddiqui',
+            'customer_email' => 'aisha@example.com',
+            'customer_phone' => '919-555-3344',
+            'delivery_type' => 'pickup',
+            'payment_method' => 'card',
+            'items' => [
+                [
+                    'id' => 2,
+                    'name' => 'Rib-Eye Steak',
+                    'price' => 22.99,
+                    'quantity' => 1,
+                ],
+            ],
+        ]);
+
+        $response->assertRedirect();
+        $this->assertDatabaseHas('orders', [
+            'customer_name' => 'Aisha Siddiqui',
+            'payment_method' => 'card',
+            'delivery_type' => 'pickup',
+        ]);
     }
 
     public function test_checkout_success_page_returns_successful_response(): void

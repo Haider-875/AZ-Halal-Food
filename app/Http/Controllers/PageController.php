@@ -2,17 +2,20 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\Product;
 use App\Models\Category;
 use App\Models\GalleryItem;
-use App\Models\SiteSection;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\SiteSection;
+use App\Models\Slider;
 use Illuminate\Http\Request;
 
 class PageController extends Controller
 {
     public function home()
     {
+        $sliders = Slider::active()->ordered()->get();
+
         $featured = Product::where('is_active', true)->where('is_featured', true)->take(3)->get();
         if ($featured->isEmpty()) {
             $featured = Product::where('is_active', true)->take(3)->get();
@@ -35,7 +38,7 @@ class PageController extends Controller
             'delivery_promo' => SiteSection::getValue('free_delivery_text', 'Free Delivery Within 10 Miles'),
         ];
 
-        return view('pages.home', compact('featured', 'highlights', 'sections'));
+        return view('pages.home', compact('sliders', 'featured', 'highlights', 'sections'));
     }
 
     public function about()

@@ -19,6 +19,9 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
+    <!-- AOS (Animate On Scroll) CSS -->
+    <link rel="stylesheet" href="https://unpkg.com/aos@2.3.1/dist/aos.css">
+
     <!-- Custom Theme CSS -->
     <link rel="stylesheet" href="/css/custom.css">
     @stack('styles')
@@ -26,7 +29,7 @@
 <body class="d-flex flex-column min-vh-100">
 
     <!-- Navigation Header -->
-    @include('partials.navbar') 
+    @include('partials.navbar')
 
     <!-- Main Content -->
     <main class="flex-grow-1">
@@ -44,6 +47,39 @@
 
     <!-- Bootstrap 5 Bundle JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
+    <!-- AOS (Animate On Scroll) JS -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>
+        (function () {
+            function initAOS() {
+                if (typeof AOS !== 'undefined') {
+                    AOS.init({
+                        duration: 700,
+                        easing: 'ease-out-cubic',
+                        once: true,
+                        offset: 50,
+                        mirror: false,
+                        debounceDelay: 50,
+                        throttleDelay: 99
+                    });
+                }
+            }
+
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', initAOS);
+            } else {
+                initAOS();
+            }
+
+            window.addEventListener('load', function () {
+                if (typeof AOS !== 'undefined') {
+                    AOS.refresh();
+                }
+            });
+        })();
+    </script>
+
     <!-- Custom Application JS -->
     <script src="/js/app.js"></script>
     @stack('scripts')

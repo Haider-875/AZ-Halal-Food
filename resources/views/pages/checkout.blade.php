@@ -4,10 +4,10 @@
 
 @section('content')
 
-<section class="py-5" style="padding-top: 140px !important;">
+<section class="py-5 overflow-hidden" style="padding-top: 140px !important;">
     <div class="container-xl" style="max-width: 1000px;">
-        
-        <div class="text-center mb-5">
+
+        <div class="text-center mb-5" data-aos="fade-down" data-aos-duration="700">
             <p class="section-label mb-2">Secure Order</p>
             <h1 class="font-heading font-black text-uppercase text-parchment mb-2" style="font-size: clamp(2rem, 4vw, 3.5rem);">
                 Complete <span class="text-gold">Checkout</span>
@@ -18,9 +18,9 @@
         </div>
 
         <div class="row g-4" id="checkoutMainContainer">
-            
+
             <!-- Checkout Form -->
-            <div class="col-lg-7">
+            <div class="col-lg-7" data-aos="fade-right" data-aos-duration="750">
                 <div class="luxury-card p-4 p-md-5">
                     <h4 class="font-heading text-gold mb-4 fw-bold text-uppercase" style="letter-spacing: 0.1em;">1. Customer & Delivery Info</h4>
 
@@ -49,10 +49,10 @@
                                         <input class="form-check-input" type="radio" name="delivery_type" id="dt_delivery" value="delivery" checked>
                                         <label class="form-check-label text-parchment" for="dt_delivery">Home Delivery (Free within 10 mi)</label>
                                     </div>
-                                    <div class="form-check">
+                                    {{-- <div class="form-check">
                                         <input class="form-check-input" type="radio" name="delivery_type" id="dt_pickup" value="pickup">
                                         <label class="form-check-label text-parchment" for="dt_pickup">Store Pickup (Cary)</label>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
 
@@ -78,14 +78,28 @@
 
                             <div class="col-12 pt-3">
                                 <label class="form-label small text-uppercase text-gold fw-semibold mb-2">Payment Method *</label>
-                                <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-50">
-                                    <div class="form-check mb-2">
-                                        <input class="form-check-input" type="radio" name="payment_method" id="pm_cod" value="cash_on_delivery" checked>
-                                        <label class="form-check-label text-parchment fw-semibold" for="pm_cod">
-                                            💵 Pay on Delivery / Pickup (Cash or Card)
-                                        </label>
+                                <div class="d-flex flex-column gap-3">
+                                    <!-- Option 1: Cash on Delivery -->
+                                    <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="pm_cod" value="cash_on_delivery" checked>
+                                            <label class="form-check-label text-parchment fw-semibold" for="pm_cod">
+                                                💵 Cash on Delivery
+                                            </label>
+                                        </div>
+                                        <p class="text-parchment-muted small mb-0 ps-4">Pay our driver in cash or card upon arrival, or at the register during store pickup.</p>
                                     </div>
-                                    <p class="text-parchment-muted small mb-0 ps-4">Pay our driver upon arrival or at the counter during store pickup.</p>
+
+                                    <!-- Option 2: Online Payment -->
+                                    <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-50">
+                                        <div class="form-check">
+                                            <input class="form-check-input" type="radio" name="payment_method" id="pm_online" value="card">
+                                            <label class="form-check-label text-parchment fw-semibold" for="pm_online">
+                                                💳 Online Payment (Credit / Debit Card)
+                                            </label>
+                                        </div>
+                                        <p class="text-parchment-muted small mb-0 ps-4">Pay securely online via credit/debit card.</p>
+                                    </div>
                                 </div>
                             </div>
 
@@ -100,7 +114,7 @@
             </div>
 
             <!-- Order Summary Sidebar -->
-            <div class="col-lg-5">
+            <div class="col-lg-5" data-aos="fade-left" data-aos-duration="800">
                 <div class="luxury-card p-4 p-md-5">
                     <h4 class="font-heading text-gold mb-4 fw-bold text-uppercase" style="letter-spacing: 0.1em;">2. Order Summary</h4>
 

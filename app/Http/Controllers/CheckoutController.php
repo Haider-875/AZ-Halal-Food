@@ -25,7 +25,7 @@ class CheckoutController extends Controller
             'city' => 'nullable|string|max:100',
             'postal_code' => 'nullable|string|max:20',
             'delivery_type' => 'required|in:pickup,delivery',
-            'payment_method' => 'required|in:cash_on_delivery,card',
+            'payment_method' => 'required|in:cash_on_delivery,card,online_payment,online',
             'notes' => 'nullable|string|max:1000',
             'items' => 'required|array|min:1',
             'items.*.id' => 'required|integer',
@@ -43,7 +43,7 @@ class CheckoutController extends Controller
         $deliveryFee = ($validated['delivery_type'] === 'delivery' && $subtotal < 50) ? 5.00 : 0.00;
         $totalAmount = $subtotal + $deliveryFee;
 
-        $orderNumber = 'AZ-' . strtoupper(Str::random(8));
+        $orderNumber = 'AZ-'.strtoupper(Str::random(8));
 
         $order = Order::create([
             'order_number' => $orderNumber,

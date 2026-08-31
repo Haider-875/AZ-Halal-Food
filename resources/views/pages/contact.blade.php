@@ -11,7 +11,7 @@
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 75%);"></div>
     </div>
 
-    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;">
+    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;" data-aos="fade-down" data-aos-duration="700">
         <p class="section-label mb-3">Get In Touch</p>
         <h1 class="font-heading font-black text-uppercase text-parchment mb-3" style="font-size: clamp(2.5rem, 6vw, 5.5rem); line-height: 1.1;">
             Visit <span class="text-gold">AZ Halal Marts</span>
@@ -27,12 +27,12 @@
 </section>
 
 <!-- Contact Cards Section -->
-<section class="py-5">
+<section class="py-5 overflow-hidden">
     <div class="container-xl">
-        
+
         <div class="row g-4 mb-5">
             <!-- Location Card -->
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="700" data-aos-delay="100">
                 <div class="luxury-card h-100 p-4 p-lg-5 d-flex flex-column">
                     <i class="bi bi-geo-alt fs-3 text-gold mb-3"></i>
                     <h3 class="font-heading text-uppercase text-gold fw-bold fs-5 mb-3" style="letter-spacing: 0.1em;">Location</h3>
@@ -48,7 +48,7 @@
             </div>
 
             <!-- Phone & Social Card -->
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="700" data-aos-delay="200">
                 <div class="luxury-card h-100 p-4 p-lg-5 d-flex flex-column">
                     <i class="bi bi-telephone fs-3 text-gold mb-3"></i>
                     <h3 class="font-heading text-uppercase text-gold fw-bold fs-5 mb-3" style="letter-spacing: 0.1em;">Phone & Social</h3>
@@ -75,7 +75,7 @@
             </div>
 
             <!-- Store Hours Card -->
-            <div class="col-md-4">
+            <div class="col-md-4" data-aos="fade-up" data-aos-duration="700" data-aos-delay="300">
                 <div class="luxury-card h-100 p-4 p-lg-5 d-flex flex-column">
                     <i class="bi bi-clock-history fs-3 text-gold mb-3"></i>
                     <h3 class="font-heading text-uppercase text-gold fw-bold fs-5 mb-3" style="letter-spacing: 0.1em;">Store Hours</h3>
@@ -92,12 +92,12 @@
         </div>
 
         <!-- Google Maps Embed -->
-        <div class="luxury-card p-1 mb-5">
+        <div class="luxury-card p-1 mb-5" data-aos="zoom-in" data-aos-duration="750">
             <iframe title="AZ Halal Marts Location" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3237.897!2d-78.908450!3d35.830783!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89ac9a9a7f5eeef1%3A0x1!2s716+Slash+Pine+Dr%2C+Cary%2C+NC+27519!5e0!3m2!1sen!2sus!4v1680000000000" width="100%" height="380" style="border:0; filter: invert(90%) hue-rotate(180deg) saturate(0.3) brightness(0.8);" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
 
         <!-- Wholesale & Business Inquiry Form -->
-        <div class="mx-auto" style="max-width: 800px;">
+        <div class="mx-auto" style="max-width: 800px;" data-aos="fade-up" data-aos-duration="750">
             <div class="text-center mb-4">
                 <p class="section-label">Business Inquiries</p>
                 <h2 class="font-heading font-black text-uppercase text-parchment mb-2" style="font-size: clamp(2rem, 4vw, 3rem);">
@@ -118,7 +118,7 @@
             </div>
             @else
             <div class="luxury-card p-4 p-md-5">
-                
+
                 <!-- Inquiry Type Selector -->
                 <div class="mb-4">
                     <label class="section-label mb-2" style="font-size: 10px;">Inquiry Type</label>

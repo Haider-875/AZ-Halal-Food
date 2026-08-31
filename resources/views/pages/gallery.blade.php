@@ -11,7 +11,7 @@
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 80%);"></div>
     </div>
 
-    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;">
+    <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 850px; margin: 0 auto;" data-aos="fade-down" data-aos-duration="700">
         <p class="section-label mb-3">Visual Archive</p>
         <h1 class="font-heading font-black text-uppercase text-parchment mb-3" style="font-size: clamp(2.5rem, 6vw, 5.5rem); line-height: 1.1;">
             The <span class="text-gold">Gallery</span>
@@ -23,11 +23,11 @@
 </section>
 
 <!-- Gallery Section -->
-<section class="py-5">
+<section class="py-5 overflow-hidden">
     <div class="container-xl">
-        
+
         <!-- Filter Tabs -->
-        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5">
+        <div class="d-flex flex-wrap justify-content-center gap-2 mb-5" data-aos="fade-down" data-aos-duration="700">
             @foreach($tags as $t)
             <button type="button" class="btn-filter gallery-filter-btn {{ $loop->first ? 'active' : '' }}" data-tag="{{ $t }}">
                 {{ $t }}
@@ -38,7 +38,7 @@
         <!-- Masonry Grid -->
         <div class="gallery-grid">
             @foreach($items as $item)
-            <div class="gallery-item" data-tag="{{ $item['tag'] }}" data-src="{{ $item['src'] }}" data-caption="{{ $item['caption'] }}">
+            <div class="gallery-item" data-tag="{{ $item['tag'] }}" data-src="{{ $item['src'] }}" data-caption="{{ $item['caption'] }}" data-aos="zoom-in" data-aos-duration="650" data-aos-delay="{{ ($loop->index % 4) * 80 }}">
                 <img src="{{ $item['src'] }}" alt="{{ $item['alt'] }}" loading="lazy">
                 <div class="gallery-overlay">
                     <span class="badge text-gold border mb-2 align-self-start" style="border-color: rgba(212,175,55,0.4) !important; background: rgba(13,23,13,0.85); font-size: 8px; letter-spacing: 0.25em;">

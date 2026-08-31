@@ -22,6 +22,10 @@
   box-sizing: border-box;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   background-color: var(--obsidian);
   color: var(--parchment);
@@ -31,6 +35,15 @@ body {
   margin: 0;
   padding: 0;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+/* Hardware Accelerated AOS Transitions for 60fps Smoothness */
+[data-aos] {
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+  will-change: transform, opacity;
+  transition-timing-function: cubic-bezier(0.25, 1, 0.5, 1) !important;
 }
 
 /* ========================================================
@@ -166,7 +179,7 @@ p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, 
   position: relative;
 }
 
-.nav-link-custom:hover, 
+.nav-link-custom:hover,
 .nav-link-custom.active {
   color: var(--gold);
 }

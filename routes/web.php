@@ -1,17 +1,18 @@
 <?php
 
-use App\Http\Controllers\PageController;
+use App\Http\Controllers\Admin\AuthController as AdminAuthController;
+use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
+use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
+use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
+use App\Http\Controllers\Admin\InquiryAdminController;
+use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\SectionController as AdminSectionController;
+use App\Http\Controllers\Admin\SliderController as AdminSliderController;
+use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\CheckoutController;
 use App\Http\Controllers\InquiryController;
-use App\Http\Controllers\Admin\AuthController as AdminAuthController;
-use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
-use App\Http\Controllers\Admin\ProductController as AdminProductController;
-use App\Http\Controllers\Admin\CategoryController as AdminCategoryController;
-use App\Http\Controllers\Admin\OrderController as AdminOrderController;
-use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
-use App\Http\Controllers\Admin\SectionController as AdminSectionController;
-use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Admin\InquiryAdminController;
+use App\Http\Controllers\PageController;
 use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
@@ -31,7 +32,7 @@ Route::get('/setup-database', function () {
             'migrate_output' => $migrateOutput,
             'seed_output' => $seedOutput,
         ]);
-    } catch (\Throwable $e) {
+    } catch (Throwable $e) {
         return response()->json([
             'status' => 'error',
             'message' => $e->getMessage(),
@@ -83,6 +84,9 @@ Route::prefix('admin')->name('admin.')->group(function () {
 
         // Gallery Items CRUD
         Route::resource('gallery', AdminGalleryController::class);
+
+        // Hero Sliders CRUD
+        Route::resource('sliders', AdminSliderController::class);
 
         // Dynamic Website Sections & Settings
         Route::get('sections', [AdminSectionController::class, 'index'])->name('sections.index');

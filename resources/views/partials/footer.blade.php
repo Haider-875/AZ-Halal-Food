@@ -1,9 +1,9 @@
-<footer style="background-color: var(--obsidian-dark); border-top: 1px solid var(--border-gold);" class="mt-auto">
+<footer style="background-color: var(--obsidian-dark); border-top: 1px solid var(--border-gold);" class="mt-auto overflow-hidden">
     <div class="container-xl py-5">
         <div class="row g-4 mb-5">
-            
+
             <!-- Brand Column -->
-            <div class="col-lg-4 col-md-6">
+            <div class="col-lg-4 col-md-6" data-aos="fade-up" data-aos-duration="700" data-aos-delay="50">
                 <div class="mb-3">
                     <span class="font-heading font-black text-gold text-uppercase fw-bold fs-4" style="letter-spacing: 0.2em;">AZ Halal Marts</span>
                 </div>
@@ -24,7 +24,7 @@
             </div>
 
             <!-- Quick Navigation -->
-            <div class="col-lg-2 col-md-6">
+            <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="100">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Navigate</h6>
                 <ul class="list-unstyled d-flex flex-column gap-2 small">
                     <li><a href="{{ route('home') }}" class="text-parchment-dim text-decoration-none hover-gold">Home</a></li>
@@ -37,7 +37,7 @@
             </div>
 
             <!-- Offerings -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="150">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Our Specialties</h6>
                 <ul class="list-unstyled d-flex flex-column gap-2 small">
                     <li class="text-parchment-dim">100% Hand-Slaughtered Zabiha Beef</li>
@@ -50,7 +50,7 @@
             </div>
 
             <!-- Contact & Hours Info -->
-            <div class="col-lg-3 col-md-6">
+            <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Store Info</h6>
                 <p class="text-parchment-dim small mb-2">
                     <i class="bi bi-geo-alt text-gold me-2"></i> 716 Slash Pine Dr, Cary, NC 27519
