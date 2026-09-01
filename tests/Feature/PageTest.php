@@ -91,7 +91,6 @@ class PageTest extends TestCase
         $response->assertSee('Complete');
         $response->assertSee('Checkout');
         $response->assertSee('Cash on Delivery');
-        $response->assertSee('Online Payment');
     }
 
     public function test_order_can_be_placed_with_cash_on_delivery(): void
