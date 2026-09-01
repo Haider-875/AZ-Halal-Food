@@ -12,4 +12,17 @@ class GalleryItem extends Model
         'is_active' => 'boolean',
         'display_order' => 'integer',
     ];
+
+    public function getSrcAttribute(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        if (str_starts_with($value, 'data:') || str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        return asset(ltrim($value, '/'));
+    }
 }

@@ -4,10 +4,9 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Models\Slider;
+use App\Services\ImageUploader;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class SliderController extends Controller
@@ -41,7 +40,7 @@ class SliderController extends Controller
             'badge' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
-            'image_url' => 'nullable|string|max:500',
+            'image_url' => 'nullable|string',
             'button_text' => 'nullable|string|max:100',
             'button_link' => 'nullable|string|max:255',
             'secondary_button_text' => 'nullable|string|max:100',
@@ -58,15 +57,7 @@ class SliderController extends Controller
         $imagePath = $request->image_url;
 
         if ($request->hasFile('image_file')) {
-            $uploadDirectory = public_path('uploads/sliders');
-            if (! File::isDirectory($uploadDirectory)) {
-                File::makeDirectory($uploadDirectory, 0755, true, true);
-            }
-
-            $file = $request->file('image_file');
-            $filename = 'slider_'.time().'_'.Str::random(10).'.'.$file->getClientOriginalExtension();
-            $file->move($uploadDirectory, $filename);
-            $imagePath = 'uploads/sliders/'.$filename;
+            $imagePath = ImageUploader::upload($request->file('image_file'), 'sliders');
         }
 
         Slider::create([
@@ -105,7 +96,7 @@ class SliderController extends Controller
             'badge' => 'nullable|string|max:100',
             'description' => 'nullable|string',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
-            'image_url' => 'nullable|string|max:500',
+            'image_url' => 'nullable|string',
             'button_text' => 'nullable|string|max:100',
             'button_link' => 'nullable|string|max:255',
             'secondary_button_text' => 'nullable|string|max:100',
@@ -117,20 +108,8 @@ class SliderController extends Controller
         $imagePath = $slider->image;
 
         if ($request->hasFile('image_file')) {
-            $uploadDirectory = public_path('uploads/sliders');
-            if (! File::isDirectory($uploadDirectory)) {
-                File::makeDirectory($uploadDirectory, 0755, true, true);
-            }
-
-            // Remove old uploaded file if it exists locally
-            if (! empty($slider->image) && ! str_starts_with($slider->image, 'http') && File::exists(public_path($slider->image))) {
-                File::delete(public_path($slider->image));
-            }
-
-            $file = $request->file('image_file');
-            $filename = 'slider_'.time().'_'.Str::random(10).'.'.$file->getClientOriginalExtension();
-            $file->move($uploadDirectory, $filename);
-            $imagePath = 'uploads/sliders/'.$filename;
+            ImageUploader::delete($slider->image);
+            $imagePath = ImageUploader::upload($request->file('image_file'), 'sliders');
         } elseif ($request->filled('image_url')) {
             $imagePath = $request->image_url;
         }
@@ -157,10 +136,7 @@ class SliderController extends Controller
      */
     public function destroy(Slider $slider): RedirectResponse
     {
-        if (! empty($slider->image) && ! str_starts_with($slider->image, 'http') && File::exists(public_path($slider->image))) {
-            File::delete(public_path($slider->image));
-        }
-
+        ImageUploader::delete($slider->image);
         $slider->delete();
 
         return redirect()->route('admin.sliders.index')->with('success', 'Slider deleted successfully.');

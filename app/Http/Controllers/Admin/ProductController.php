@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Product;
+use App\Services\ImageUploader;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\File;
 use Illuminate\Support\Str;
 
 class ProductController extends Controller
@@ -51,7 +51,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'sku' => 'nullable|string|max:50|unique:products,sku',
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
-            'img' => 'nullable|string|max:500',
+            'img' => 'nullable|string',
             'badge' => 'nullable|string|max:50',
             'stock' => 'required|integer|min:0',
             'is_featured' => 'nullable|boolean',
@@ -61,15 +61,7 @@ class ProductController extends Controller
         $imagePath = $validated['img'] ?? null;
 
         if ($request->hasFile('image_file')) {
-            $uploadDirectory = public_path('uploads/products');
-            if (! File::isDirectory($uploadDirectory)) {
-                File::makeDirectory($uploadDirectory, 0755, true, true);
-            }
-
-            $file = $request->file('image_file');
-            $filename = 'product_'.time().'_'.Str::random(10).'.'.$file->getClientOriginalExtension();
-            $file->move($uploadDirectory, $filename);
-            $imagePath = 'uploads/products/'.$filename;
+            $imagePath = ImageUploader::upload($request->file('image_file'), 'products');
         }
 
         $validated['img'] = $imagePath;
@@ -100,7 +92,7 @@ class ProductController extends Controller
             'price' => 'required|numeric|min:0',
             'sku' => "required|string|max:50|unique:products,sku,{$product->id}",
             'image_file' => 'nullable|image|mimes:jpeg,png,jpg,webp,gif,svg|max:5120',
-            'img' => 'nullable|string|max:500',
+            'img' => 'nullable|string',
             'badge' => 'nullable|string|max:50',
             'stock' => 'required|integer|min:0',
             'is_featured' => 'nullable|boolean',
@@ -110,21 +102,8 @@ class ProductController extends Controller
         $imagePath = $product->getRawOriginal('img') ?? $product->img;
 
         if ($request->hasFile('image_file')) {
-            $uploadDirectory = public_path('uploads/products');
-            if (! File::isDirectory($uploadDirectory)) {
-                File::makeDirectory($uploadDirectory, 0755, true, true);
-            }
-
-            // Remove old uploaded file if it exists locally
-            $rawImg = $product->getRawOriginal('img') ?? $product->img;
-            if (! empty($rawImg) && ! str_starts_with($rawImg, 'http') && File::exists(public_path($rawImg))) {
-                File::delete(public_path($rawImg));
-            }
-
-            $file = $request->file('image_file');
-            $filename = 'product_'.time().'_'.Str::random(10).'.'.$file->getClientOriginalExtension();
-            $file->move($uploadDirectory, $filename);
-            $imagePath = 'uploads/products/'.$filename;
+            ImageUploader::delete($product->getRawOriginal('img'));
+            $imagePath = ImageUploader::upload($request->file('image_file'), 'products');
         } elseif ($request->filled('img')) {
             $imagePath = $request->img;
         }
@@ -140,11 +119,7 @@ class ProductController extends Controller
 
     public function destroy(Product $product)
     {
-        $rawImg = $product->getRawOriginal('img') ?? $product->img;
-        if (! empty($rawImg) && ! str_starts_with($rawImg, 'http') && File::exists(public_path($rawImg))) {
-            File::delete(public_path($rawImg));
-        }
-
+        ImageUploader::delete($product->getRawOriginal('img'));
         $product->delete();
 
         return redirect()->route('admin.products.index')->with('success', 'Product deleted successfully.');

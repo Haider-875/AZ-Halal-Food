@@ -62,7 +62,7 @@ class Product extends Model
             return null;
         }
 
-        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+        if (str_starts_with($value, 'data:') || str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
             return $value;
         }
 

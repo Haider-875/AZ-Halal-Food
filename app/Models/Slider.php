@@ -38,7 +38,7 @@ class Slider extends Model
             return 'https://images.unsplash.com/photo-1544025162-d76694265947?w=1800&q=90';
         }
 
-        if (str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
+        if (str_starts_with($this->image, 'data:') || str_starts_with($this->image, 'http://') || str_starts_with($this->image, 'https://')) {
             return $this->image;
         }
 
