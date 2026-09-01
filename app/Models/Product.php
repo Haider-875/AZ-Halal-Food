@@ -35,10 +35,10 @@ class Product extends Model
         parent::boot();
         static::creating(function ($prod) {
             if (empty($prod->slug)) {
-                $prod->slug = Str::slug($prod->name) . '-' . strtolower(Str::random(4));
+                $prod->slug = Str::slug($prod->name).'-'.strtolower(Str::random(4));
             }
             if (empty($prod->sku)) {
-                $prod->sku = 'AZ-' . strtoupper(Str::random(6));
+                $prod->sku = 'AZ-'.strtoupper(Str::random(6));
             }
         });
     }
@@ -51,5 +51,21 @@ class Product extends Model
     public function subcategory(): BelongsTo
     {
         return $this->belongsTo(Subcategory::class);
+    }
+
+    /**
+     * Get the accessible public URL for the product image.
+     */
+    public function getImgAttribute(?string $value): ?string
+    {
+        if (empty($value)) {
+            return null;
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+            return $value;
+        }
+
+        return asset(ltrim($value, '/'));
     }
 }

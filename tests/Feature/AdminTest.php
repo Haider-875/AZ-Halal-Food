@@ -2,11 +2,12 @@
 
 namespace Tests\Feature;
 
-use App\Models\User;
 use App\Models\Category;
-use App\Models\Product;
 use App\Models\Order;
+use App\Models\Product;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
 class AdminTest extends TestCase
@@ -70,6 +71,59 @@ class AdminTest extends TestCase
         ]);
     }
 
+    public function test_admin_can_create_product_with_image_upload(): void
+    {
+        $admin = User::where('email', 'admin@azhalal.com')->first();
+        $category = Category::first();
+        $file = UploadedFile::fake()->image('test_product.jpg', 600, 400);
+
+        $response = $this->actingAs($admin)->post('/admin/products', [
+            'name' => 'Uploaded Organic Goat',
+            'category_id' => $category->id,
+            'price' => 22.50,
+            'sku' => 'GOAT-UPLOAD-1',
+            'stock' => 5,
+            'image_file' => $file,
+            'is_active' => 1,
+        ]);
+
+        $response->assertRedirect('/admin/products');
+        $product = Product::where('sku', 'GOAT-UPLOAD-1')->first();
+        $this->assertNotNull($product);
+        $this->assertStringContainsString('uploads/products/product_', $product->getRawOriginal('img'));
+
+        // Clean up test upload file if written
+        if (file_exists(public_path($product->getRawOriginal('img')))) {
+            unlink(public_path($product->getRawOriginal('img')));
+        }
+    }
+
+    public function test_admin_can_update_product_with_image_upload(): void
+    {
+        $admin = User::where('email', 'admin@azhalal.com')->first();
+        $product = Product::first();
+        $file = UploadedFile::fake()->image('updated_product.jpg', 600, 400);
+
+        $response = $this->actingAs($admin)->put("/admin/products/{$product->id}", [
+            'name' => 'Updated Product Name',
+            'category_id' => $product->category_id,
+            'price' => 29.99,
+            'sku' => $product->sku,
+            'stock' => 20,
+            'image_file' => $file,
+            'is_active' => 1,
+        ]);
+
+        $response->assertRedirect('/admin/products');
+        $product->refresh();
+        $this->assertEquals('Updated Product Name', $product->name);
+        $this->assertStringContainsString('uploads/products/product_', $product->getRawOriginal('img'));
+
+        if (file_exists(public_path($product->getRawOriginal('img')))) {
+            unlink(public_path($product->getRawOriginal('img')));
+        }
+    }
+
     public function test_admin_can_update_order_status(): void
     {
         $admin = User::where('email', 'admin@azhalal.com')->first();
@@ -104,11 +158,11 @@ class AdminTest extends TestCase
                 [
                     'id' => $product->id,
                     'name' => $product->name,
-                    'price' => (float)$product->price,
+                    'price' => (float) $product->price,
                     'quantity' => 2,
                     'img' => $product->img,
-                ]
-            ]
+                ],
+            ],
         ]);
 
         $response->assertStatus(200);

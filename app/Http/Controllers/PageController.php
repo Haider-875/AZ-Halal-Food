@@ -14,11 +14,19 @@ class PageController extends Controller
 {
     public function home()
     {
-        $sliders = Slider::active()->ordered()->get();
+        try {
+            $sliders = Slider::active()->ordered()->get();
+        } catch (\Throwable $e) {
+            $sliders = collect();
+        }
 
-        $featured = Product::where('is_active', true)->where('is_featured', true)->take(3)->get();
-        if ($featured->isEmpty()) {
-            $featured = Product::where('is_active', true)->take(3)->get();
+        try {
+            $featured = Product::where('is_active', true)->where('is_featured', true)->take(3)->get();
+            if ($featured->isEmpty()) {
+                $featured = Product::where('is_active', true)->take(3)->get();
+            }
+        } catch (\Throwable $e) {
+            $featured = collect();
         }
 
         $highlights = [
@@ -28,15 +36,27 @@ class PageController extends Controller
             ['icon' => 'bi-clock-history', 'label' => 'Fresh Daily', 'sub' => 'Never frozen'],
         ];
 
-        $sections = [
-            'tagline' => SiteSection::getValue('home_hero_tagline', '✦ Cary, North Carolina ✦'),
-            'title' => SiteSection::getValue('home_hero_title', 'Halal. The Art of Flavor.'),
-            'subtitle' => SiteSection::getValue('home_hero_subtitle', 'Premium Halal Meats · Seafood · Groceries'),
-            'story_title' => SiteSection::getValue('home_story_title', 'Where Faith Meets Excellence'),
-            'story_p1' => SiteSection::getValue('home_story_p1', 'AZ Halal Marts was built on one conviction: the Muslim community deserves access to premium-grade halal meats without compromise. Every cut is hand-selected, every animal Zabiha-certified.'),
-            'story_p2' => SiteSection::getValue('home_story_p2', 'From succulent T-bone steaks and rib-eyes to the finest Indian and Bangladeshi fish — Rohu, Katla, Hilsa — we source with intention and serve with pride.'),
-            'delivery_promo' => SiteSection::getValue('free_delivery_text', 'Free Delivery Within 10 Miles'),
-        ];
+        try {
+            $sections = [
+                'tagline' => SiteSection::getValue('home_hero_tagline', '✦ Cary, North Carolina ✦'),
+                'title' => SiteSection::getValue('home_hero_title', 'Halal. The Art of Flavor.'),
+                'subtitle' => SiteSection::getValue('home_hero_subtitle', 'Premium Halal Meats · Seafood · Groceries'),
+                'story_title' => SiteSection::getValue('home_story_title', 'Where Faith Meets Excellence'),
+                'story_p1' => SiteSection::getValue('home_story_p1', 'AZ Halal Marts was built on one conviction: the Muslim community deserves access to premium-grade halal meats without compromise. Every cut is hand-selected, every animal Zabiha-certified.'),
+                'story_p2' => SiteSection::getValue('home_story_p2', 'From succulent T-bone steaks and rib-eyes to the finest Indian and Bangladeshi fish — Rohu, Katla, Hilsa — we source with intention and serve with pride.'),
+                'delivery_promo' => SiteSection::getValue('free_delivery_text', 'Free Delivery Within 10 Miles'),
+            ];
+        } catch (\Throwable $e) {
+            $sections = [
+                'tagline' => '✦ Cary, North Carolina ✦',
+                'title' => 'Halal. The Art of Flavor.',
+                'subtitle' => 'Premium Halal Meats · Seafood · Groceries',
+                'story_title' => 'Where Faith Meets Excellence',
+                'story_p1' => 'AZ Halal Marts was built on one conviction: the Muslim community deserves access to premium-grade halal meats without compromise. Every cut is hand-selected, every animal Zabiha-certified.',
+                'story_p2' => 'From succulent T-bone steaks and rib-eyes to the finest Indian and Bangladeshi fish — Rohu, Katla, Hilsa — we source with intention and serve with pride.',
+                'delivery_promo' => 'Free Delivery Within 10 Miles',
+            ];
+        }
 
         return view('pages.home', compact('sliders', 'featured', 'highlights', 'sections'));
     }
@@ -80,22 +100,30 @@ class PageController extends Controller
 
     public function products()
     {
-        $categories = Category::where('is_active', true)->orderBy('display_order')->pluck('name')->toArray();
-        array_unshift($categories, 'All');
-
-        $products = Product::with('category')->where('is_active', true)->orderBy('name')->get();
-
-        $pricingPolicy = SiteSection::getValue('pricing_policy_text', 'Meat prices fluctuate with market conditions. We always offer competitive, fair pricing and never upcharge unfairly. Check our latest updates or reach out directly.');
+        try {
+            $categories = Category::where('is_active', true)->orderBy('display_order')->pluck('name')->toArray();
+            array_unshift($categories, 'All');
+            $products = Product::with('category')->where('is_active', true)->orderBy('name')->get();
+            $pricingPolicy = SiteSection::getValue('pricing_policy_text', 'Meat prices fluctuate with market conditions. We always offer competitive, fair pricing and never upcharge unfairly. Check our latest updates or reach out directly.');
+        } catch (\Throwable $e) {
+            $categories = ['All', 'Beef', 'Goat & Lamb', 'Seafood', 'Mango', 'Grocery'];
+            $products = collect();
+            $pricingPolicy = 'Meat prices fluctuate with market conditions. We always offer competitive, fair pricing and never upcharge unfairly. Check our latest updates or reach out directly.';
+        }
 
         return view('pages.products', compact('categories', 'products', 'pricingPolicy'));
     }
 
     public function catalog()
     {
-        $categories = Category::where('is_active', true)->orderBy('display_order')->pluck('name')->toArray();
-        array_unshift($categories, 'All');
-
-        $products = Product::with(['category', 'subcategory'])->where('is_active', true)->orderBy('name')->get();
+        try {
+            $categories = Category::where('is_active', true)->orderBy('display_order')->pluck('name')->toArray();
+            array_unshift($categories, 'All');
+            $products = Product::with(['category', 'subcategory'])->where('is_active', true)->orderBy('name')->get();
+        } catch (\Throwable $e) {
+            $categories = ['All', 'Beef', 'Goat & Lamb', 'Seafood', 'Mango', 'Grocery'];
+            $products = collect();
+        }
 
         return view('pages.catalog', compact('products', 'categories'));
     }
@@ -103,7 +131,11 @@ class PageController extends Controller
     public function gallery()
     {
         $tags = ['All', 'BEEF', 'GOAT', 'LAMB', 'SEAFOOD', 'MANGO', 'GROCERY'];
-        $items = GalleryItem::where('is_active', true)->orderBy('display_order')->get();
+        try {
+            $items = GalleryItem::where('is_active', true)->orderBy('display_order')->get();
+        } catch (\Throwable $e) {
+            $items = collect();
+        }
 
         return view('pages.gallery', compact('tags', 'items'));
     }
@@ -121,11 +153,19 @@ class PageController extends Controller
             ['day' => 'Sunday', 'hours' => '10:00 AM – 8:00 PM', 'closed' => false],
         ];
 
-        $phones = [
-            'primary' => SiteSection::getValue('store_phone_primary', '919-244-8634'),
-            'secondary' => SiteSection::getValue('store_phone_secondary', '919-344-1125'),
-            'address' => SiteSection::getValue('store_address', '716 Slash Pine Dr, Cary, NC 27519'),
-        ];
+        try {
+            $phones = [
+                'primary' => SiteSection::getValue('store_phone_primary', '919-244-8634'),
+                'secondary' => SiteSection::getValue('store_phone_secondary', '919-344-1125'),
+                'address' => SiteSection::getValue('store_address', '716 Slash Pine Dr, Cary, NC 27519'),
+            ];
+        } catch (\Throwable $e) {
+            $phones = [
+                'primary' => '919-244-8634',
+                'secondary' => '919-344-1125',
+                'address' => '716 Slash Pine Dr, Cary, NC 27519',
+            ];
+        }
 
         return view('pages.contact', compact('today', 'hours', 'phones'));
     }

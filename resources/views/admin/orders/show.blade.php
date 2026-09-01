@@ -77,7 +77,7 @@
 
     <!-- Customer & Status Updater Sidebar -->
     <div class="col-lg-4 d-flex flex-column gap-4">
-        
+
         <!-- Status Updater -->
         <div class="admin-card p-3">
             <h6 class="font-heading text-gold mb-3 fw-bold"><i class="bi bi-sliders me-2"></i> Update Order Status</h6>
