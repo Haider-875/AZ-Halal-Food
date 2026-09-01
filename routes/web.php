@@ -6,6 +6,7 @@ use App\Http\Controllers\Admin\DashboardController as AdminDashboardController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\InquiryAdminController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
+use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Admin\SectionController as AdminSectionController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
@@ -52,6 +53,8 @@ Route::post('/contact/inquiry', [InquiryController::class, 'store'])->name('inqu
 // Checkout & Order Placement Routes
 Route::get('/checkout', [CheckoutController::class, 'show'])->name('checkout');
 Route::post('/checkout', [CheckoutController::class, 'process'])->name('checkout.process');
+Route::post('/checkout/paypal/create', [CheckoutController::class, 'createPaypalOrder'])->name('checkout.paypal.create');
+Route::post('/checkout/paypal/capture', [CheckoutController::class, 'capturePaypalOrder'])->name('checkout.paypal.capture');
 Route::get('/checkout-success', [PageController::class, 'checkoutSuccess'])->name('checkout.success');
 
 // Standard Login Fallback
@@ -81,6 +84,11 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::get('orders/{order}', [AdminOrderController::class, 'show'])->name('orders.show');
         Route::patch('orders/{order}/status', [AdminOrderController::class, 'updateStatus'])->name('orders.status');
         Route::get('orders/{order}/invoice', [AdminOrderController::class, 'printInvoice'])->name('orders.invoice');
+
+        // Payments & Transactions Screen
+        Route::get('payments', [AdminPaymentController::class, 'index'])->name('payments.index');
+        Route::get('payments/{order}', [AdminPaymentController::class, 'show'])->name('payments.show');
+        Route::patch('payments/{order}/status', [AdminPaymentController::class, 'updateStatus'])->name('payments.status');
 
         // Gallery Items CRUD
         Route::resource('gallery', AdminGalleryController::class);
