@@ -47,7 +47,7 @@
                                 <div class="d-flex gap-3">
                                     <div class="form-check">
                                         <input class="form-check-input" type="radio" name="delivery_type" id="dt_delivery" value="delivery" checked>
-                                        <label class="form-check-label text-parchment" for="dt_delivery">Home Delivery (Free within 10 mi)</label>
+                                        <label class="form-check-label text-parchment" for="dt_delivery">Home Delivery (Free within 10 min)</label>
                                     </div>
                                     {{-- <div class="form-check">
                                         <input class="form-check-input" type="radio" name="delivery_type" id="dt_pickup" value="pickup">
