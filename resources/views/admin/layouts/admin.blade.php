@@ -188,6 +188,58 @@
             background-color: var(--gold);
             color: #070E07;
         }
+
+        /* Admin Pagination */
+        .pagination {
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+            margin: 0;
+            padding: 0;
+            list-style: none;
+        }
+
+        .pagination .page-item {
+            display: inline-flex;
+        }
+
+        .pagination .page-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 36px;
+            height: 36px;
+            padding: 0 0.75rem;
+            font-size: 12px;
+            font-weight: 500;
+            text-decoration: none;
+            background-color: var(--admin-card) !important;
+            color: var(--parchment) !important;
+            border: 1px solid var(--border-gold) !important;
+            border-radius: 4px !important;
+            transition: all 0.2s ease;
+        }
+
+        .pagination .page-item:not(.active):not(.disabled) .page-link:hover {
+            background-color: rgba(212, 175, 55, 0.15) !important;
+            color: var(--gold) !important;
+            border-color: var(--gold) !important;
+        }
+
+        .pagination .page-item.active .page-link {
+            background-color: var(--gold) !important;
+            color: var(--admin-bg) !important;
+            border-color: var(--gold) !important;
+            font-weight: 700 !important;
+        }
+
+        .pagination .page-item.disabled .page-link {
+            background-color: rgba(10, 19, 10, 0.4) !important;
+            color: var(--parchment-muted) !important;
+            border-color: rgba(212, 175, 55, 0.1) !important;
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 <body>
