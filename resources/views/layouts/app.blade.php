@@ -81,7 +81,7 @@
     </script>
 
     <!-- Custom Application JS -->
-    <script src="/js/app.js"></script>
+    <script src="/js/app.js?v={{ file_exists(public_path('js/app.js')) ? filemtime(public_path('js/app.js')) : time() }}"></script>
     @stack('scripts')
 </body>
 </html>

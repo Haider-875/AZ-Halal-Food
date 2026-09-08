@@ -54,7 +54,7 @@
         <!-- Inventory Grid -->
         <div class="row g-4" id="catalogProductsGrid">
             @foreach($products as $p)
-            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? '' }}" data-name="{{ strtolower($p->name) }}" data-desc="{{ strtolower($p->desc) }}" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
+            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? '' }}" data-name="{{ strtolower($p->name) }}" data-desc="{{ strtolower($p->desc) }}">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 220px;">
                         <img src="{{ $p->img }}" alt="{{ $p->name }}" class="w-100 h-100 object-fit-cover">
@@ -89,6 +89,16 @@
                     </div>
 
                     <div class="p-4 d-flex flex-column flex-grow-1">
+                        @if(!empty($p->category?->name))
+                        <div class="mb-1">
+                            <span class="text-gold text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.2em;">
+                                {{ $p->category->name }}
+                            </span>
+                            @if(!empty($p->subcategory?->name))
+                            <span class="text-parchment-dim small ms-1" style="font-size: 10px;">· {{ $p->subcategory->name }}</span>
+                            @endif
+                        </div>
+                        @endif
                         <h3 class="font-heading text-uppercase text-gold fw-bold fs-6 mb-2" style="letter-spacing: 0.05em;">{{ $p->name }}</h3>
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7; font-size: 13px;">{{ $p->desc }}</p>
 

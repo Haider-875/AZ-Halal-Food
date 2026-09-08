@@ -31,19 +31,57 @@
 <section class="py-5 overflow-hidden">
     <div class="container-xl">
 
+        <!-- Search Bar & Controls -->
+        <div class="row g-3 justify-content-center align-items-center mb-4" data-aos="fade-down" data-aos-duration="700">
+            <div class="col-md-6 col-lg-5">
+                <form action="{{ route('products') }}" method="GET" class="position-relative">
+                    @if(request('category') && strtolower(request('category')) !== 'all')
+                    <input type="hidden" name="category" value="{{ request('category') }}">
+                    @endif
+                    <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-gold"></i>
+                    <input type="text" name="search" class="gold-input ps-5 pe-5 w-100" placeholder="Search meats, seafood, groceries..." value="{{ request('search') }}">
+                    @if(request('search'))
+                    <a href="{{ request('category') ? route('products', ['category' => request('category')]) : route('products') }}" class="position-absolute top-50 end-0 translate-middle-y me-3 text-parchment-dim hover-gold" title="Clear search">
+                        <i class="bi bi-x-circle"></i>
+                    </a>
+                    @endif
+                </form>
+            </div>
+        </div>
+
         <!-- Category Filter Tabs -->
         <div class="d-flex flex-wrap justify-content-center gap-2 mb-5" data-aos="fade-down" data-aos-duration="700">
             @foreach($categories as $cat)
-            <button type="button" class="btn-filter catalog-filter-btn {{ $loop->first ? 'active' : '' }}" data-filter="{{ $cat }}">
+            @php
+                $isActive = (strtolower($selectedCategory ?? 'All') === strtolower($cat)) || (empty($selectedCategory) && $cat === 'All');
+                $catUrl = ($cat === 'All')
+                    ? (request('search') ? route('products', ['search' => request('search')]) : route('products'))
+                    : route('products', array_filter(['category' => $cat, 'search' => request('search')]));
+            @endphp
+            <a href="{{ $catUrl }}" class="btn-filter {{ $isActive ? 'active' : '' }}">
                 {{ $cat }}
-            </button>
+            </a>
             @endforeach
         </div>
 
+        @if($products->isEmpty())
+        <!-- No Results Fallback -->
+        <div id="catalogNoResults" class="text-center py-5">
+            <i class="bi bi-search text-gold opacity-50 fs-1"></i>
+            <p class="text-parchment-dim mt-3">No products match your filter or search criteria.</p>
+            @if(request('category') || request('search'))
+            <div class="mt-3">
+                <a href="{{ route('products') }}" class="btn-gold-outline d-inline-block">
+                    <span>View All Products</span>
+                </a>
+            </div>
+            @endif
+        </div>
+        @else
         <!-- Products Grid -->
         <div class="row g-4" id="productsGridContainer">
             @foreach($products as $p)
-            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p['category'] }}" data-name="{{ strtolower($p['name']) }}" data-desc="{{ strtolower($p['desc']) }}" data-aos="fade-up" data-aos-duration="700" data-aos-delay="{{ ($loop->index % 3) * 100 }}">
+            <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? ($p['category']['name'] ?? ($p['category'] ?? '')) }}" data-name="{{ strtolower($p['name'] ?? $p->name) }}" data-desc="{{ strtolower($p['desc'] ?? $p->desc) }}">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 230px;">
                         <img src="{{ $p['img'] }}" alt="{{ $p['name'] }}" class="w-100 h-100 object-fit-cover">
@@ -61,6 +99,16 @@
                     </div>
 
                     <div class="p-4 d-flex flex-column flex-grow-1">
+                        @if(!empty($p->category?->name))
+                        <div class="mb-1">
+                            <span class="text-gold text-uppercase fw-semibold" style="font-size: 10px; letter-spacing: 0.2em;">
+                                {{ $p->category->name }}
+                            </span>
+                            @if(!empty($p->subcategory?->name))
+                            <span class="text-parchment-dim small ms-1" style="font-size: 10px;">· {{ $p->subcategory->name }}</span>
+                            @endif
+                        </div>
+                        @endif
                         <h3 class="font-heading text-uppercase text-gold fw-bold fs-6 mb-2" style="letter-spacing: 0.05em;">{{ $p['name'] }}</h3>
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7; font-size: 13px;">{{ $p['desc'] }}</p>
 
@@ -88,6 +136,14 @@
             </div>
             @endforeach
         </div>
+
+        @if($products->hasPages())
+        <!-- Pagination Links -->
+        <div class="pagination-wrapper mt-5 d-flex justify-content-center">
+            {{ $products->links('pagination::bootstrap-5') }}
+        </div>
+        @endif
+        @endif
 
     </div>
 </section>
