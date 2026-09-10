@@ -31,6 +31,10 @@
             --font-body: 'Inter', system-ui, sans-serif;
         }
 
+        html {
+            overflow-x: hidden;
+        }
+
         body {
             background-color: var(--admin-bg);
             color: var(--parchment);
@@ -322,9 +326,88 @@
             box-shadow: 0 0 12px rgba(220, 53, 69, 0.35);
             transform: translateY(-1px);
         }
+        /* Sidebar mobile overlay backdrop */
+        .sidebar-backdrop {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.55);
+            z-index: 999;
+            backdrop-filter: blur(2px);
+            -webkit-backdrop-filter: blur(2px);
+        }
+        .sidebar-backdrop.show {
+            display: block;
+        }
+
+        /* Admin mobile responsive improvements */
+        @media (max-width: 767.98px) {
+            /* Header: shrink page title font on mobile */
+            header h5.font-heading {
+                font-size: 1rem;
+            }
+
+            /* Main content padding */
+            main.p-3 {
+                padding: 0.75rem !important;
+            }
+
+            /* Admin cards: reduce padding */
+            .admin-card .p-4 {
+                padding: 1rem !important;
+            }
+
+            /* Tables: always horizontally scrollable */
+            .admin-card .table-responsive {
+                -webkit-overflow-scrolling: touch;
+            }
+
+            /* Metric cards in dashboard: 2-per-row */
+            .col-sm-6 {
+                flex: 0 0 50%;
+                max-width: 50%;
+            }
+
+            /* Form rows in admin edit pages */
+            .row.g-3 > .col-md-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+        }
+
+        @media (max-width: 575.98px) {
+            /* Metric cards: full width on xs */
+            .col-sm-6 {
+                flex: 0 0 100%;
+                max-width: 100%;
+            }
+
+            /* Pagination in admin: smaller */
+            .pagination .page-link {
+                min-width: 30px;
+                height: 30px;
+                font-size: 11px;
+                padding: 0 0.5rem;
+            }
+
+            /* Btn groups: stack */
+            .d-flex.gap-2.flex-wrap {
+                flex-direction: column;
+            }
+
+            /* Table action buttons: smaller */
+            .admin-table .btn,
+            .admin-table .btn-sm {
+                padding: 0.3rem 0.5rem;
+                font-size: 11px;
+            }
+        }
     </style>
 </head>
 <body>
+
+    <!-- Mobile Sidebar Backdrop -->
+    <div class="sidebar-backdrop" id="sidebarBackdrop"></div>
 
     <!-- Sidebar -->
     <aside class="admin-sidebar d-flex flex-column justify-content-between p-3" id="adminSidebar">
@@ -472,13 +555,23 @@
         const sidebar = document.getElementById('adminSidebar');
         const toggleBtn = document.getElementById('sidebarToggleBtn');
         const closeBtn = document.getElementById('sidebarCloseBtn');
+        const backdrop = document.getElementById('sidebarBackdrop');
 
-        if (toggleBtn && sidebar) {
-            toggleBtn.addEventListener('click', () => sidebar.classList.toggle('show'));
+        function openSidebar() {
+            if (sidebar) { sidebar.classList.add('show'); }
+            if (backdrop) { backdrop.classList.add('show'); }
+            document.body.style.overflow = 'hidden';
         }
-        if (closeBtn && sidebar) {
-            closeBtn.addEventListener('click', () => sidebar.classList.remove('show'));
+
+        function closeSidebar() {
+            if (sidebar) { sidebar.classList.remove('show'); }
+            if (backdrop) { backdrop.classList.remove('show'); }
+            document.body.style.overflow = '';
         }
+
+        if (toggleBtn) { toggleBtn.addEventListener('click', openSidebar); }
+        if (closeBtn)  { closeBtn.addEventListener('click', closeSidebar); }
+        if (backdrop)  { backdrop.addEventListener('click', closeSidebar); }
     </script>
     @stack('scripts')
 </body>

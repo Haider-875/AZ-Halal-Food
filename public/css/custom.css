@@ -24,6 +24,7 @@
 
 html {
   scroll-behavior: smooth;
+  overflow-x: hidden;
 }
 
 body {
@@ -767,3 +768,186 @@ p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, 
   }
 }
 
+/* ========================================================
+   MOBILE RESPONSIVENESS — Full Site
+   Only layout, spacing, sizing. No color changes.
+   ======================================================== */
+
+/* ── Navbar ─────────────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  .site-navbar {
+    padding: 0.75rem 0;
+  }
+
+  .brand-title {
+    font-size: 1.05rem;
+  }
+
+  .brand-sub {
+    font-size: 8px;
+  }
+
+  .nav-cart-btn {
+    padding: 4px;
+  }
+}
+
+/* ── Buttons – stack full-width on xs ───────────────────── */
+@media (max-width: 575.98px) {
+  .btn-gold-outline,
+  .btn-saffron-outline {
+    width: 100%;
+    justify-content: center;
+    padding: 0.85rem 1.2rem;
+  }
+}
+
+/* ── Hero inner border frame ────────────────────────────── */
+@media (max-width: 575.98px) {
+  .position-absolute.m-3.m-md-5 {
+    margin: 0.5rem !important;
+  }
+
+  .scroll-line {
+    display: none;
+  }
+}
+
+/* ── Highlights strip – 2-per-row on xs ─────────────────── */
+@media (max-width: 575.98px) {
+  section .col-6.col-md-3 {
+    flex: 0 0 50%;
+    max-width: 50%;
+  }
+}
+
+/* ── Our Story image ────────────────────────────────────── */
+@media (max-width: 767.98px) {
+  .d-none.d-sm-block.pointer-events-none {
+    display: none !important;
+  }
+}
+
+@media (max-width: 575.98px) {
+  .col-lg-6 img[style*="height: 420px"] {
+    height: 220px !important;
+  }
+
+  section .p-5 {
+    padding: 1.75rem 1.25rem !important;
+  }
+}
+
+/* ── Product card image heights ─────────────────────────── */
+@media (max-width: 575.98px) {
+  .luxury-card .card-img-wrapper {
+    height: 200px !important;
+  }
+
+  .btn-filter {
+    padding: 0.5rem 0.9rem;
+    font-size: 9px;
+    letter-spacing: 0.15em;
+  }
+}
+
+/* ── Cart Offcanvas – full width on xs ──────────────────── */
+@media (max-width: 575.98px) {
+  .cart-offcanvas {
+    width: 100vw !important;
+  }
+
+  .mobile-nav-offcanvas {
+    width: 85vw !important;
+    max-width: 320px !important;
+  }
+}
+
+/* ── Floating WhatsApp ──────────────────────────────────── */
+@media (max-width: 767.98px) {
+  .floating-whatsapp {
+    bottom: 1rem;
+    right: 1rem;
+    padding: 0.6rem 1rem;
+    font-size: 11px;
+    letter-spacing: 0.1em;
+  }
+}
+
+@media (max-width: 400px) {
+  /* Icon-only on very small screens */
+  .floating-whatsapp .whatsapp-label {
+    display: none;
+  }
+  .floating-whatsapp {
+    padding: 0.65rem;
+    border-radius: 50%;
+  }
+  .floating-whatsapp i {
+    font-size: 1.35rem;
+    margin: 0;
+  }
+}
+
+/* ── Toast ──────────────────────────────────────────────── */
+@media (max-width: 575.98px) {
+  .az-toast {
+    width: 90vw;
+    text-align: center;
+    font-size: 11px;
+  }
+}
+
+/* ── Gallery ────────────────────────────────────────────── */
+@media (max-width: 575.98px) {
+  .gallery-grid {
+    column-count: 1;
+    column-gap: 0.75rem;
+  }
+}
+
+/* ── Footer – stack columns on mobile ───────────────────── */
+@media (max-width: 767.98px) {
+  footer .row.g-4 .col-md-6 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+/* ── Checkout – stack layout columns ───────────────────── */
+@media (max-width: 991.98px) {
+  #checkoutMainContainer > .col-lg-7,
+  #checkoutMainContainer > .col-lg-5 {
+    flex: 0 0 100%;
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 575.98px) {
+  section[style*="padding-top: 140px"] {
+    padding-top: 100px !important;
+  }
+}
+
+/* ── Rows – tighten gutters on xs ───────────────────────── */
+@media (max-width: 575.98px) {
+  .row.g-4 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 1rem;
+  }
+
+  .row.g-5 {
+    --bs-gutter-x: 1rem;
+    --bs-gutter-y: 2rem;
+  }
+}
+
+/* ── Pagination – smaller touch targets ─────────────────── */
+@media (max-width: 575.98px) {
+  .pagination .page-link {
+    min-width: 32px;
+    height: 32px;
+    font-size: 11px;
+    padding: 0 0.6rem;
+  }
+}
