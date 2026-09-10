@@ -49,13 +49,24 @@
             width: 260px;
             background-color: var(--admin-sidebar);
             border-right: 1px solid var(--border-gold);
-            min-height: 100vh;
+            height: 100vh;
             position: fixed;
             top: 0;
             left: 0;
             bottom: 0;
             z-index: 1000;
             transition: all 0.3s ease;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+
+        .admin-sidebar::-webkit-scrollbar {
+            width: 4px;
+        }
+
+        .admin-sidebar::-webkit-scrollbar-thumb {
+            background: rgba(212, 175, 55, 0.2);
+            border-radius: 4px;
         }
 
         .admin-main {
@@ -240,6 +251,75 @@
             opacity: 0.5;
             cursor: not-allowed;
         }
+
+        /* Sidebar Quick Action Buttons (Store & Exit) */
+        .admin-sidebar-actions {
+            display: flex;
+            gap: 0.5rem;
+            align-items: center;
+            width: 100%;
+        }
+
+        .admin-sidebar-actions .admin-btn-store,
+        .admin-sidebar-actions .admin-btn-exit {
+            flex: 1 1 0;
+            width: 100%;
+            min-width: 0;
+            height: 38px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.45rem;
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+            padding: 0 0.5rem;
+            white-space: nowrap;
+            box-sizing: border-box;
+            outline: none;
+        }
+
+        .admin-sidebar-actions .admin-btn-store {
+            background-color: rgba(212, 175, 55, 0.08);
+            color: var(--gold);
+            border: 1px solid var(--border-gold);
+        }
+
+        .admin-sidebar-actions .admin-btn-store:hover {
+            background-color: var(--gold);
+            color: var(--admin-bg);
+            border-color: var(--gold);
+            box-shadow: 0 0 12px rgba(212, 175, 55, 0.3);
+            transform: translateY(-1px);
+        }
+
+        .admin-sidebar-actions .admin-exit-form {
+            flex: 1 1 0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            min-width: 0;
+            width: 100%;
+        }
+
+        .admin-sidebar-actions .admin-btn-exit {
+            background-color: rgba(220, 53, 69, 0.08);
+            color: #f87171;
+            border: 1px solid rgba(220, 53, 69, 0.25);
+            cursor: pointer;
+        }
+
+        .admin-sidebar-actions .admin-btn-exit:hover {
+            background-color: #dc3545;
+            color: #ffffff;
+            border-color: #dc3545;
+            box-shadow: 0 0 12px rgba(220, 53, 69, 0.35);
+            transform: translateY(-1px);
+        }
     </style>
 </head>
 <body>
@@ -267,6 +347,9 @@
                     @if($pendingCount > 0)
                         <span class="badge bg-warning text-dark ms-auto" style="font-size: 10px;">{{ $pendingCount }}</span>
                     @endif
+                </a>
+                <a href="{{ route('admin.payments.index') }}" class="admin-nav-link {{ request()->routeIs('admin.payments.*') ? 'active' : '' }}">
+                    <i class="bi bi-credit-card-2-front"></i> Payments & PayPal
                 </a>
                 <a href="{{ route('admin.products.index') }}" class="admin-nav-link {{ request()->routeIs('admin.products.*') ? 'active' : '' }}">
                     <i class="bi bi-egg-fried"></i> Foods / Products
@@ -302,13 +385,13 @@
                     <span class="badge bg-secondary text-uppercase" style="font-size: 8px; letter-spacing: 0.15em;">{{ Auth::user()->role ?? 'Admin' }}</span>
                 </div>
             </div>
-            <div class="d-flex gap-2">
-                <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary w-50" title="View Storefront">
-                    <i class="bi bi-eye"></i> Store
+            <div class="admin-sidebar-actions">
+                <a href="{{ route('home') }}" target="_blank" class="btn btn-secondary admin-btn-store" title="View Storefront">
+                    <i class="bi bi-shop"></i> Store
                 </a>
-                <form action="{{ route('admin.logout') }}" method="POST" class="w-50">
+                <form action="{{ route('admin.logout') }}" method="POST" class="admin-exit-form">
                     @csrf
-                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
+                    <button type="submit" class="btn btn-warning admin-btn-exit" title="Log Out of Admin">
                         <i class="bi bi-box-arrow-right"></i> Exit
                     </button>
                 </form>
