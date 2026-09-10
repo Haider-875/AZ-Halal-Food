@@ -107,33 +107,39 @@
                             </div>
 
                             <!-- PayPal Payment Container -->
-                            <div class="col-12 pt-4 d-none" id="paypal-button-container">
+                            <div class="col-12 pt-4 d-none" id="paypal-payment-section">
                                 <div class="p-4 border border-gold border-opacity-50 rounded bg-dark bg-opacity-90">
                                     <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom border-secondary border-opacity-25">
                                         <div class="d-flex align-items-center gap-2">
                                             <i class="bi bi-paypal fs-4 text-info"></i>
                                             <div>
                                                 <div class="text-parchment fw-bold small">PayPal Express Checkout</div>
-                                                <div class="text-parchment-muted" style="font-size: 11px;">Sandbox & Live Payment Gateway</div>
+                                                <div class="text-parchment-muted" style="font-size: 11px;">
+                                                    {{ ($paypalMode ?? 'sandbox') === 'sandbox' ? 'PayPal Sandbox Test Mode' : 'Live Secure PayPal Gateway' }}
+                                                </div>
                                             </div>
                                         </div>
                                         <span class="badge bg-gold text-dark px-2 py-1" style="font-size: 10px;">SECURE 256-BIT</span>
                                     </div>
 
-                                    <!-- Interactive PayPal Sandbox Checkout Buttons -->
-                                    <div id="paypal-interactive-buttons" class="d-flex flex-column gap-2">
-                                        <button type="button" id="btnPaypalExpress" class="btn w-100 py-3 d-flex align-items-center justify-content-center gap-2 fw-bold" style="background: #FFC439; color: #003087; border-radius: 4px; font-size: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.3); border: none; transition: transform 0.15s ease, background 0.15s ease;">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 24 24" fill="#003087"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.82.872 4.965-.034.168-.073.333-.117.496-.983 4.41-3.957 6.643-8.837 6.643H8.384l-1.308 7.426zm9.324-14.733c-.015-.098-.035-.195-.06-.293-.728-2.316-2.92-3.32-6.523-3.32H6.942l-2.02 12.87h2.894l.872-5.522c.082-.519.53-.901 1.054-.901h1.795c3.702 0 6.06-1.782 6.863-5.384z"/></svg>
-                                            <span>Pay with <strong style="color: #003087;">Pay</strong><strong style="color: #0079C1;">Pal</strong></span>
-                                        </button>
-                                        <button type="button" id="btnPaypalCard" class="btn w-100 py-2 d-flex align-items-center justify-content-center gap-2 fw-semibold text-light" style="background: #2C2E2F; border: 1px solid #555; border-radius: 4px; font-size: 14px;">
-                                            <i class="bi bi-credit-card-2-front text-gold"></i>
-                                            <span>Debit or Credit Card</span>
-                                        </button>
+                                    <!-- Loading / Authorizing Spinner Overlay -->
+                                    <div id="paypal-processing-spinner" class="d-none text-center py-4">
+                                        <div class="spinner-border text-warning" role="status" style="width: 2.5rem; height: 2.5rem;">
+                                            <span class="visually-hidden">Processing...</span>
+                                        </div>
+                                        <div class="text-gold fw-semibold mt-3 small" id="paypal-processing-text">
+                                            Authorizing PayPal payment & securing your order...
+                                        </div>
+                                        <div class="text-parchment-muted mt-1" style="font-size: 11px;">
+                                            Please do not refresh or close this window.
+                                        </div>
                                     </div>
 
+                                    <!-- Real PayPal Smart Payment Buttons Mount Target -->
+                                    <div id="paypal-button-container" class="mt-2"></div>
+
                                     <div class="text-center mt-3 text-parchment-muted" style="font-size: 11px;">
-                                        <i class="bi bi-shield-lock-fill text-gold me-1"></i> Sandbox Test Mode enabled · Complete order without actual credit card charge.
+                                        <i class="bi bi-shield-lock-fill text-gold me-1"></i> Pay securely using your PayPal account balance or credit/debit card.
                                     </div>
                                 </div>
                             </div>
@@ -183,120 +189,25 @@
     </div>
 </section>
 
-<!-- PayPal Sandbox Checkout Modal -->
-<div class="modal fade" id="paypalSandboxModal" tabindex="-1" aria-labelledby="paypalSandboxModalLabel" aria-hidden="true" data-bs-backdrop="static">
-    <div class="modal-dialog modal-dialog-centered" style="max-width: 480px;">
-        <div class="modal-content text-dark border-0 shadow-lg" style="background: #FFFFFF; border-radius: 12px; overflow: hidden; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;">
-            <!-- Authentic PayPal Header -->
-            <div class="d-flex align-items-center justify-content-between px-4 py-3" style="background: #003087;">
-                <div class="d-flex align-items-center gap-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="#FFFFFF"><path d="M7.076 21.337H2.47a.641.641 0 0 1-.633-.74L4.944.901C5.026.382 5.474 0 5.998 0h7.46c2.57 0 4.578.543 5.69 1.81 1.01 1.15 1.304 2.82.872 4.965-.034.168-.073.333-.117.496-.983 4.41-3.957 6.643-8.837 6.643H8.384l-1.308 7.426zm9.324-14.733c-.015-.098-.035-.195-.06-.293-.728-2.316-2.92-3.32-6.523-3.32H6.942l-2.02 12.87h2.894l.872-5.522c.082-.519.53-.901 1.054-.901h1.795c3.702 0 6.06-1.782 6.863-5.384z"/></svg>
-                    <span style="color: #FFFFFF; font-size: 18px; font-weight: 700; letter-spacing: -0.5px;">PayPal <span class="badge bg-warning text-dark text-uppercase ms-1" style="font-size: 10px; vertical-align: middle;">Sandbox</span></span>
-                </div>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-
-            <div class="modal-body p-4" style="background: #FAFAFA;">
-                <!-- Store & Total Due -->
-                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 mb-3" style="background: #FFFFFF; border: 1px solid #E5E7EB;">
-                    <div>
-                        <div class="text-muted small">Merchant</div>
-                        <div class="fw-bold text-dark" style="font-size: 15px;">AZ Halal Marts LLC</div>
-                        <div class="text-secondary small" style="font-size: 11px;">West Cary, NC · 100% Zabiha Halal</div>
-                    </div>
-                    <div class="text-end">
-                        <div class="text-muted small">Total Due</div>
-                        <div class="fw-bold fs-4" style="color: #003087;" id="paypalModalAmount">$0.00 USD</div>
-                    </div>
-                </div>
-
-                <!-- Sandbox Buyer Info -->
-                <div class="p-3 rounded-3 mb-3" style="background: #FFFFFF; border: 1px solid #E5E7EB;">
-                    <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="text-muted small fw-semibold">Sandbox Account</span>
-                        <span class="badge bg-success-subtle text-success border border-success-subtle" style="font-size: 11px;">✓ Authenticated</span>
-                    </div>
-                    <div class="d-flex align-items-center gap-2 mb-2">
-                        <i class="bi bi-person-circle fs-4 text-primary"></i>
-                        <div class="min-w-0">
-                            <div class="fw-semibold text-truncate text-dark small" id="paypalModalCustomer">Buyer</div>
-                            <div class="text-muted text-truncate" style="font-size: 11px;" id="paypalModalEmail">buyer@sandbox.paypal.com</div>
-                        </div>
-                    </div>
-                    <div class="border-top pt-2 mt-2 text-muted" style="font-size: 11px;">
-                        <i class="bi bi-geo-alt-fill text-danger me-1"></i> Destination: <span class="text-dark fw-semibold" id="paypalModalAddress">—</span>
-                    </div>
-                </div>
-
-                <!-- Funding Source Selection -->
-                <div class="p-3 rounded-3 mb-3" style="background: #FFFFFF; border: 1px solid #E5E7EB;">
-                    <div class="text-muted small fw-semibold mb-2">Payment Method</div>
-                    <div class="form-check d-flex align-items-center justify-content-between py-2 border-bottom">
-                        <div class="d-flex align-items-center gap-2">
-                            <input class="form-check-input mt-0" type="radio" name="paypal_funding_source" id="pf_balance" value="balance" checked>
-                            <label class="form-check-label text-dark small fw-semibold" for="pf_balance">
-                                <i class="bi bi-wallet2 text-primary me-1"></i> PayPal Balance ($5,000.00 USD)
-                            </label>
-                        </div>
-                        <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px;">Instant</span>
-                    </div>
-                    <div class="form-check d-flex align-items-center justify-content-between pt-2">
-                        <div class="d-flex align-items-center gap-2">
-                            <input class="form-check-input mt-0" type="radio" name="paypal_funding_source" id="pf_card" value="card">
-                            <label class="form-check-label text-dark small fw-semibold" for="pf_card">
-                                <i class="bi bi-credit-card-fill text-warning me-1"></i> Visa Sandbox Card (•••• 4242)
-                            </label>
-                        </div>
-                        <span class="badge bg-secondary-subtle text-secondary" style="font-size: 10px;">Preferred</span>
-                    </div>
-                </div>
-
-                <!-- Status Alert Box -->
-                <div id="paypalModalStatus" class="alert alert-info py-2 px-3 small d-none mb-3 border-0" style="background: #E0F2FE; color: #0369A1;">
-                    <div class="d-flex align-items-center gap-2">
-                        <div class="spinner-border spinner-border-sm text-primary" role="status"></div>
-                        <span id="paypalModalStatusText" class="fw-semibold">Authorizing PayPal payment...</span>
-                    </div>
-                </div>
-
-                <!-- Complete Payment Button -->
-                <button type="button" id="btnConfirmPaypalPayment" class="btn w-100 py-3 fw-bold d-flex align-items-center justify-content-center gap-2" style="background: #FFC439; color: #111; font-size: 16px; border-radius: 6px; border: none; box-shadow: 0 2px 6px rgba(0,0,0,0.15);">
-                    <i class="bi bi-shield-check fs-5" style="color: #003087;"></i>
-                    <span>Complete Sandbox Payment</span>
-                </button>
-
-                <div class="text-center mt-3">
-                    <button type="button" class="btn btn-link text-muted text-decoration-none p-0" style="font-size: 12px;" data-bs-dismiss="modal">
-                        Cancel and return to checkout
-                    </button>
-                </div>
-            </div>
-
-            <!-- Footer -->
-            <div class="d-flex align-items-center justify-content-between px-4 py-2 border-top" style="background: #F3F4F6; font-size: 11px; color: #6B7280;">
-                <span><i class="bi bi-lock-fill text-success me-1"></i> 256-Bit SSL Encrypted</span>
-                <span>PayPal Express Sandbox Gateway</span>
-            </div>
-        </div>
-    </div>
-</div>
-
 @endsection
 
 @push('scripts')
+<script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId ?? config('services.paypal.client_id', 'sb') }}&currency={{ $paypalCurrency ?? config('services.paypal.currency', 'USD') }}&intent=capture&enable-funding=venmo,card"></script>
 <script>
+let paypalButtonsRendered = false;
+
 function selectPaymentMethod(method) {
     const pmCod = document.getElementById('pm_cod');
     const pmPaypal = document.getElementById('pm_paypal');
     const codContainer = document.getElementById('cod-button-container');
-    const paypalContainer = document.getElementById('paypal-button-container');
+    const paypalSection = document.getElementById('paypal-payment-section');
     const cardCod = document.getElementById('card_pm_cod');
     const cardPaypal = document.getElementById('card_pm_paypal');
 
     if (method === 'paypal') {
         if (pmPaypal) pmPaypal.checked = true;
         if (codContainer) codContainer.classList.add('d-none');
-        if (paypalContainer) paypalContainer.classList.remove('d-none');
+        if (paypalSection) paypalSection.classList.remove('d-none');
         if (cardPaypal) {
             cardPaypal.classList.add('border-gold');
             cardPaypal.classList.remove('border-secondary');
@@ -305,10 +216,11 @@ function selectPaymentMethod(method) {
             cardCod.classList.remove('border-gold');
             cardCod.classList.add('border-secondary');
         }
+        renderPaypalSmartButtons();
     } else {
         if (pmCod) pmCod.checked = true;
         if (codContainer) codContainer.classList.remove('d-none');
-        if (paypalContainer) paypalContainer.classList.add('d-none');
+        if (paypalSection) paypalSection.classList.add('d-none');
         if (cardCod) {
             cardCod.classList.add('border-gold');
             cardCod.classList.remove('border-secondary');
@@ -320,6 +232,201 @@ function selectPaymentMethod(method) {
     }
 }
 
+function showPaypalProcessing(isProcessing, message) {
+    const spinner = document.getElementById('paypal-processing-spinner');
+    const textEl = document.getElementById('paypal-processing-text');
+    const btnContainer = document.getElementById('paypal-button-container');
+
+    if (spinner && btnContainer) {
+        if (isProcessing) {
+            if (message && textEl) textEl.textContent = message;
+            spinner.classList.remove('d-none');
+            btnContainer.classList.add('d-none');
+        } else {
+            spinner.classList.add('d-none');
+            btnContainer.classList.remove('d-none');
+        }
+    }
+}
+
+function renderPaypalSmartButtons() {
+    if (paypalButtonsRendered) return;
+    const target = document.getElementById('paypal-button-container');
+    if (!target) return;
+
+    if (typeof paypal === 'undefined') {
+        target.innerHTML = `
+            <div class="alert alert-warning small text-center my-2">
+                <i class="bi bi-exclamation-triangle-fill me-1"></i> PayPal SDK is loading or blocked by browser extension. Please refresh or select Cash on Delivery.
+            </div>
+        `;
+        return;
+    }
+
+    paypalButtonsRendered = true;
+    target.innerHTML = '';
+
+    paypal.Buttons({
+        style: {
+            layout: 'vertical',
+            color: 'gold',
+            shape: 'rect',
+            label: 'paypal',
+            height: 48
+        },
+        onClick: function(data, actions) {
+            if (!validateCustomerForm()) {
+                return actions.reject();
+            }
+            return actions.resolve();
+        },
+        createOrder: async function(data, actions) {
+            const form = document.getElementById('checkoutOrderForm');
+            const items = window.AZCart ? window.AZCart.items : [];
+            const formData = form ? new FormData(form) : new FormData();
+            const { total } = getCartTotal();
+
+            // First attempt to create order through backend (if PayPal API configured)
+            try {
+                const res = await fetch('{{ route('checkout.paypal.create') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify({
+                        items: items,
+                        delivery_type: formData.get('delivery_type'),
+                    })
+                });
+
+                const orderData = await res.json();
+                if (orderData.success && orderData.order_id) {
+                    return orderData.order_id;
+                }
+            } catch (e) {
+                console.warn('Backend PayPal order creation fallback to client-side:', e);
+            }
+
+            // Client-side order creation using PayPal SDK
+            return actions.order.create({
+                purchase_units: [{
+                    description: 'AZ Halal Marts Order',
+                    amount: {
+                        currency_code: '{{ $paypalCurrency ?? config('services.paypal.currency', 'USD') }}',
+                        value: total.toFixed(2)
+                    }
+                }]
+            });
+        },
+        onApprove: async function(data, actions) {
+            showPaypalProcessing(true, 'Authorizing & capturing payment with PayPal...');
+
+            try {
+                // Capture the real transaction on PayPal
+                const details = await actions.order.capture();
+
+                showPaypalProcessing(true, 'Payment captured! Securing order in store...');
+
+                const form = document.getElementById('checkoutOrderForm');
+                const items = window.AZCart ? window.AZCart.items : [];
+                const formData = form ? new FormData(form) : new FormData();
+                const captureId = details?.purchase_units?.[0]?.payments?.captures?.[0]?.id || details?.id || data.orderID;
+
+                const payload = {
+                    customer_name: formData.get('customer_name'),
+                    customer_email: formData.get('customer_email'),
+                    customer_phone: formData.get('customer_phone'),
+                    delivery_address: formData.get('delivery_address'),
+                    city: formData.get('city'),
+                    postal_code: formData.get('postal_code'),
+                    delivery_type: formData.get('delivery_type'),
+                    notes: formData.get('notes'),
+                    paypal_order_id: data.orderID,
+                    transaction_id: captureId,
+                    payer_details: {
+                        payer_id: details?.payer?.payer_id || data.payerID,
+                        payer_email: details?.payer?.email_address || formData.get('customer_email'),
+                        payer_name: ((details?.payer?.name?.given_name || '') + ' ' + (details?.payer?.name?.surname || '')).trim() || formData.get('customer_name'),
+                        status: details?.status || 'COMPLETED',
+                        amount: details?.purchase_units?.[0]?.amount?.value || getCartTotal().total
+                    },
+                    items: items
+                };
+
+                const response = await fetch('{{ route('checkout.paypal.capture') }}', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json',
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}'
+                    },
+                    body: JSON.stringify(payload)
+                });
+
+                const serverRes = await response.json();
+                if (serverRes.success && serverRes.redirect) {
+                    if (window.AZCart) window.AZCart.clear();
+                    window.location.href = serverRes.redirect;
+                } else {
+                    alert(serverRes.message || 'Payment was captured on PayPal, but saving the order in the system failed. Please save your PayPal Transaction ID: ' + captureId);
+                    showPaypalProcessing(false);
+                }
+            } catch (err) {
+                console.error('PayPal Capture Error:', err);
+                alert('An error occurred during PayPal capture: ' + (err.message || 'Unknown error'));
+                showPaypalProcessing(false);
+            }
+        },
+        onError: function(err) {
+            console.error('PayPal SDK Error:', err);
+            alert('PayPal window was closed or encountered an error. Please check your credentials or try again.');
+            showPaypalProcessing(false);
+        },
+        onCancel: function(data) {
+            showPaypalProcessing(false);
+        }
+    }).render('#paypal-button-container');
+}
+
+function getCartTotal() {
+    const form = document.getElementById('checkoutOrderForm');
+    const items = window.AZCart ? window.AZCart.items : [];
+    let subtotal = 0;
+    items.forEach(i => { subtotal += (i.price * i.quantity); });
+    const deliveryType = form ? form.querySelector('input[name="delivery_type"]:checked')?.value : 'delivery';
+    const fee = (deliveryType === 'delivery' && subtotal < 50 && subtotal > 0) ? 5.00 : 0.00;
+    return { subtotal, fee, total: subtotal + fee };
+}
+
+function validateCustomerForm() {
+    const form = document.getElementById('checkoutOrderForm');
+    if (!form) return false;
+    const name = form.querySelector('[name="customer_name"]')?.value.trim();
+    const email = form.querySelector('[name="customer_email"]')?.value.trim();
+    const phone = form.querySelector('[name="customer_phone"]')?.value.trim();
+    const deliveryType = form.querySelector('[name="delivery_type"]:checked')?.value;
+    const address = form.querySelector('[name="delivery_address"]')?.value.trim();
+
+    if (!name) { alert('Please enter your full name.'); form.querySelector('[name="customer_name"]')?.focus(); return false; }
+    if (!email) { alert('Please enter your email address.'); form.querySelector('[name="customer_email"]')?.focus(); return false; }
+    if (!phone) { alert('Please enter your phone number.'); form.querySelector('[name="customer_phone"]')?.focus(); return false; }
+    if (deliveryType === 'delivery' && !address) {
+        alert('Please enter your delivery street address.');
+        form.querySelector('[name="delivery_address"]')?.focus();
+        return false;
+    }
+
+    const items = window.AZCart ? window.AZCart.items : [];
+    if (!items || items.length === 0) {
+        alert('Your cart is empty. Please add items to your cart before proceeding.');
+        return false;
+    }
+
+    return true;
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     const form = document.getElementById('checkoutOrderForm');
     const itemsList = document.getElementById('checkoutItemsList');
@@ -327,24 +434,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const totalEl = document.getElementById('checkoutTotalAmount');
     const deliveryFeeEl = document.getElementById('checkoutDeliveryFee');
     const btnSubmit = document.getElementById('btnSubmitOrder');
-
-    const btnPaypalExpress = document.getElementById('btnPaypalExpress');
-    const btnPaypalCard = document.getElementById('btnPaypalCard');
-    const btnConfirmPaypalPayment = document.getElementById('btnConfirmPaypalPayment');
-    const paypalModalEl = document.getElementById('paypalSandboxModal');
-    let paypalModal = null;
-    if (paypalModalEl && typeof bootstrap !== 'undefined') {
-        paypalModal = new bootstrap.Modal(paypalModalEl);
-    }
-
-    function getCartTotal() {
-        const items = window.AZCart ? window.AZCart.items : [];
-        let subtotal = 0;
-        items.forEach(i => { subtotal += (i.price * i.quantity); });
-        const deliveryType = form ? form.querySelector('input[name="delivery_type"]:checked')?.value : 'delivery';
-        const fee = (deliveryType === 'delivery' && subtotal < 50 && subtotal > 0) ? 5.00 : 0.00;
-        return { subtotal, fee, total: subtotal + fee };
-    }
 
     function renderCheckoutItems() {
         const items = window.AZCart ? window.AZCart.items : [];
@@ -386,32 +475,6 @@ document.addEventListener('DOMContentLoaded', () => {
     dtInputs.forEach(input => {
         input.addEventListener('change', renderCheckoutItems);
     });
-
-    function validateCustomerForm() {
-        if (!form) return false;
-        const name = form.querySelector('[name="customer_name"]')?.value.trim();
-        const email = form.querySelector('[name="customer_email"]')?.value.trim();
-        const phone = form.querySelector('[name="customer_phone"]')?.value.trim();
-        const deliveryType = form.querySelector('[name="delivery_type"]:checked')?.value;
-        const address = form.querySelector('[name="delivery_address"]')?.value.trim();
-
-        if (!name) { alert('Please enter your full name.'); form.querySelector('[name="customer_name"]')?.focus(); return false; }
-        if (!email) { alert('Please enter your email address.'); form.querySelector('[name="customer_email"]')?.focus(); return false; }
-        if (!phone) { alert('Please enter your phone number.'); form.querySelector('[name="customer_phone"]')?.focus(); return false; }
-        if (deliveryType === 'delivery' && !address) {
-            alert('Please enter your delivery street address.');
-            form.querySelector('[name="delivery_address"]')?.focus();
-            return false;
-        }
-
-        const items = window.AZCart ? window.AZCart.items : [];
-        if (!items || items.length === 0) {
-            alert('Your cart is empty. Please add items to your cart.');
-            return false;
-        }
-
-        return true;
-    }
 
     // Standard Cash on Delivery Form Submit
     if (form) {
@@ -464,139 +527,6 @@ document.addEventListener('DOMContentLoaded', () => {
                 btnSubmit.disabled = false;
             }
         });
-    }
-
-    // Launch PayPal Sandbox Modal on click
-    function openPaypalSandboxCheckout() {
-        if (!validateCustomerForm()) return;
-
-        const { total } = getCartTotal();
-        const nameVal = form.querySelector('[name="customer_name"]')?.value.trim() || 'Customer';
-        const emailVal = form.querySelector('[name="customer_email"]')?.value.trim() || 'buyer@sandbox.paypal.com';
-        const addressVal = form.querySelector('[name="delivery_address"]')?.value.trim() || 'Store Pickup (716 Slash Pine Dr)';
-        const cityVal = form.querySelector('[name="city"]')?.value.trim() || 'Cary';
-        const zipVal = form.querySelector('[name="postal_code"]')?.value.trim() || '27519';
-
-        const amountEl = document.getElementById('paypalModalAmount');
-        const custEl = document.getElementById('paypalModalCustomer');
-        const emailEl = document.getElementById('paypalModalEmail');
-        const addrEl = document.getElementById('paypalModalAddress');
-
-        if (amountEl) amountEl.textContent = '$' + total.toFixed(2) + ' USD';
-        if (custEl) custEl.textContent = nameVal;
-        if (emailEl) emailEl.textContent = emailVal;
-        if (addrEl) addrEl.textContent = addressVal + ', ' + cityVal + ' ' + zipVal;
-
-        const statusBox = document.getElementById('paypalModalStatus');
-        if (statusBox) statusBox.classList.add('d-none');
-
-        if (btnConfirmPaypalPayment) {
-            btnConfirmPaypalPayment.disabled = false;
-            btnConfirmPaypalPayment.innerHTML = '<i class="bi bi-shield-check fs-5" style="color: #003087;"></i> <span>Complete Sandbox Payment</span>';
-        }
-
-        if (paypalModal) {
-            paypalModal.show();
-        } else {
-            // Fallback if bootstrap modal object not ready
-            const modalEl = document.getElementById('paypalSandboxModal');
-            if (modalEl && typeof bootstrap !== 'undefined') {
-                new bootstrap.Modal(modalEl).show();
-            } else {
-                executePaypalCapture();
-            }
-        }
-    }
-
-    if (btnPaypalExpress) btnPaypalExpress.addEventListener('click', openPaypalSandboxCheckout);
-    if (btnPaypalCard) btnPaypalCard.addEventListener('click', openPaypalSandboxCheckout);
-
-    // Complete PayPal Capture Flow
-    async function executePaypalCapture() {
-        if (!validateCustomerForm()) return;
-
-        const items = window.AZCart ? window.AZCart.items : [];
-        if (!items || items.length === 0) {
-            alert('Your cart is empty. Please add items to your cart.');
-            return;
-        }
-
-        const formData = new FormData(form);
-        const randId = Math.random().toString(36).substring(2, 10).toUpperCase();
-        const txnId = 'PP-SANDBOX-' + randId;
-        const fundingSource = document.querySelector('input[name="paypal_funding_source"]:checked')?.value || 'balance';
-
-        const statusBox = document.getElementById('paypalModalStatus');
-        const statusText = document.getElementById('paypalModalStatusText');
-        if (statusBox) statusBox.classList.remove('d-none');
-        if (statusText) statusText.textContent = 'Authorizing PayPal Payment ($' + getCartTotal().total.toFixed(2) + ')...';
-
-        if (btnConfirmPaypalPayment) {
-            btnConfirmPaypalPayment.disabled = true;
-            btnConfirmPaypalPayment.innerHTML = '<div class="spinner-border spinner-border-sm me-2" role="status"></div> <span>Processing PayPal Authorization...</span>';
-        }
-
-        const capturePayload = {
-            customer_name: formData.get('customer_name'),
-            customer_email: formData.get('customer_email'),
-            customer_phone: formData.get('customer_phone'),
-            delivery_address: formData.get('delivery_address'),
-            city: formData.get('city'),
-            postal_code: formData.get('postal_code'),
-            delivery_type: formData.get('delivery_type'),
-            notes: formData.get('notes'),
-            paypal_order_id: 'PP-ORD-' + randId,
-            transaction_id: txnId,
-            payer_details: {
-                payer_id: 'PAYER-' + randId,
-                payer_email: formData.get('customer_email'),
-                payer_name: formData.get('customer_name'),
-                channel: fundingSource === 'card' ? 'PayPal Sandbox Visa (•••• 4242)' : 'PayPal Sandbox Balance',
-                status: 'COMPLETED'
-            },
-            items: items,
-        };
-
-        try {
-            const response = await fetch('{{ route('checkout.paypal.capture') }}', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Accept': 'application/json',
-                    'X-CSRF-TOKEN': '{{ csrf_token() }}'
-                },
-                body: JSON.stringify(capturePayload)
-            });
-
-            const data = await response.json();
-            if (data.success && data.redirect) {
-                if (statusText) statusText.textContent = 'Payment Approved! Redirecting to confirmation...';
-                if (window.AZCart) window.AZCart.clear();
-                setTimeout(() => {
-                    window.location.href = data.redirect;
-                }, 600);
-            } else {
-                const errMsg = data.message || 'Payment authorization failed. Please check inputs and try again.';
-                alert(errMsg);
-                if (statusBox) statusBox.classList.add('d-none');
-                if (btnConfirmPaypalPayment) {
-                    btnConfirmPaypalPayment.disabled = false;
-                    btnConfirmPaypalPayment.innerHTML = '<i class="bi bi-shield-check fs-5" style="color: #003087;"></i> <span>Complete Sandbox Payment</span>';
-                }
-            }
-        } catch (err) {
-            console.error('PayPal capture error:', err);
-            alert('An error occurred during PayPal authorization: ' + (err.message || 'Network error'));
-            if (statusBox) statusBox.classList.add('d-none');
-            if (btnConfirmPaypalPayment) {
-                btnConfirmPaypalPayment.disabled = false;
-                btnConfirmPaypalPayment.innerHTML = '<i class="bi bi-shield-check fs-5" style="color: #003087;"></i> <span>Complete Sandbox Payment</span>';
-            }
-        }
-    }
-
-    if (btnConfirmPaypalPayment) {
-        btnConfirmPaypalPayment.addEventListener('click', executePaypalCapture);
     }
 });
 </script>
