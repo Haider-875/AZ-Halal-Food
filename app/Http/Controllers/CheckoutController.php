@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
-use App\Models\Product;
 use App\Services\PayPalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -117,8 +116,8 @@ class CheckoutController extends Controller
 
         // If PayPal credentials configured on server, generate order via PayPal API v2
         if ($this->paypalService->isConfigured()) {
-            $paypalOrder = $this->paypalService->createOrder($total, $currency, 'AZ-' . strtoupper(Str::random(8)), $validated['items']);
-            if ($paypalOrder && !empty($paypalOrder['id'])) {
+            $paypalOrder = $this->paypalService->createOrder($total, $currency, 'AZ-'.strtoupper(Str::random(8)), $validated['items']);
+            if ($paypalOrder && ! empty($paypalOrder['id'])) {
                 return response()->json([
                     'success' => true,
                     'order_id' => $paypalOrder['id'],
@@ -174,16 +173,16 @@ class CheckoutController extends Controller
         // If PayPal credentials are configured, verify/capture with PayPal API
         if ($this->paypalService->isConfigured() && $paypalOrderId) {
             // Attempt capture if not already captured
-            if (!$transactionId) {
+            if (! $transactionId) {
                 $captureResult = $this->paypalService->captureOrder($paypalOrderId);
-                if ($captureResult && !empty($captureResult['id'])) {
+                if ($captureResult && ! empty($captureResult['id'])) {
                     $transactionId = $captureResult['purchase_units'][0]['payments']['captures'][0]['id'] ?? $captureResult['id'];
                     $payerDetails = array_merge($payerDetails, $captureResult['payer'] ?? []);
                 }
             } else {
                 // Verify order status on PayPal
                 $orderResult = $this->paypalService->getOrder($paypalOrderId);
-                if ($orderResult && !empty($orderResult['payer'])) {
+                if ($orderResult && ! empty($orderResult['payer'])) {
                     $payerDetails = array_merge($payerDetails, $orderResult['payer']);
                 }
             }

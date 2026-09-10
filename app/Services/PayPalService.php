@@ -9,8 +9,11 @@ use Illuminate\Support\Facades\Log;
 class PayPalService
 {
     protected string $mode;
+
     protected string $clientId;
+
     protected string $clientSecret;
+
     protected string $currency;
 
     public function __construct()
@@ -40,7 +43,7 @@ class PayPalService
 
     public function isConfigured(): bool
     {
-        return !empty($this->clientId) && !empty($this->clientSecret) && $this->clientId !== 'sb';
+        return ! empty($this->clientId) && ! empty($this->clientSecret) && $this->clientId !== 'sb';
     }
 
     /**
@@ -48,17 +51,17 @@ class PayPalService
      */
     public function getAccessToken(): ?string
     {
-        if (!$this->isConfigured()) {
+        if (! $this->isConfigured()) {
             return null;
         }
 
-        $cacheKey = 'paypal_access_token_' . md5($this->clientId . $this->mode);
+        $cacheKey = 'paypal_access_token_'.md5($this->clientId.$this->mode);
 
         return Cache::remember($cacheKey, 3000, function () {
             try {
                 $response = Http::asForm()
                     ->withBasicAuth($this->clientId, $this->clientSecret)
-                    ->post($this->getBaseUrl() . '/v1/oauth2/token', [
+                    ->post($this->getBaseUrl().'/v1/oauth2/token', [
                         'grant_type' => 'client_credentials',
                     ]);
 
@@ -66,10 +69,12 @@ class PayPalService
                     return $response->json('access_token');
                 }
 
-                Log::error('PayPal getAccessToken failed: ' . $response->body());
+                Log::error('PayPal getAccessToken failed: '.$response->body());
+
                 return null;
             } catch (\Throwable $e) {
-                Log::error('PayPal OAuth exception: ' . $e->getMessage());
+                Log::error('PayPal OAuth exception: '.$e->getMessage());
+
                 return null;
             }
         });
@@ -81,7 +86,7 @@ class PayPalService
     public function createOrder(float $amount, string $currency = 'USD', ?string $referenceId = null, array $items = []): ?array
     {
         $token = $this->getAccessToken();
-        if (!$token) {
+        if (! $token) {
             return null;
         }
 
@@ -89,7 +94,7 @@ class PayPalService
             'intent' => 'CAPTURE',
             'purchase_units' => [
                 [
-                    'reference_id' => $referenceId ?: ('AZ-' . uniqid()),
+                    'reference_id' => $referenceId ?: ('AZ-'.uniqid()),
                     'description' => 'AZ Halal Marts Order',
                     'amount' => [
                         'currency_code' => $currency ?: $this->currency,
@@ -108,16 +113,18 @@ class PayPalService
 
         try {
             $response = Http::withToken($token)
-                ->post($this->getBaseUrl() . '/v2/checkout/orders', $payload);
+                ->post($this->getBaseUrl().'/v2/checkout/orders', $payload);
 
             if ($response->successful()) {
                 return $response->json();
             }
 
-            Log::error('PayPal createOrder failed: ' . $response->body());
+            Log::error('PayPal createOrder failed: '.$response->body());
+
             return null;
         } catch (\Throwable $e) {
-            Log::error('PayPal createOrder exception: ' . $e->getMessage());
+            Log::error('PayPal createOrder exception: '.$e->getMessage());
+
             return null;
         }
     }
@@ -128,7 +135,7 @@ class PayPalService
     public function captureOrder(string $paypalOrderId): ?array
     {
         $token = $this->getAccessToken();
-        if (!$token) {
+        if (! $token) {
             return null;
         }
 
@@ -138,16 +145,18 @@ class PayPalService
                     'Content-Type' => 'application/json',
                     'Prefer' => 'return=representation',
                 ])
-                ->post($this->getBaseUrl() . "/v2/checkout/orders/{$paypalOrderId}/capture", new \stdClass());
+                ->post($this->getBaseUrl()."/v2/checkout/orders/{$paypalOrderId}/capture", new \stdClass);
 
             if ($response->successful()) {
                 return $response->json();
             }
 
-            Log::error("PayPal captureOrder failed for {$paypalOrderId}: " . $response->body());
+            Log::error("PayPal captureOrder failed for {$paypalOrderId}: ".$response->body());
+
             return null;
         } catch (\Throwable $e) {
-            Log::error("PayPal captureOrder exception for {$paypalOrderId}: " . $e->getMessage());
+            Log::error("PayPal captureOrder exception for {$paypalOrderId}: ".$e->getMessage());
+
             return null;
         }
     }
@@ -158,22 +167,24 @@ class PayPalService
     public function getOrder(string $paypalOrderId): ?array
     {
         $token = $this->getAccessToken();
-        if (!$token) {
+        if (! $token) {
             return null;
         }
 
         try {
             $response = Http::withToken($token)
-                ->get($this->getBaseUrl() . "/v2/checkout/orders/{$paypalOrderId}");
+                ->get($this->getBaseUrl()."/v2/checkout/orders/{$paypalOrderId}");
 
             if ($response->successful()) {
                 return $response->json();
             }
 
-            Log::error("PayPal getOrder failed for {$paypalOrderId}: " . $response->body());
+            Log::error("PayPal getOrder failed for {$paypalOrderId}: ".$response->body());
+
             return null;
         } catch (\Throwable $e) {
-            Log::error("PayPal getOrder exception for {$paypalOrderId}: " . $e->getMessage());
+            Log::error("PayPal getOrder exception for {$paypalOrderId}: ".$e->getMessage());
+
             return null;
         }
     }

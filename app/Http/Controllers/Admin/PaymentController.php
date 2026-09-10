@@ -12,8 +12,8 @@ class PaymentController extends Controller
     {
         $query = Order::with('items')->where(function ($q) {
             $q->whereNotNull('transaction_id')
-              ->orWhereNotNull('paypal_order_id')
-              ->orWhere('payment_method', 'paypal');
+                ->orWhereNotNull('paypal_order_id')
+                ->orWhere('payment_method', 'paypal');
         });
 
         if ($request->filled('payment_status') && $request->payment_status !== 'all') {
@@ -28,10 +28,10 @@ class PaymentController extends Controller
             $s = strtolower($request->search);
             $query->where(function ($q) use ($s) {
                 $q->where('order_number', 'like', "%{$s}%")
-                  ->orWhere('transaction_id', 'like', "%{$s}%")
-                  ->orWhere('paypal_order_id', 'like', "%{$s}%")
-                  ->orWhere('customer_name', 'like', "%{$s}%")
-                  ->orWhere('customer_email', 'like', "%{$s}%");
+                    ->orWhere('transaction_id', 'like', "%{$s}%")
+                    ->orWhere('paypal_order_id', 'like', "%{$s}%")
+                    ->orWhere('customer_name', 'like', "%{$s}%")
+                    ->orWhere('customer_email', 'like', "%{$s}%");
             });
         }
 
@@ -50,6 +50,7 @@ class PaymentController extends Controller
     public function show(Order $order)
     {
         $order->load('items.product');
+
         return view('admin.payments.show', compact('order'));
     }
 
@@ -61,6 +62,6 @@ class PaymentController extends Controller
 
         $order->update($validated);
 
-        return back()->with('success', "Payment status for Order #{$order->order_number} updated to " . ucfirst($order->payment_status));
+        return back()->with('success', "Payment status for Order #{$order->order_number} updated to ".ucfirst($order->payment_status));
     }
 }

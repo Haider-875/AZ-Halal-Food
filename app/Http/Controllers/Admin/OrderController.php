@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Order;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Cache;
 
 class OrderController extends Controller
 {
@@ -46,6 +47,7 @@ class OrderController extends Controller
         ]);
 
         $order->update($validated);
+        Cache::forget('admin_pending_orders_count');
 
         return back()->with('success', "Order #{$order->order_number} status updated to ".ucfirst($order->status));
     }

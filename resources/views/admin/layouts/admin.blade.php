@@ -428,7 +428,11 @@
                 </a>
                 <a href="{{ route('admin.orders.index') }}" class="admin-nav-link {{ request()->routeIs('admin.orders.*') ? 'active' : '' }}">
                     <i class="bi bi-bag-check"></i> Orders
-                    @php $pendingCount = \App\Models\Order::where('status', 'pending')->count(); @endphp
+                    @php
+                        $pendingCount = \Illuminate\Support\Facades\Cache::remember('admin_pending_orders_count', 60, function () {
+                            return \App\Models\Order::where('status', 'pending')->count();
+                        });
+                    @endphp
                     @if($pendingCount > 0)
                         <span class="badge bg-warning text-dark ms-auto" style="font-size: 10px;">{{ $pendingCount }}</span>
                     @endif

@@ -11,52 +11,60 @@ return new class extends Migration
      */
     public function up(): void
     {
-        if (Schema::hasTable('products')) {
-            Schema::table('products', function (Blueprint $table) {
-                $table->index('is_active', 'idx_products_is_active');
-                $table->index('is_featured', 'idx_products_is_featured');
-                $table->index('stock', 'idx_products_stock');
-                $table->index(['is_active', 'is_featured'], 'idx_products_active_featured');
-                $table->index(['is_active', 'name'], 'idx_products_active_name');
-            });
-        }
+        $tables = [
+            'products' => [
+                'idx_products_is_active' => ['is_active'],
+                'idx_products_is_featured' => ['is_featured'],
+                'idx_products_stock' => ['stock'],
+                'idx_products_active_featured' => ['is_active', 'is_featured'],
+                'idx_products_active_name' => ['is_active', 'name'],
+            ],
+            'orders' => [
+                'idx_orders_status' => ['status'],
+                'idx_orders_created_at' => ['created_at'],
+                'idx_orders_status_created' => ['status', 'created_at'],
+            ],
+            'categories' => [
+                'idx_categories_is_active' => ['is_active'],
+                'idx_categories_display_order' => ['display_order'],
+                'idx_categories_active_display' => ['is_active', 'display_order'],
+            ],
+            'sliders' => [
+                'idx_sliders_is_active' => ['is_active'],
+                'idx_sliders_display_order' => ['display_order'],
+                'idx_sliders_active_display' => ['is_active', 'display_order'],
+            ],
+            'gallery_items' => [
+                'idx_gallery_is_active' => ['is_active'],
+                'idx_gallery_display_order' => ['display_order'],
+                'idx_gallery_active_display' => ['is_active', 'display_order'],
+            ],
+            'inquiries' => [
+                'idx_inquiries_status' => ['status'],
+                'idx_inquiries_created_at' => ['created_at'],
+            ],
+        ];
 
-        if (Schema::hasTable('orders')) {
-            Schema::table('orders', function (Blueprint $table) {
-                $table->index('status', 'idx_orders_status');
-                $table->index('created_at', 'idx_orders_created_at');
-                $table->index(['status', 'created_at'], 'idx_orders_status_created');
-            });
-        }
+        foreach ($tables as $tableName => $indexes) {
+            if (! Schema::hasTable($tableName)) {
+                continue;
+            }
 
-        if (Schema::hasTable('categories')) {
-            Schema::table('categories', function (Blueprint $table) {
-                $table->index('is_active', 'idx_categories_is_active');
-                $table->index('display_order', 'idx_categories_display_order');
-                $table->index(['is_active', 'display_order'], 'idx_categories_active_display');
-            });
-        }
+            try {
+                $existingIndexes = collect(DB::select("SHOW INDEX FROM `{$tableName}`"))
+                    ->pluck('Key_name')
+                    ->unique()
+                    ->toArray();
+            } catch (Throwable $e) {
+                $existingIndexes = [];
+            }
 
-        if (Schema::hasTable('sliders')) {
-            Schema::table('sliders', function (Blueprint $table) {
-                $table->index('is_active', 'idx_sliders_is_active');
-                $table->index('display_order', 'idx_sliders_display_order');
-                $table->index(['is_active', 'display_order'], 'idx_sliders_active_display');
-            });
-        }
-
-        if (Schema::hasTable('gallery_items')) {
-            Schema::table('gallery_items', function (Blueprint $table) {
-                $table->index('is_active', 'idx_gallery_is_active');
-                $table->index('display_order', 'idx_gallery_display_order');
-                $table->index(['is_active', 'display_order'], 'idx_gallery_active_display');
-            });
-        }
-
-        if (Schema::hasTable('inquiries')) {
-            Schema::table('inquiries', function (Blueprint $table) {
-                $table->index('status', 'idx_inquiries_status');
-                $table->index('created_at', 'idx_inquiries_created_at');
+            Schema::table($tableName, function (Blueprint $table) use ($indexes, $existingIndexes) {
+                foreach ($indexes as $indexName => $columns) {
+                    if (! in_array($indexName, $existingIndexes)) {
+                        $table->index($columns, $indexName);
+                    }
+                }
             });
         }
     }
@@ -66,52 +74,35 @@ return new class extends Migration
      */
     public function down(): void
     {
-        if (Schema::hasTable('products')) {
-            Schema::table('products', function (Blueprint $table) {
-                $table->dropIndex('idx_products_is_active');
-                $table->dropIndex('idx_products_is_featured');
-                $table->dropIndex('idx_products_stock');
-                $table->dropIndex('idx_products_active_featured');
-                $table->dropIndex('idx_products_active_name');
-            });
-        }
+        $tables = [
+            'products' => ['idx_products_is_active', 'idx_products_is_featured', 'idx_products_stock', 'idx_products_active_featured', 'idx_products_active_name'],
+            'orders' => ['idx_orders_status', 'idx_orders_created_at', 'idx_orders_status_created'],
+            'categories' => ['idx_categories_is_active', 'idx_categories_display_order', 'idx_categories_active_display'],
+            'sliders' => ['idx_sliders_is_active', 'idx_sliders_display_order', 'idx_sliders_active_display'],
+            'gallery_items' => ['idx_gallery_is_active', 'idx_gallery_display_order', 'idx_gallery_active_display'],
+            'inquiries' => ['idx_inquiries_status', 'idx_inquiries_created_at'],
+        ];
 
-        if (Schema::hasTable('orders')) {
-            Schema::table('orders', function (Blueprint $table) {
-                $table->dropIndex('idx_orders_status');
-                $table->dropIndex('idx_orders_created_at');
-                $table->dropIndex('idx_orders_status_created');
-            });
-        }
+        foreach ($tables as $tableName => $indexes) {
+            if (! Schema::hasTable($tableName)) {
+                continue;
+            }
 
-        if (Schema::hasTable('categories')) {
-            Schema::table('categories', function (Blueprint $table) {
-                $table->dropIndex('idx_categories_is_active');
-                $table->dropIndex('idx_categories_display_order');
-                $table->dropIndex('idx_categories_active_display');
-            });
-        }
+            try {
+                $existingIndexes = collect(DB::select("SHOW INDEX FROM `{$tableName}`"))
+                    ->pluck('Key_name')
+                    ->unique()
+                    ->toArray();
+            } catch (Throwable $e) {
+                $existingIndexes = [];
+            }
 
-        if (Schema::hasTable('sliders')) {
-            Schema::table('sliders', function (Blueprint $table) {
-                $table->dropIndex('idx_sliders_is_active');
-                $table->dropIndex('idx_sliders_display_order');
-                $table->dropIndex('idx_sliders_active_display');
-            });
-        }
-
-        if (Schema::hasTable('gallery_items')) {
-            Schema::table('gallery_items', function (Blueprint $table) {
-                $table->dropIndex('idx_gallery_is_active');
-                $table->dropIndex('idx_gallery_display_order');
-                $table->dropIndex('idx_gallery_active_display');
-            });
-        }
-
-        if (Schema::hasTable('inquiries')) {
-            Schema::table('inquiries', function (Blueprint $table) {
-                $table->dropIndex('idx_inquiries_status');
-                $table->dropIndex('idx_inquiries_created_at');
+            Schema::table($tableName, function (Blueprint $table) use ($indexes, $existingIndexes) {
+                foreach ($indexes as $indexName) {
+                    if (in_array($indexName, $existingIndexes)) {
+                        $table->dropIndex($indexName);
+                    }
+                }
             });
         }
     }

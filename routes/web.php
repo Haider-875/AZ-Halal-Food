@@ -19,7 +19,7 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-// Helper route to run migrations and seeds on Vercel
+// Helper route to run migrations and seeds
 Route::get('/setup-database', function () {
     try {
         Artisan::call('migrate --force');
@@ -30,7 +30,7 @@ Route::get('/setup-database', function () {
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Database successfully migrated and seeded on TiDB Cloud!',
+            'message' => 'Database successfully migrated and seeded!',
             'migrate_output' => $migrateOutput,
             'seed_output' => $seedOutput,
         ]);
@@ -39,6 +39,106 @@ Route::get('/setup-database', function () {
             'status' => 'error',
             'message' => $e->getMessage(),
         ], 500);
+    }
+});
+
+// Helper routes for Cache, Config, View, and Optimization
+Route::get('/optimize-clear', function () {
+    try {
+        Artisan::call('optimize:clear');
+        $config = Artisan::output();
+
+        Artisan::call('cache:clear');
+        $config = Artisan::output();
+
+        Artisan::call('config:clear');
+        $config = Artisan::output();
+
+        Artisan::call('view:clear');
+        $config = Artisan::output();
+
+
+        Artisan::call('config:cache');
+        $config = Artisan::output();
+
+        Artisan::call('route:cache');
+        $route = Artisan::output();
+
+        Artisan::call('view:cache');
+        $view = Artisan::output();
+
+        return response()->json([
+            'status' => 'success',
+            'command' => 'optimize:clear',
+            'output' => Artisan::output(),
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
+Route::get('/optimize-cache', function () {
+    try {
+        Artisan::call('config:cache');
+        $config = Artisan::output();
+
+        Artisan::call('route:cache');
+        $route = Artisan::output();
+
+        Artisan::call('view:cache');
+        $view = Artisan::output();
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Config, Routes, and Views cached successfully for production!',
+            'config_cache' => $config,
+            'route_cache' => $route,
+            'view_cache' => $view,
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
+Route::get('/clear-cache', function () {
+    try {
+        Artisan::call('cache:clear');
+
+        return response()->json([
+            'status' => 'success',
+            'command' => 'cache:clear',
+            'output' => Artisan::output(),
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
+Route::get('/clear-config', function () {
+    try {
+        Artisan::call('config:clear');
+
+        return response()->json([
+            'status' => 'success',
+            'command' => 'config:clear',
+            'output' => Artisan::output(),
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
+Route::get('/clear-view', function () {
+    try {
+        Artisan::call('view:clear');
+
+        return response()->json([
+            'status' => 'success',
+            'command' => 'view:clear',
+            'output' => Artisan::output(),
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
 });
 
@@ -112,7 +212,6 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::put('profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
 
         // User Management & Roles (Admin Only)
-        Route::resource('users', AdminUserController::class);
         Route::middleware([AdminMiddleware::class.':admin'])->group(function () {
             Route::resource('users', AdminUserController::class);
             Route::put('users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.password');

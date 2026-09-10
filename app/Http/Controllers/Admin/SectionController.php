@@ -23,6 +23,8 @@ class SectionController extends Controller
             SiteSection::where('key', $key)->update(['content' => $content]);
         }
 
+        SiteSection::clearCache();
+
         return redirect()->route('admin.sections.index')->with('success', 'Website dynamic content updated successfully.');
     }
 }

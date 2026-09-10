@@ -135,7 +135,7 @@ class UserController extends Controller
         $validated = $request->validate([
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ]);
-    
+
         $user->update([
             'password' => Hash::make($validated['password']),
         ]);

@@ -57,7 +57,7 @@
             <div class="col-md-6 col-lg-4 catalog-product-item" data-category="{{ $p->category->name ?? '' }}" data-name="{{ strtolower($p->name) }}" data-desc="{{ strtolower($p->desc) }}">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 220px;">
-                        <img src="{{ $p->img }}" alt="{{ $p->name }}" class="w-100 h-100 object-fit-cover">
+                        <img src="{{ $p->img }}" alt="{{ $p->name }}" class="w-100 h-100 object-fit-cover" loading="lazy">
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent 40%, rgba(13,23,13,0.9));"></div>
 
                         {{--

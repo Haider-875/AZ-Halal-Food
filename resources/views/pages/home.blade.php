@@ -162,7 +162,7 @@
             <div class="col-md-4" data-aos="zoom-in-right" data-aos-duration="750">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 260px;">
-                        <img src="https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=85" alt="Prime Rib-Eye Steak" class="w-100 h-100 object-fit-cover">
+                        <img src="https://images.unsplash.com/photo-1558030006-450675393462?w=800&q=85" alt="Prime Rib-Eye Steak" class="w-100 h-100 object-fit-cover" loading="lazy">
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent 40%, rgba(13,23,13,0.9));"></div>
                         <span class="position-absolute top-3 start-3 badge text-gold border" style="border-color: rgba(212,175,55,0.4) !important; background: rgba(13,23,13,0.85); font-size: 9px; letter-spacing: 0.25em;">BEEF</span>
                     </div>
@@ -182,7 +182,7 @@
             <div class="col-md-4" data-aos="zoom-in-up" data-aos-duration="750" data-aos-delay="150">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 260px;">
-                        <img src="https://images.unsplash.com/photo-1574672280600-4accfa5b6f98?w=800&q=85" alt="Fresh Goat" class="w-100 h-100 object-fit-cover">
+                        <img src="https://images.unsplash.com/photo-1574672280600-4accfa5b6f98?w=800&q=85" alt="Fresh Goat" class="w-100 h-100 object-fit-cover" loading="lazy">
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent 40%, rgba(13,23,13,0.9));"></div>
                         <span class="position-absolute top-3 start-3 badge text-gold border" style="border-color: rgba(212,175,55,0.4) !important; background: rgba(13,23,13,0.85); font-size: 9px; letter-spacing: 0.25em;">GOAT</span>
                     </div>
@@ -202,7 +202,7 @@
             <div class="col-md-4" data-aos="zoom-in-left" data-aos-duration="750" data-aos-delay="300">
                 <div class="luxury-card h-100 d-flex flex-column">
                     <div class="card-img-wrapper position-relative" style="height: 260px;">
-                        <img src="https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=800&q=85" alt="Fresh Rohu & Katla Seafood" class="w-100 h-100 object-fit-cover">
+                        <img src="https://images.unsplash.com/photo-1510130387422-82bed34b37e9?w=800&q=85" alt="Fresh Rohu & Katla Seafood" class="w-100 h-100 object-fit-cover" loading="lazy">
                         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent 40%, rgba(13,23,13,0.9));"></div>
                         <span class="position-absolute top-3 start-3 badge text-gold border" style="border-color: rgba(212,175,55,0.4) !important; background: rgba(13,23,13,0.85); font-size: 9px; letter-spacing: 0.25em;">SEAFOOD</span>
                     </div>
@@ -235,7 +235,7 @@
 
             <div class="col-lg-6" data-aos="flip-left" data-aos-duration="850">
                 <div class="position-relative">
-                    <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=85" alt="Halal butcher at work" class="w-100 object-fit-cover shadow-lg" style="height: 420px; border: 1px solid rgba(212,175,55,0.3); filter: brightness(0.75) saturate(0.85);">
+                    <img src="https://images.unsplash.com/photo-1607623814075-e51df1bdc82f?w=800&q=85" alt="Halal butcher at work" class="w-100 object-fit-cover shadow-lg" style="height: 420px; border: 1px solid rgba(212,175,55,0.3); filter: brightness(0.75) saturate(0.85);" loading="lazy">
                     <div class="position-absolute d-none d-sm-block pointer-events-none" style="top: -15px; left: -15px; right: 15px; bottom: 15px; border: 1px solid rgba(212,175,55,0.15);"></div>
                     <div class="position-absolute bottom-0 end-0 m-3 px-3 py-2" style="background: rgba(13,23,13,0.9); border: 1px solid rgba(212,175,55,0.4);" data-aos="zoom-in-up-left" data-aos-delay="200">
                         <span class="text-gold text-uppercase small fw-bold" style="letter-spacing: 0.25em; font-size: 10px;">Est. West Cary, NC</span>
