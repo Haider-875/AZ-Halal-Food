@@ -26,7 +26,7 @@ class InquiryController extends Controller
                 'success' => true,
                 'name' => $validated['name'],
                 'email' => $validated['email'],
-                'message' => "Thank you, {$validated['name']}. We'll get back to you at {$validated['email']} within 24–48 hours."
+                'message' => "Thank you, {$validated['name']}. We'll get back to you at {$validated['email']} within 24–48 hours.",
             ]);
         }
 

@@ -17,6 +17,7 @@ class InquiryAdminController extends Controller
         }
 
         $inquiries = $query->latest()->paginate(15)->withQueryString();
+
         return view('admin.inquiries.index', compact('inquiries'));
     }
 
@@ -34,6 +35,7 @@ class InquiryAdminController extends Controller
     public function destroy(Inquiry $inquiry)
     {
         $inquiry->delete();
+
         return redirect()->route('admin.inquiries.index')->with('success', 'Inquiry deleted.');
     }
 }

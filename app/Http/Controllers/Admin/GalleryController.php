@@ -11,6 +11,7 @@ class GalleryController extends Controller
     public function index()
     {
         $items = GalleryItem::orderBy('display_order')->latest()->get();
+
         return view('admin.gallery.index', compact('items'));
     }
 
@@ -55,6 +56,7 @@ class GalleryController extends Controller
     public function destroy(GalleryItem $gallery)
     {
         $gallery->delete();
+
         return redirect()->route('admin.gallery.index')->with('success', 'Gallery item removed.');
     }
 }

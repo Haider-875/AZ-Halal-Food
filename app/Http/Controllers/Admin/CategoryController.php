@@ -13,6 +13,7 @@ class CategoryController extends Controller
     public function index()
     {
         $categories = Category::with('subcategories')->withCount('products')->orderBy('display_order')->get();
+
         return view('admin.categories.index', compact('categories'));
     }
 
@@ -53,6 +54,7 @@ class CategoryController extends Controller
     public function destroy(Category $category)
     {
         $category->delete();
+
         return redirect()->route('admin.categories.index')->with('success', 'Category deleted successfully.');
     }
 
@@ -76,6 +78,7 @@ class CategoryController extends Controller
     public function destroySubcategory(Subcategory $subcategory)
     {
         $subcategory->delete();
+
         return redirect()->route('admin.categories.index')->with('success', 'Subcategory deleted successfully.');
     }
 }

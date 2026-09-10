@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\InquiryAdminController;
 use App\Http\Controllers\Admin\OrderController as AdminOrderController;
 use App\Http\Controllers\Admin\PaymentController as AdminPaymentController;
 use App\Http\Controllers\Admin\ProductController as AdminProductController;
+use App\Http\Controllers\Admin\ProfileController as AdminProfileController;
 use App\Http\Controllers\Admin\SectionController as AdminSectionController;
 use App\Http\Controllers\Admin\SliderController as AdminSliderController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -105,7 +106,16 @@ Route::prefix('admin')->name('admin.')->group(function () {
         Route::patch('inquiries/{inquiry}/status', [InquiryAdminController::class, 'updateStatus'])->name('inquiries.status');
         Route::delete('inquiries/{inquiry}', [InquiryAdminController::class, 'destroy'])->name('inquiries.destroy');
 
+        // My Profile & Password Management
+        Route::get('profile', [AdminProfileController::class, 'edit'])->name('profile.edit');
+        Route::patch('profile', [AdminProfileController::class, 'update'])->name('profile.update');
+        Route::put('profile/password', [AdminProfileController::class, 'updatePassword'])->name('profile.password');
+
         // User Management & Roles (Admin Only)
         Route::resource('users', AdminUserController::class);
+        Route::middleware([AdminMiddleware::class.':admin'])->group(function () {
+            Route::resource('users', AdminUserController::class);
+            Route::put('users/{user}/password', [AdminUserController::class, 'updatePassword'])->name('users.password');
+        });
     });
 });

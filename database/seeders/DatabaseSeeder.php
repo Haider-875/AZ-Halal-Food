@@ -2,14 +2,14 @@
 
 namespace Database\Seeders;
 
-use App\Models\User;
 use App\Models\Category;
-use App\Models\Subcategory;
-use App\Models\Product;
 use App\Models\GalleryItem;
-use App\Models\SiteSection;
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\Product;
+use App\Models\SiteSection;
+use App\Models\Subcategory;
+use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 
@@ -56,27 +56,27 @@ class DatabaseSeeder extends Seeder
             [
                 'name' => 'Beef',
                 'description' => '100% Hand-cut Zabiha Halal Beef, Steaks, Ribs, and Fresh Ground Beef.',
-                'subcategories' => ['Steaks & Loins', 'Ground & Curry Cuts', 'Ribs & Roasts']
+                'subcategories' => ['Steaks & Loins', 'Ground & Curry Cuts', 'Ribs & Roasts'],
             ],
             [
                 'name' => 'Goat & Lamb',
                 'description' => 'Freshly slaughtered whole goat, lamb legs, and chops cut to order.',
-                'subcategories' => ['Whole Goat', 'Goat Chops & Curry', 'Lamb Leg & Rack']
+                'subcategories' => ['Whole Goat', 'Goat Chops & Curry', 'Lamb Leg & Rack'],
             ],
             [
                 'name' => 'Seafood',
                 'description' => 'Authentic South Asian fresh-water fish: Rohu, Katla, and Hilsa (Ilish).',
-                'subcategories' => ['Bengali Carp (Rohu / Katla)', 'Prized Hilsa (Ilish)', 'Specialty Fish']
+                'subcategories' => ['Bengali Carp (Rohu / Katla)', 'Prized Hilsa (Ilish)', 'Specialty Fish'],
             ],
             [
                 'name' => 'Pakistani Mangoes',
                 'description' => 'Direct from orchard Royal Pakistani Mangoes: Chaunsa, Sindhri, and Anwar Ratol.',
-                'subcategories' => ['Chaunsa Boxes', 'Sindhri Selection', 'Premium Gift Boxes']
+                'subcategories' => ['Chaunsa Boxes', 'Sindhri Selection', 'Premium Gift Boxes'],
             ],
             [
                 'name' => 'Groceries',
                 'description' => 'Aged extra-long basmati rice, authentic spices, and imported pantry essentials.',
-                'subcategories' => ['Basmati Rice', 'Spice Blends & Masalas', 'South Asian Pantry']
+                'subcategories' => ['Basmati Rice', 'Spice Blends & Masalas', 'South Asian Pantry'],
             ],
         ];
 

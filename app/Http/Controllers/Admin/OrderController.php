@@ -20,9 +20,9 @@ class OrderController extends Controller
             $s = strtolower($request->search);
             $query->where(function ($q) use ($s) {
                 $q->where('order_number', 'like', "%{$s}%")
-                  ->orWhere('customer_name', 'like', "%{$s}%")
-                  ->orWhere('customer_email', 'like', "%{$s}%")
-                  ->orWhere('customer_phone', 'like', "%{$s}%");
+                    ->orWhere('customer_name', 'like', "%{$s}%")
+                    ->orWhere('customer_email', 'like', "%{$s}%")
+                    ->orWhere('customer_phone', 'like', "%{$s}%");
             });
         }
 
@@ -34,6 +34,7 @@ class OrderController extends Controller
     public function show(Order $order)
     {
         $order->load('items.product');
+
         return view('admin.orders.show', compact('order'));
     }
 
@@ -46,12 +47,13 @@ class OrderController extends Controller
 
         $order->update($validated);
 
-        return back()->with('success', "Order #{$order->order_number} status updated to " . ucfirst($order->status));
+        return back()->with('success', "Order #{$order->order_number} status updated to ".ucfirst($order->status));
     }
 
     public function printInvoice(Order $order)
     {
         $order->load('items');
+
         return view('admin.orders.invoice', compact('order'));
     }
 }

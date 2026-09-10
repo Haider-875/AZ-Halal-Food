@@ -13,6 +13,7 @@ class AuthController extends Controller
         if (Auth::check() && Auth::user()->isStaff()) {
             return redirect()->route('admin.dashboard');
         }
+
         return view('admin.auth.login');
     }
 
@@ -27,16 +28,19 @@ class AuthController extends Controller
 
         if (Auth::attempt($credentials, $remember)) {
             $user = Auth::user();
-            if (!$user->is_active) {
+            if (! $user->is_active) {
                 Auth::logout();
+
                 return back()->withErrors(['email' => 'This account is deactivated.']);
             }
-            if (!$user->isStaff()) {
+            if (! $user->isStaff()) {
                 Auth::logout();
+
                 return back()->withErrors(['email' => 'You do not have administrative access.']);
             }
 
             $request->session()->regenerate();
+
             return redirect()->intended(route('admin.dashboard'))->with('success', "Welcome back, {$user->name}!");
         }
 

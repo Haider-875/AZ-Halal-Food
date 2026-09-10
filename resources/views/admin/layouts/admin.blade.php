@@ -43,6 +43,8 @@
         .font-heading { font-family: var(--font-heading); }
         .text-gold { color: var(--gold) !important; }
         .bg-gold { background-color: var(--gold) !important; color: var(--admin-bg) !important; }
+        .hover-gold { transition: color 0.2s ease; }
+        .hover-gold:hover { color: var(--gold) !important; }
 
         /* Sidebar */
         .admin-sidebar {
@@ -288,30 +290,42 @@
                     <i class="bi bi-shield-lock"></i> Users & Roles
                 </a>
                 @endif
+                <a href="{{ route('admin.profile.edit') }}" class="admin-nav-link {{ request()->routeIs('admin.profile.*') ? 'active' : '' }}">
+                    <i class="bi bi-person-circle"></i> My Profile & Security
+                </a>
             </nav>
         </div>
 
-        <!-- User Info & Logout -->
+        <!-- User Info & Action Buttons -->
         <div class="pt-3 border-top border-secondary border-opacity-25">
-            <div class="d-flex align-items-center gap-2 mb-3">
-                <div class="rounded-circle bg-gold text-dark d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px; font-size: 14px;">
+            <a href="{{ route('admin.profile.edit') }}" class="sidebar-user-card d-flex align-items-center gap-2 mb-3 text-decoration-none" title="View & Edit My Profile">
+                <div class="rounded-circle bg-gold text-dark d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px; font-size: 14px; flex-shrink: 0;">
                     {{ strtoupper(substr(Auth::user()->name ?? 'A', 0, 1)) }}
                 </div>
-                <div class="min-w-0">
-                    <div class="text-truncate fw-semibold text-parchment small">{{ Auth::user()->name ?? 'Administrator' }}</div>
+                <div class="min-w-0 flex-grow-1">
+                    <div class="text-truncate fw-semibold text-parchment small hover-gold">{{ Auth::user()->name ?? 'Administrator' }}</div>
                     <span class="badge bg-secondary text-uppercase" style="font-size: 8px; letter-spacing: 0.15em;">{{ Auth::user()->role ?? 'Admin' }}</span>
                 </div>
-            </div>
-            <div class="d-flex gap-2">
-                <a href="{{ route('home') }}" target="_blank" class="btn btn-sm btn-outline-secondary w-50" title="View Storefront">
-                    <i class="bi bi-eye"></i> Store
-                </a>
-                <form action="{{ route('admin.logout') }}" method="POST" class="w-50">
-                    @csrf
-                    <button type="submit" class="btn btn-sm btn-outline-danger w-100">
-                        <i class="bi bi-box-arrow-right"></i> Exit
-                    </button>
-                </form>
+                <i class="bi bi-chevron-right text-gold small opacity-50"></i>
+            </a>
+
+            <!-- Enhanced Action Buttons: Store & Exit -->
+            <div class="row g-2">
+                <div class="col-6">
+                    <a href="{{ route('home') }}" target="_blank" class="btn-sidebar-store" title="Open Storefront in New Tab">
+                        <i class="bi bi-shop text-gold"></i>
+                        <span>Store</span>
+                    </a>
+                </div>
+                <div class="col-6">
+                    <form action="{{ route('admin.logout') }}" method="POST" class="m-0">
+                        @csrf
+                        <button type="submit" class="btn btn-sidebar-exit" title="Sign Out of Admin Portal">
+                            <i class="bi bi-box-arrow-right"></i>
+                            <span>Exit</span>
+                        </button>
+                    </form>
+                </div>
             </div>
         </div>
     </aside>
@@ -328,7 +342,10 @@
                 <h5 class="font-heading text-gold mb-0 fw-bold">@yield('page_title', 'Dashboard')</h5>
             </div>
 
-            <div class="d-flex align-items-center gap-3">
+            <div class="d-flex align-items-center gap-2">
+                <a href="{{ route('admin.profile.edit') }}" class="btn btn-sm {{ request()->routeIs('admin.profile.*') ? 'btn-gold' : 'btn-outline-gold' }} d-inline-flex align-items-center text-decoration-none">
+                    <i class="bi bi-person-circle me-1"></i> My Profile
+                </a>
                 <a href="{{ route('home') }}" target="_blank" class="btn-outline-gold btn-sm d-none d-sm-inline-flex text-decoration-none">
                     <i class="bi bi-shop me-1"></i> Live Store
                 </a>
