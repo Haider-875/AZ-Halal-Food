@@ -7,7 +7,7 @@
 {{-- Hero Section --}}
 <section class="position-relative overflow-hidden pt-5 pb-5" style="padding-top: 140px !important;">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-        <img src="https://images.unsplash.com/photo-1542838132-25c8459a5c20?w=1600&q=80" alt="Product catalog" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.2);">
+        <img src="{{ asset('images/heroes/hero-catalog.webp') }}" alt="Product catalog" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" style="filter: brightness(0.2);">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 75%);"></div>
     </div>
 

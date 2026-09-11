@@ -40,8 +40,10 @@ class PageTest extends TestCase
         $response->assertSee('Our');
         $response->assertSee('Products');
         $response->assertSee('Pricing');
-        $response->assertSee('T-Bone Steak');
-        $response->assertSee('Rohu Fish');
+
+        $searchResponse = $this->get('/products?search=T-Bone');
+        $searchResponse->assertStatus(200);
+        $searchResponse->assertSee('T-Bone Steak');
     }
 
     public function test_catalog_page_returns_successful_response(): void

@@ -7,7 +7,7 @@
 <!-- Hero Section -->
 <section class="position-relative overflow-hidden pt-5 pb-5" style="padding-top: 140px !important;">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-        <img src="https://images.unsplash.com/photo-1553163147-622ab57be1c7?w=1600&q=80" alt="Halal meat selection" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.2);">
+        <img src="{{ asset('images/heroes/hero-products.webp') }}" alt="Halal meat selection" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" style="filter: brightness(0.2);">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 75%);"></div>
     </div>
 

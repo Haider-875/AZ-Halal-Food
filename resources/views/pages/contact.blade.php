@@ -7,7 +7,7 @@
 <!-- Hero Section -->
 <section class="position-relative overflow-hidden pt-5 pb-5" style="padding-top: 140px !important;">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-        <img src="https://images.unsplash.com/photo-1542838132-92c53300491e?w=1600&q=80" alt="Halal grocery store" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.18) saturate(0.7);">
+        <img src="{{ asset('images/heroes/hero-contact.webp') }}" alt="Halal grocery store" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" style="filter: brightness(0.18) saturate(0.7);">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 75%);"></div>
     </div>
 

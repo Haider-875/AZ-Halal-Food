@@ -7,7 +7,7 @@
 <!-- Hero Section -->
 <section class="position-relative overflow-hidden pt-5 pb-5" style="padding-top: 140px !important;">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-        <img src="https://images.unsplash.com/photo-1567620905732-2d1ec7ab7445?w=1600&q=80" alt="Gallery hero" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.18);">
+        <img src="{{ asset('images/heroes/hero-gallery.webp') }}" alt="Gallery hero" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" style="filter: brightness(0.18);">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(to bottom, transparent, #0D170D 80%);"></div>
     </div>
 
