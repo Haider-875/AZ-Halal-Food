@@ -139,18 +139,43 @@ class PageController extends Controller
         return view('pages.products', compact('categories', 'products', 'pricingPolicy', 'selectedCategory'));
     }
 
-    public function catalog()
+    public function catalog(Request $request)
     {
         try {
-            $categories = Category::where('is_active', true)->orderBy('display_order')->pluck('name')->toArray();
+            $categories = Category::where('is_active', true)
+                ->orderBy('display_order')
+                ->orderBy('name')
+                ->pluck('name')
+                ->toArray();
             array_unshift($categories, 'All');
-            $products = Product::with(['category', 'subcategory'])->where('is_active', true)->orderBy('name')->get();
+
+            $selectedCategory = $request->query('category', 'All');
+
+            $query = Product::with(['category', 'subcategory'])->where('is_active', true);
+
+            if ($request->filled('search')) {
+                $s = trim(strtolower($request->search));
+                $query->where(function ($q) use ($s) {
+                    $q->where('name', 'like', "%{$s}%")
+                        ->orWhere('sku', 'like', "%{$s}%")
+                        ->orWhere('desc', 'like', "%{$s}%");
+                });
+            }
+
+            if ($selectedCategory && strtolower($selectedCategory) !== 'all') {
+                $query->whereHas('category', function ($q) use ($selectedCategory) {
+                    $q->where('name', $selectedCategory);
+                });
+            }
+
+            $products = $query->orderBy('name')->paginate(12)->withQueryString();
         } catch (\Throwable $e) {
             $categories = ['All', 'Beef', 'Goat & Lamb', 'Seafood', 'Mango', 'Grocery'];
-            $products = collect();
+            $selectedCategory = 'All';
+            $products = Product::where('is_active', true)->orderBy('name')->paginate(12)->withQueryString();
         }
 
-        return view('pages.catalog', compact('products', 'categories'));
+        return view('pages.catalog', compact('products', 'categories', 'selectedCategory'));
     }
 
     public function gallery()

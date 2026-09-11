@@ -19,18 +19,178 @@ use App\Http\Middleware\AdminMiddleware;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
-// Helper route to run migrations and seeds
-Route::get('/setup-database', function () {
-    try {
-        Artisan::call('migrate --force');
-        $migrateOutput = Artisan::output();
+/*
+|--------------------------------------------------------------------------
+| Live Server Maintenance Routes
+|--------------------------------------------------------------------------
+| Hit /deploy after every code push to your live server.
+| Hit /optimize-clear only if something is broken / cached incorrectly.
+*/
 
-        Artisan::call('db:seed --force');
-        $seedOutput = Artisan::output();
+// ── FULL DEPLOY ─────────────────────────────────────────────────────────────
+// Run after every git pull / code push on the live server.
+// Order: clear old caches → migrate → rebuild all caches → optimize
+Route::get('/deploy', function () {
+    $steps = [];
+    $start = microtime(true);
+
+    $run = function (string $cmd) use (&$steps) {
+        $t = microtime(true);
+        Artisan::call($cmd);
+        $steps[] = [
+            'cmd' => $cmd,
+            'output' => trim(Artisan::output()) ?: 'OK',
+            'ms' => round((microtime(true) - $t) * 1000),
+        ];
+    };
+
+    try {
+        // 1. Clear all old caches first (safe start)
+        $run('optimize:clear');
+
+        // 2. Run any pending database migrations
+        $run('migrate --force');
+
+        // 3. Cache config (reads .env → PHP array, eliminates .env parsing per request)
+        $run('config:cache');
+
+        // 4. Cache routes (eliminates route registration on every request)
+        $run('route:cache');
+
+        // 5. Cache all Blade views (eliminates Blade compilation on every request)
+        $run('view:cache');
+
+        // 6. Cache event/listener map
+        $run('event:cache');
+
+        // 7. Clear application-level cache (products, sessions etc. stale data)
+        $run('cache:clear');
 
         return response()->json([
             'status' => 'success',
-            'message' => 'Database successfully migrated and seeded!',
+            'message' => 'Deploy complete — all caches rebuilt.',
+            'total_ms' => round((microtime(true) - $start) * 1000),
+            'steps' => $steps,
+        ]);
+    } catch (Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'steps' => $steps,
+        ], 500);
+    }
+});
+
+// ── OPTIMIZE CLEAR (Emergency reset) ────────────────────────────────────────
+// Use when the site is serving stale/broken pages.
+// Clears everything then rebuilds all caches.
+Route::get('/optimize-clear', function () {
+    $steps = [];
+    $start = microtime(true);
+
+    $run = function (string $cmd) use (&$steps) {
+        $t = microtime(true);
+        Artisan::call($cmd);
+        $steps[] = [
+            'cmd' => $cmd,
+            'output' => trim(Artisan::output()) ?: 'OK',
+            'ms' => round((microtime(true) - $t) * 1000),
+        ];
+    };
+
+    try {
+        // Clear phase
+        $run('optimize:clear');   // clears config, route, view, event caches
+        $run('cache:clear');      // clears application cache (file/database)
+        $run('view:clear');       // clears compiled Blade templates
+
+        // Rebuild phase
+        $run('config:cache');     // re-cache .env + config/
+        $run('route:cache');      // re-cache all routes
+        $run('view:cache');       // re-compile all Blade views
+        $run('event:cache');      // re-cache event listeners
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'All caches cleared and rebuilt.',
+            'total_ms' => round((microtime(true) - $start) * 1000),
+            'steps' => $steps,
+        ]);
+    } catch (Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'steps' => $steps,
+        ], 500);
+    }
+});
+
+// ── OPTIMIZE CACHE (Rebuild only, no clear) ──────────────────────────────────
+// Use after editing a .blade.php or config file without a full deploy.
+Route::get('/optimize-cache', function () {
+    $steps = [];
+    $start = microtime(true);
+
+    $run = function (string $cmd) use (&$steps) {
+        $t = microtime(true);
+        Artisan::call($cmd);
+        $steps[] = [
+            'cmd' => $cmd,
+            'output' => trim(Artisan::output()) ?: 'OK',
+            'ms' => round((microtime(true) - $t) * 1000),
+        ];
+    };
+
+    try {
+        $run('config:cache');
+        $run('route:cache');
+        $run('view:cache');
+        $run('event:cache');
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'All caches rebuilt for production.',
+            'total_ms' => round((microtime(true) - $start) * 1000),
+            'steps' => $steps,
+        ]);
+    } catch (Throwable $e) {
+        return response()->json([
+            'status' => 'error',
+            'message' => $e->getMessage(),
+            'steps' => $steps,
+        ], 500);
+    }
+});
+
+// ── CLEAR CACHE ONLY ─────────────────────────────────────────────────────────
+// Use to bust stale product/category data from the application cache.
+Route::get('/clear-cache', function () {
+    try {
+        Artisan::call('cache:clear');
+
+        return response()->json([
+            'status' => 'success',
+            'command' => 'cache:clear',
+            'output' => trim(Artisan::output()) ?: 'OK',
+        ]);
+    } catch (Throwable $e) {
+        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
+    }
+});
+
+// ── SETUP DATABASE (migrate + seed) ──────────────────────────────────────────
+// Run once on first deploy to a new server.
+Route::get('/setup-database', function () {
+    try {
+        Artisan::call('migrate --force');
+        $migrateOutput = trim(Artisan::output());
+
+        Artisan::call('db:seed --force');
+        $seedOutput = trim(Artisan::output());
+
+        return response()->json([
+            'status' => 'success',
+            'message' => 'Database migrated and seeded.',
             'migrate_output' => $migrateOutput,
             'seed_output' => $seedOutput,
         ]);
@@ -39,106 +199,6 @@ Route::get('/setup-database', function () {
             'status' => 'error',
             'message' => $e->getMessage(),
         ], 500);
-    }
-});
-
-// Helper routes for Cache, Config, View, and Optimization
-Route::get('/optimize-clear', function () {
-    try {
-        Artisan::call('optimize:clear');
-        $config = Artisan::output();
-
-        Artisan::call('cache:clear');
-        $config = Artisan::output();
-
-        Artisan::call('config:clear');
-        $config = Artisan::output();
-
-        Artisan::call('view:clear');
-        $config = Artisan::output();
-
-
-        Artisan::call('config:cache');
-        $config = Artisan::output();
-
-        Artisan::call('route:cache');
-        $route = Artisan::output();
-
-        Artisan::call('view:cache');
-        $view = Artisan::output();
-
-        return response()->json([
-            'status' => 'success',
-            'command' => 'optimize:clear',
-            'output' => Artisan::output(),
-        ]);
-    } catch (Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-    }
-});
-
-Route::get('/optimize-cache', function () {
-    try {
-        Artisan::call('config:cache');
-        $config = Artisan::output();
-
-        Artisan::call('route:cache');
-        $route = Artisan::output();
-
-        Artisan::call('view:cache');
-        $view = Artisan::output();
-
-        return response()->json([
-            'status' => 'success',
-            'message' => 'Config, Routes, and Views cached successfully for production!',
-            'config_cache' => $config,
-            'route_cache' => $route,
-            'view_cache' => $view,
-        ]);
-    } catch (Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-    }
-});
-
-Route::get('/clear-cache', function () {
-    try {
-        Artisan::call('cache:clear');
-
-        return response()->json([
-            'status' => 'success',
-            'command' => 'cache:clear',
-            'output' => Artisan::output(),
-        ]);
-    } catch (Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-    }
-});
-
-Route::get('/clear-config', function () {
-    try {
-        Artisan::call('config:clear');
-
-        return response()->json([
-            'status' => 'success',
-            'command' => 'config:clear',
-            'output' => Artisan::output(),
-        ]);
-    } catch (Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
-    }
-});
-
-Route::get('/clear-view', function () {
-    try {
-        Artisan::call('view:clear');
-
-        return response()->json([
-            'status' => 'success',
-            'command' => 'view:clear',
-            'output' => Artisan::output(),
-        ]);
-    } catch (Throwable $e) {
-        return response()->json(['status' => 'error', 'message' => $e->getMessage()], 500);
     }
 });
 

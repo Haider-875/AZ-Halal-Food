@@ -10,11 +10,12 @@
     <link rel="icon" type="image/png" href="https://media.base44.com/images/public/6a2ccdd94a32a715825e5f58/2026c6a9d_Screenshot2026-06-13at52139AM.png">
 
     <!-- DNS Prefetch & Preconnect for External Assets -->
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <link rel="dns-prefetch" href="https://cdn.shopify.com">
+    <link rel="dns-prefetch" href="https://images.unsplash.com">
 
     <!-- Google Fonts with display swap -->
     <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
@@ -24,11 +25,12 @@
     <!-- Bootstrap Icons -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
 
-    <!-- AOS (Animate On Scroll) CSS via fast jsDelivr CDN -->
+    <!-- AOS (Animate On Scroll) CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css">
 
-    <!-- Custom Theme CSS -->
+    <!-- Custom Theme CSS (must be last to override Bootstrap defaults) -->
     <link rel="stylesheet" href="/css/custom.css">
+
     @stack('styles')
 </head>
 <body class="d-flex flex-column min-vh-100">
