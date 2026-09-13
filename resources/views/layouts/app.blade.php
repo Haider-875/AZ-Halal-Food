@@ -10,36 +10,30 @@
     <link rel="icon" type="image/png" href="https://media.base44.com/images/public/6a2ccdd94a32a715825e5f58/2026c6a9d_Screenshot2026-06-13at52139AM.png">
 
     <!-- Preload Critical Above-the-Fold Resources -->
+    <link rel="preload" href="/fonts/playfair-display-latin.woff2" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="/fonts/inter-latin.woff2" as="font" type="font/woff2" crossorigin>
     @stack('preload')
 
-    <!-- DNS Prefetch & Preconnect for External Assets -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-    <link rel="dns-prefetch" href="https://fonts.googleapis.com">
-    <link rel="dns-prefetch" href="https://fonts.gstatic.com">
-    <link rel="dns-prefetch" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdn.shopify.com" crossorigin>
+    <!-- Preconnect for External Media Assets -->
     <link rel="preconnect" href="https://images.unsplash.com" crossorigin>
-    <link rel="dns-prefetch" href="https://cdn.shopify.com">
     <link rel="dns-prefetch" href="https://images.unsplash.com">
 
-    <!-- Google Fonts with display swap -->
-    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400&display=swap" rel="stylesheet">
+    <!-- Bootstrap 5 CSS (Local Zero-Latency Load) -->
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
 
-    <!-- Bootstrap 5 CSS (Critical framework styles) -->
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Local Optimized Typography Fonts -->
+    <link rel="stylesheet" href="/css/fonts.css">
 
     <!-- Custom Theme CSS (Critical theme styles) -->
     <link rel="stylesheet" href="/css/custom.css">
 
     <!-- Bootstrap Icons (Non-render-blocking async load) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css"></noscript>
+    <link rel="stylesheet" href="/css/bootstrap-icons.min.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/bootstrap-icons.min.css"></noscript>
 
     <!-- AOS (Animate On Scroll) CSS (Non-render-blocking async load for below-the-fold animations) -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css" media="print" onload="this.media='all'">
-    <noscript><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.css"></noscript>
+    <link rel="stylesheet" href="/css/aos.css" media="print" onload="this.media='all'">
+    <noscript><link rel="stylesheet" href="/css/aos.css"></noscript>
 
     @stack('styles')
 </head>
@@ -65,11 +59,11 @@
     <!-- Custom Theme Alert & Confirmation Dialog -->
     @include('partials.alert-dialog')
 
-    <!-- Bootstrap 5 Bundle JS (Deferred for non-blocking rendering) -->
-    <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Bootstrap 5 Bundle JS (Local Deferred) -->
+    <script defer src="/js/bootstrap.bundle.min.js"></script>
 
-    <!-- AOS (Animate On Scroll) JS via fast jsDelivr CDN -->
-    <script defer src="https://cdn.jsdelivr.net/npm/aos@2.3.4/dist/aos.js"></script>
+    <!-- AOS (Animate On Scroll) JS (Local Deferred) -->
+    <script defer src="/js/aos.js"></script>
     <script>
         (function () {
             function initAOS() {

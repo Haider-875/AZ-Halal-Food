@@ -49,7 +49,7 @@ Route::get('/deploy', function () {
         $run('optimize:clear');
 
         // 2. Run any pending database migrations
-        $run('migrate --force');
+        // $run('migrate --force');
 
         // 3. Cache config (reads .env → PHP array, eliminates .env parsing per request)
         $run('config:cache');
