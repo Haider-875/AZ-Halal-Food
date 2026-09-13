@@ -2,14 +2,22 @@
 
 @section('title', 'AZ Halal Marts · Premium Halal Meats, Seafood & Groceries · Cary, NC')
 
+@push('preload')
+@if(isset($sliders) && $sliders->isNotEmpty())
+    <link rel="preload" as="image" href="{{ $sliders->first()->image_url }}" fetchpriority="high">
+@else
+    <link rel="preload" as="image" href="{{ asset('images/heroes/hero-home.webp') }}" type="image/webp" fetchpriority="high">
+@endif
+@endpush
+
 @section('content')
 
 @if(isset($sliders) && $sliders->isNotEmpty())
 <!-- Hero Carousel Slider -->
-<section class="position-relative overflow-hidden" style="min-height: 90vh;" data-aos="fade">
+<section class="position-relative overflow-hidden" style="min-height: 90vh;">
     <div id="heroCarousel" class="carousel slide carousel-fade h-100" data-bs-ride="carousel" data-bs-interval="6000">
         @if($sliders->count() > 1)
-        <div class="carousel-indicators mb-4" style="z-index: 10;" data-aos="zoom-in-up" data-aos-delay="300">
+        <div class="carousel-indicators mb-4" style="z-index: 10;">
             @foreach($sliders as $idx => $slide)
             <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $idx }}" class="{{ $idx === 0 ? 'active' : '' }}" aria-current="{{ $idx === 0 ? 'true' : 'false' }}" aria-label="Slide {{ $idx + 1 }}"></button>
             @endforeach
@@ -21,7 +29,7 @@
             <div class="carousel-item {{ $idx === 0 ? 'active' : '' }} position-relative" style="min-height: 90vh;">
                 <!-- Slide Background Image & Overlay -->
                 <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
-                    <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" class="w-100 h-100 object-fit-cover" style="filter: brightness(0.28) saturate(0.9);">
+                    <img src="{{ $slide->image_url }}" alt="{{ $slide->title }}" class="w-100 h-100 object-fit-cover" fetchpriority="{{ $idx === 0 ? 'high' : 'auto' }}" loading="{{ $idx === 0 ? 'eager' : 'lazy' }}" style="filter: brightness(0.28) saturate(0.9);">
                     <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(13,23,13,0.75) 0%, rgba(13,23,13,0.3) 50%, rgba(13,23,13,0.85) 100%);"></div>
                     <div class="position-absolute m-3 m-md-5 pointer-events-none" style="top:0; bottom:0; left:0; right:0; border: 1px solid rgba(212,175,55,0.2);"></div>
                 </div>
@@ -30,32 +38,32 @@
                 <div class="position-relative d-flex align-items-center justify-content-center text-center px-4 py-5" style="z-index: 2; min-height: 90vh;">
                     <div style="max-width: 900px;">
                         @if($slide->badge)
-                        <div class="mb-3" data-aos="zoom-in-down" data-aos-delay="100">
+                        <div class="mb-3">
                             <span class="badge text-gold border px-3 py-2" style="border-color: rgba(212,175,55,0.5) !important; background: rgba(13,23,13,0.85); font-size: 10px; letter-spacing: 0.3em;">
                                 {{ $slide->badge }}
                             </span>
                         </div>
                         @else
-                        <p class="section-label mb-3" style="letter-spacing: 0.4em;" data-aos="fade-down" data-aos-delay="100">✦ Cary, North Carolina ✦</p>
+                        <p class="section-label mb-3" style="letter-spacing: 0.4em;">✦ Cary, North Carolina ✦</p>
                         @endif
 
-                        <h1 class="font-heading font-black text-uppercase text-gold mb-3" style="font-size: clamp(2.5rem, 6.5vw, 5.5rem); line-height: 1.1; letter-spacing: 0.02em; text-shadow: 0 0 70px rgba(212,175,55,0.3);" data-aos="fade-up" data-aos-duration="800">
+                        <h1 class="font-heading font-black text-uppercase text-gold mb-3" style="font-size: clamp(2.5rem, 6.5vw, 5.5rem); line-height: 1.1; letter-spacing: 0.02em; text-shadow: 0 0 70px rgba(212,175,55,0.3);">
                             {{ $slide->title }}
                         </h1>
 
                         @if($slide->subtitle)
-                        <p class="text-parchment font-heading text-uppercase mb-3" style="font-size: 15px; letter-spacing: 0.2em;" data-aos="zoom-in" data-aos-delay="200">
+                        <p class="text-parchment font-heading text-uppercase mb-3" style="font-size: 15px; letter-spacing: 0.2em;">
                             {{ $slide->subtitle }}
                         </p>
                         @endif
 
                         @if($slide->description)
-                        <p class="text-parchment-dim mx-auto mb-4" style="max-width: 650px; line-height: 1.8;" data-aos="fade-up" data-aos-delay="300">
+                        <p class="text-parchment-dim mx-auto mb-4" style="max-width: 650px; line-height: 1.8;">
                             {{ $slide->description }}
                         </p>
                         @endif
 
-                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4" data-aos="zoom-in-up" data-aos-delay="400">
+                        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center mt-4">
                             @if($slide->button_text && $slide->button_link)
                             <a href="{{ $slide->button_link }}" class="btn-gold-outline">
                                 <span>{{ $slide->button_text }}</span>
@@ -72,11 +80,11 @@
         </div>
 
         @if($sliders->count() > 1)
-        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" style="z-index: 10; width: 6%;" data-aos="fade-right">
+        <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" style="z-index: 10; width: 6%;">
             <span class="carousel-control-prev-icon" aria-hidden="true" style="filter: drop-shadow(0 0 4px rgba(212,175,55,0.8));"></span>
             <span class="visually-hidden">Previous</span>
         </button>
-        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" style="z-index: 10; width: 6%;" data-aos="fade-left">
+        <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next" style="z-index: 10; width: 6%;">
             <span class="carousel-control-next-icon" aria-hidden="true" style="filter: drop-shadow(0 0 4px rgba(212,175,55,0.8));"></span>
             <span class="visually-hidden">Next</span>
         </button>
@@ -84,8 +92,8 @@
     </div>
 </section>
 @else
-<!-- Fallback Hero Section -->
-<section class="position-relative min-vh-100 d-flex align-items-center justify-content-center overflow-hidden pt-5" data-aos="fade">
+<!-- Fallback Hero Section (Above-the-Fold instant paint) -->
+<section class="position-relative min-vh-100 d-flex align-items-center justify-content-center overflow-hidden pt-5">
     <div class="position-absolute top-0 start-0 w-100 h-100" style="z-index: 1;">
         <img src="{{ asset('images/heroes/hero-home.webp') }}" alt="Premium halal meats" class="w-100 h-100 object-fit-cover" fetchpriority="high" loading="eager" decoding="async" style="filter: brightness(0.25) saturate(0.85);">
         <div class="position-absolute top-0 start-0 w-100 h-100" style="background: linear-gradient(135deg, rgba(13,23,13,0.75) 0%, rgba(13,23,13,0.35) 50%, rgba(13,23,13,0.85) 100%);"></div>
@@ -93,19 +101,19 @@
     </div>
 
     <div class="position-relative text-center px-4 py-5" style="z-index: 2; max-width: 900px;">
-        <p class="section-label mb-4" style="letter-spacing: 0.4em;" data-aos="fade-down" data-aos-duration="700">✦ Cary, North Carolina ✦</p>
+        <p class="section-label mb-4" style="letter-spacing: 0.4em;">✦ Cary, North Carolina ✦</p>
 
-        <h1 class="font-heading font-black text-uppercase text-gold mb-4" style="font-size: clamp(2.8rem, 7vw, 6.5rem); line-height: 1.05; letter-spacing: 0.03em; text-shadow: 0 0 70px rgba(212,175,55,0.3);" data-aos="zoom-in" data-aos-duration="900">
+        <h1 class="font-heading font-black text-uppercase text-gold mb-4" style="font-size: clamp(2.8rem, 7vw, 6.5rem); line-height: 1.05; letter-spacing: 0.03em; text-shadow: 0 0 70px rgba(212,175,55,0.3);">
             Halal.<br>
             <span class="text-parchment">The Art</span><br>
             of Flavor.
         </h1>
 
-        <p class="text-parchment-dim text-uppercase mb-5" style="font-size: 13px; letter-spacing: 0.28em;" data-aos="fade-up" data-aos-delay="200">
+        <p class="text-parchment-dim text-uppercase mb-5" style="font-size: 13px; letter-spacing: 0.28em;">
             Premium Halal Meats · Seafood · Groceries
         </p>
 
-        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center" data-aos="zoom-in-up" data-aos-delay="300">
+        <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center">
             <a href="{{ route('products') }}" class="btn-gold-outline">
                 <span>Explore Our Offerings</span>
             </a>
@@ -114,7 +122,7 @@
             </a>
         </div>
 
-        <div class="mt-5 pt-3 d-flex flex-column align-items-center opacity-75" data-aos="fade-down" data-aos-delay="500">
+        <div class="mt-5 pt-3 d-flex flex-column align-items-center opacity-75">
             <span class="text-uppercase small" style="font-size: 9px; letter-spacing: 0.35em; color: rgba(212,175,55,0.6);">Scroll</span>
             <div class="scroll-line"></div>
         </div>
