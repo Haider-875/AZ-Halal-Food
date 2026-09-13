@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Order;
 use App\Models\OrderItem;
+use App\Models\SiteSection;
 use App\Services\PayPalService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
@@ -22,8 +23,30 @@ class CheckoutController extends Controller
         $paypalClientId = config('services.paypal.client_id', 'sb');
         $paypalCurrency = config('services.paypal.currency', 'USD');
         $paypalMode = config('services.paypal.mode', 'sandbox');
+        $configuredDeliveryFee = (float) SiteSection::getValue('delivery_fee', '0.00');
+        $freeDeliveryThreshold = (float) SiteSection::getValue('delivery_free_threshold', '0.00');
 
-        return view('pages.checkout', compact('paypalClientId', 'paypalCurrency', 'paypalMode'));
+        return view('pages.checkout', compact('paypalClientId', 'paypalCurrency', 'paypalMode', 'configuredDeliveryFee', 'freeDeliveryThreshold'));
+    }
+
+    protected function calculateDeliveryFee(string $deliveryType, float $subtotal): float
+    {
+        if ($deliveryType !== 'delivery' || $subtotal <= 0) {
+            return 0.00;
+        }
+
+        $standardFee = (float) SiteSection::getValue('delivery_fee', '0.00');
+        $freeThreshold = (float) SiteSection::getValue('delivery_free_threshold', '0.00');
+
+        if ($standardFee <= 0) {
+            return 0.00;
+        }
+
+        if ($freeThreshold > 0 && $subtotal >= $freeThreshold) {
+            return 0.00;
+        }
+
+        return round($standardFee, 2);
     }
 
     public function process(Request $request)
@@ -51,8 +74,20 @@ class CheckoutController extends Controller
             $subtotal += ($item['price'] * $item['quantity']);
         }
 
-        $deliveryFee = ($validated['delivery_type'] === 'delivery' && $subtotal < 50) ? 5.00 : 0.00;
+        $deliveryFee = $this->calculateDeliveryFee($validated['delivery_type'], $subtotal);
         $totalAmount = $subtotal + $deliveryFee;
+
+        if ($subtotal > 50.00) {
+            $msg = 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.';
+            if ($request->wantsJson() || $request->ajax()) {
+                return response()->json([
+                    'success' => false,
+                    'message' => $msg,
+                ], 422);
+            }
+
+            return back()->withErrors(['error' => $msg])->withInput();
+        }
 
         $orderNumber = 'AZ-'.strtoupper(Str::random(8));
 
@@ -110,8 +145,16 @@ class CheckoutController extends Controller
             $subtotal += ($item['price'] * $item['quantity']);
         }
 
-        $deliveryFee = (($validated['delivery_type'] ?? 'delivery') === 'delivery' && $subtotal < 50) ? 5.00 : 0.00;
+        $deliveryFee = $this->calculateDeliveryFee($validated['delivery_type'] ?? 'delivery', $subtotal);
         $total = round($subtotal + $deliveryFee, 2);
+
+        if ($subtotal > 50.00) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+            ], 422);
+        }
+
         $currency = config('services.paypal.currency', 'USD');
 
         // If PayPal credentials configured on server, generate order via PayPal API v2
@@ -162,8 +205,15 @@ class CheckoutController extends Controller
         }
 
         $deliveryType = $validated['delivery_type'] ?? 'delivery';
-        $deliveryFee = ($deliveryType === 'delivery' && $subtotal < 50) ? 5.00 : 0.00;
+        $deliveryFee = $this->calculateDeliveryFee($deliveryType, $subtotal);
         $totalAmount = $subtotal + $deliveryFee;
+
+        if ($subtotal > 50.00) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+            ], 422);
+        }
 
         $orderNumber = 'AZ-'.strtoupper(Str::random(8));
         $paypalOrderId = $validated['paypal_order_id'] ?? null;

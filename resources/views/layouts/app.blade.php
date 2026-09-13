@@ -53,6 +53,9 @@
     <!-- Floating WhatsApp Button -->
     @include('partials.whatsapp-widget')
 
+    <!-- Custom Theme Alert & Confirmation Dialog -->
+    @include('partials.alert-dialog')
+
     <!-- Bootstrap 5 Bundle JS (Deferred for non-blocking rendering) -->
     <script defer src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 

@@ -13,6 +13,7 @@ class PageTest extends TestCase
     {
         parent::setUp();
         $this->seed();
+        $this->artisan('db:seed', ['--force' => true]);
     }
 
     public function test_home_page_returns_successful_response(): void
@@ -149,6 +150,56 @@ class PageTest extends TestCase
             'customer_name' => 'Aisha Siddiqui',
             'payment_method' => 'card',
             'delivery_type' => 'pickup',
+        ]);
+    }
+
+    public function test_order_cannot_be_placed_exceeding_fifty_dollars(): void
+    {
+        $response = $this->postJson('/checkout', [
+            'customer_name' => 'Tariq Mehmood',
+            'customer_email' => 'tariq@example.com',
+            'customer_phone' => '919-555-9988',
+            'delivery_type' => 'pickup',
+            'payment_method' => 'cash_on_delivery',
+            'items' => [
+                [
+                    'id' => 1,
+                    'name' => 'T-Bone Steak',
+                    'price' => 18.99,
+                    'quantity' => 3, // 3 * 18.99 = 56.97 > 50.00
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
+        ]);
+        $response->assertJsonFragment([
+            'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+        ]);
+
+        $this->assertDatabaseMissing('orders', [
+            'customer_name' => 'Tariq Mehmood',
+        ]);
+    }
+
+    public function test_paypal_order_cannot_be_created_exceeding_fifty_dollars(): void
+    {
+        $response = $this->postJson('/checkout/paypal/create', [
+            'items' => [
+                [
+                    'id' => 1,
+                    'name' => 'T-Bone Steak',
+                    'price' => 20.00,
+                    'quantity' => 3, // 60.00 > 50.00
+                ],
+            ],
+        ]);
+
+        $response->assertStatus(422);
+        $response->assertJson([
+            'success' => false,
         ]);
     }
 

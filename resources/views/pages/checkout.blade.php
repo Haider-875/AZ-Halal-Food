@@ -17,12 +17,64 @@
             </p>
         </div>
 
+        <!-- Dedicated Bypass Lockout Screen when order > $50 -->
+        <div id="checkoutBypassLockoutScreen" class="d-none my-4">
+            <div class="luxury-card p-4 p-md-5 text-center mx-auto" style="max-width: 650px;">
+                <div class="mb-4">
+                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.4);">
+                        <i class="bi bi-shield-slash-fill fs-1 text-danger"></i>
+                    </span>
+                </div>
+                <h3 class="font-heading text-gold fw-bold text-uppercase mb-2" style="letter-spacing: 0.05em;">Order Limit Exceeded</h3>
+                <p class="text-parchment fs-5 mb-2">Online orders cannot exceed <strong>$50.00</strong>.</p>
+                <p class="text-parchment-dim mb-4" style="font-size: 14px; line-height: 1.6;">
+                    Your cart subtotal is <strong class="text-danger fs-5" id="bypassBlockedTotalDisplay">$0.00</strong>.
+                    Online checkout is restricted for orders with items over $50. Please reduce items in your cart to proceed.
+                </p>
+                <div class="d-flex flex-wrap justify-content-center gap-3">
+                    <button type="button" class="btn btn-gold px-4 py-2" onclick="if(window.AZCart) window.AZCart.openDrawer()">
+                        <i class="bi bi-bag me-1"></i> Edit Cart Items
+                    </button>
+                    <a href="{{ route('catalog') }}" class="btn btn-gold-outline px-4 py-2">
+                        <i class="bi bi-arrow-left me-1"></i> Return to Catalog
+                    </a>
+                </div>
+            </div>
+        </div>
+
         <div class="row g-4" id="checkoutMainContainer">
 
             <!-- Checkout Form -->
             <div class="col-lg-7" data-aos="fade-right" data-aos-duration="750">
                 <div class="luxury-card p-4 p-md-5">
                     <h4 class="font-heading text-gold mb-4 fw-bold text-uppercase" style="letter-spacing: 0.1em;">1. Customer & Delivery Info</h4>
+
+                    <!-- Lockout Banner when order > $50 -->
+                    <div id="checkoutFormLockoutBanner" class="alert alert-warning border border-warning d-none mb-4 p-3 rounded" style="background: rgba(255, 193, 7, 0.12); color: #ffc107;" role="alert">
+                        <div class="d-flex align-items-start gap-3">
+                            <i class="bi bi-shield-lock-fill fs-2 text-warning flex-shrink-0 mt-1"></i>
+                            <div>
+                                <h5 class="font-heading text-uppercase fw-bold text-warning mb-1" style="letter-spacing: 0.05em; font-size: 15px;">Checkout Details Locked (Order > $50.00)</h5>
+                                <p class="mb-2 text-parchment small" style="line-height: 1.6;">
+                                    Online checkout details are disabled because orders cannot exceed <strong>$50.00</strong>. Your current cart subtotal is <strong class="text-gold fs-6" id="lockoutCartTotalDisplay">$0.00</strong>.
+                                </p>
+                                <p class="mb-2 text-parchment-dim small" style="line-height: 1.5;">
+                                    To place this order online, please reduce items in your cart to $50 or below:
+                                </p>
+                                <div class="d-flex flex-wrap gap-2 mt-2">
+                                    <button type="button" class="btn btn-sm btn-gold-outline py-1 px-3" style="font-size: 11px;" onclick="if(window.AZCart) window.AZCart.openDrawer()">
+                                        <i class="bi bi-bag me-1"></i> Edit Cart Items
+                                    </button>
+                                    <a href="{{ route('catalog') }}" class="btn btn-sm btn-gold-outline py-1 px-3" style="font-size: 11px;">
+                                        <i class="bi bi-arrow-left me-1"></i> Browse Catalog
+                                    </a>
+                                    <a href="tel:9192448634" class="btn btn-sm btn-outline-warning py-1 px-3 text-decoration-none d-flex align-items-center gap-1" style="font-size: 11px;">
+                                        <i class="bi bi-telephone"></i> Call: 919-244-8634
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
 
                     <form id="checkoutOrderForm">
                         @csrf
@@ -173,6 +225,17 @@
                         </div>
                     </div>
 
+                    <!-- Maximum $50 Order Limit Notice -->
+                    <div id="checkoutLimitWarning" class="alert alert-warning border border-warning d-none mt-3 mb-0" style="font-size: 12px; background: rgba(255, 193, 7, 0.1); color: #ffc107;" role="alert">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="bi bi-exclamation-triangle-fill fs-5 text-warning flex-shrink-0"></i>
+                            <div>
+                                <strong class="text-warning text-uppercase">Order Limit Exceeded:</strong><br>
+                                <span>Online orders cannot exceed <strong>$50.00</strong>. For bulk meat, whole goat, or catering orders, please call us at <a href="tel:9192448634" class="text-warning fw-bold text-decoration-underline">919-244-8634</a>.</span>
+                            </div>
+                        </div>
+                    </div>
+
                     <div class="mt-4 p-3 bg-dark bg-opacity-50 border border-secondary border-opacity-25 rounded">
                         <div class="d-flex align-items-center gap-2 text-gold small fw-semibold">
                             <i class="bi bi-shield-check fs-5"></i> 100% Halal Certified Guarantee
@@ -192,11 +255,18 @@
 @endsection
 
 @push('scripts')
+
 <script src="https://www.paypal.com/sdk/js?client-id={{ $paypalClientId ?? config('services.paypal.client_id', 'sb') }}&currency={{ $paypalCurrency ?? config('services.paypal.currency', 'USD') }}&intent=capture&enable-funding=venmo,card"></script>
 <script>
-let paypalButtonsRendered = false;
+    window.AZ_DELIVERY_FEE = {{ (float) ($configuredDeliveryFee ?? \App\Models\SiteSection::getValue('delivery_fee', '0.00')) }};
+    window.AZ_FREE_DELIVERY_THRESHOLD = {{ (float) ($freeDeliveryThreshold ?? \App\Models\SiteSection::getValue('delivery_free_threshold', '0.00')) }};
+
+    let paypalButtonsRendered = false;
 
 function selectPaymentMethod(method) {
+    const { subtotal, total } = getCartTotal();
+    if (subtotal > 50 || total > 50) return;
+
     const pmCod = document.getElementById('pm_cod');
     const pmPaypal = document.getElementById('pm_paypal');
     const codContainer = document.getElementById('cod-button-container');
@@ -392,11 +462,40 @@ function renderPaypalSmartButtons() {
 
 function getCartTotal() {
     const form = document.getElementById('checkoutOrderForm');
-    const items = window.AZCart ? window.AZCart.items : [];
+    let items = (window.AZCart && Array.isArray(window.AZCart.items) && window.AZCart.items.length > 0)
+        ? window.AZCart.items
+        : null;
+
+    if (!items) {
+        try {
+            const saved = localStorage.getItem('az_halal_cart_v1');
+            if (saved) {
+                items = JSON.parse(saved);
+            }
+        } catch (e) {
+            items = [];
+        }
+    }
+
+    items = Array.isArray(items) ? items : [];
     let subtotal = 0;
-    items.forEach(i => { subtotal += (i.price * i.quantity); });
+    items.forEach(i => {
+        const price = parseFloat(i.price) || 0;
+        const qty = parseInt(i.quantity, 10) || 1;
+        subtotal += (price * qty);
+    });
+
     const deliveryType = form ? form.querySelector('input[name="delivery_type"]:checked')?.value : 'delivery';
-    const fee = (deliveryType === 'delivery' && subtotal < 50 && subtotal > 0) ? 5.00 : 0.00;
+    const standardFee = parseFloat(window.AZ_DELIVERY_FEE) || 0.00;
+    const freeThreshold = parseFloat(window.AZ_FREE_DELIVERY_THRESHOLD) || 0.00;
+    let fee = 0.00;
+    if (deliveryType === 'delivery' && standardFee > 0 && subtotal > 0) {
+        if (freeThreshold > 0 && subtotal >= freeThreshold) {
+            fee = 0.00;
+        } else {
+            fee = standardFee;
+        }
+    }
     return { subtotal, fee, total: subtotal + fee };
 }
 
@@ -409,18 +508,48 @@ function validateCustomerForm() {
     const deliveryType = form.querySelector('[name="delivery_type"]:checked')?.value;
     const address = form.querySelector('[name="delivery_address"]')?.value.trim();
 
-    if (!name) { alert('Please enter your full name.'); form.querySelector('[name="customer_name"]')?.focus(); return false; }
-    if (!email) { alert('Please enter your email address.'); form.querySelector('[name="customer_email"]')?.focus(); return false; }
-    if (!phone) { alert('Please enter your phone number.'); form.querySelector('[name="customer_phone"]')?.focus(); return false; }
+    if (!name) {
+        alert('Please enter your full name.');
+        form.querySelector('[name="customer_name"]')?.focus();
+        return false;
+    }
+    if (!email) {
+        alert('Please enter your email address.');
+        form.querySelector('[name="customer_email"]')?.focus();
+        return false;
+    }
+    if (!phone) {
+        alert('Please enter your phone number.');
+        form.querySelector('[name="customer_phone"]')?.focus();
+        return false;
+    }
+
     if (deliveryType === 'delivery' && !address) {
         alert('Please enter your delivery street address.');
         form.querySelector('[name="delivery_address"]')?.focus();
         return false;
     }
 
-    const items = window.AZCart ? window.AZCart.items : [];
-    if (!items || items.length === 0) {
+    let items = (window.AZCart && Array.isArray(window.AZCart.items) && window.AZCart.items.length > 0)
+        ? window.AZCart.items
+        : null;
+    if (!items) {
+        try {
+            const saved = localStorage.getItem('az_halal_cart_v1');
+            if (saved) items = JSON.parse(saved);
+        } catch (e) {
+            items = [];
+        }
+    }
+    items = Array.isArray(items) ? items : [];
+    if (items.length === 0) {
         alert('Your cart is empty. Please add items to your cart before proceeding.');
+        return false;
+    }
+
+    const { subtotal } = getCartTotal();
+    if (subtotal > 50) {
+        alert('Online orders cannot exceed $50.00. For wholesale or orders over $50, please call us directly at 919-244-8634.');
         return false;
     }
 
@@ -436,39 +565,128 @@ document.addEventListener('DOMContentLoaded', () => {
     const btnSubmit = document.getElementById('btnSubmitOrder');
 
     function renderCheckoutItems() {
-        const items = window.AZCart ? window.AZCart.items : [];
+        let items = (window.AZCart && Array.isArray(window.AZCart.items))
+            ? window.AZCart.items
+            : null;
         if (!items || items.length === 0) {
-            itemsList.innerHTML = '<p class="text-parchment-muted small text-center my-3">No items in your cart. <a href="{{ route('catalog') }}" class="text-gold">Browse Catalog</a></p>';
-            if (btnSubmit) btnSubmit.disabled = true;
-            return;
+            try {
+                const saved = localStorage.getItem('az_halal_cart_v1');
+                if (saved) items = JSON.parse(saved);
+            } catch (e) {
+                items = [];
+            }
         }
-
-        if (btnSubmit) btnSubmit.disabled = false;
+        items = Array.isArray(items) ? items : [];
 
         const { subtotal, fee, total } = getCartTotal();
+        const isOverLimit = (subtotal > 50.00);
 
-        itemsList.innerHTML = items.map(i => {
-            const itemTotal = i.price * i.quantity;
-            return `
-                <div class="d-flex align-items-center justify-content-between gap-2 pb-2 border-bottom border-secondary border-opacity-15">
-                    <div class="d-flex align-items-center gap-2 min-w-0">
-                        ${i.img ? `<img src="${i.img}" style="width:36px;height:36px;object-fit:cover;border-radius:3px;">` : ''}
-                        <div class="min-w-0">
-                            <div class="text-truncate small fw-semibold text-parchment">${i.name}</div>
-                            <span class="text-parchment-muted" style="font-size:11px;">Qty: ${i.quantity} × $${i.price.toFixed(2)}</span>
+        const mainContainer = document.getElementById('checkoutMainContainer');
+        const lockoutScreen = document.getElementById('checkoutBypassLockoutScreen');
+        const bypassTotalEl = document.getElementById('bypassBlockedTotalDisplay');
+        const limitWarning = document.getElementById('checkoutLimitWarning');
+        const lockoutBanner = document.getElementById('checkoutFormLockoutBanner');
+        const lockoutTotalDisplay = document.getElementById('lockoutCartTotalDisplay');
+
+        if (isOverLimit) {
+            if (mainContainer) mainContainer.classList.add('d-none');
+            if (lockoutScreen) lockoutScreen.classList.remove('d-none');
+            if (bypassTotalEl) bypassTotalEl.textContent = '$' + subtotal.toFixed(2);
+            if (limitWarning) limitWarning.classList.remove('d-none');
+            if (lockoutBanner) lockoutBanner.classList.remove('d-none');
+            if (lockoutTotalDisplay) lockoutTotalDisplay.textContent = '$' + subtotal.toFixed(2);
+
+            if (form) {
+                form.style.opacity = '0.4';
+                form.style.pointerEvents = 'none';
+                form.querySelectorAll('input, textarea, select, button').forEach(el => {
+                    el.disabled = true;
+                });
+            }
+
+            if (btnSubmit) {
+                btnSubmit.disabled = true;
+                btnSubmit.classList.add('opacity-50');
+                btnSubmit.innerHTML = '<span>Order Exceeds $50 Max Limit</span>';
+            }
+        } else {
+            if (mainContainer) mainContainer.classList.remove('d-none');
+            if (lockoutScreen) lockoutScreen.classList.add('d-none');
+            if (limitWarning) limitWarning.classList.add('d-none');
+            if (lockoutBanner) lockoutBanner.classList.add('d-none');
+
+            if (form) {
+                form.style.opacity = '1';
+                form.style.pointerEvents = 'auto';
+                form.querySelectorAll('input, textarea, select, button').forEach(el => {
+                    el.disabled = false;
+                });
+            }
+
+            if (btnSubmit) {
+                btnSubmit.disabled = false;
+                btnSubmit.classList.remove('opacity-50');
+                btnSubmit.innerHTML = '<span>Place Order (Cash on Delivery)</span>';
+            }
+        }
+
+        if (itemsList) {
+            if (items.length === 0) {
+                itemsList.innerHTML = '<p class="text-parchment-muted small text-center my-3">No items in your cart. <a href="{{ route('catalog') }}" class="text-gold">Browse Catalog</a></p>';
+                if (btnSubmit) btnSubmit.disabled = true;
+            } else {
+                itemsList.innerHTML = items.map(i => {
+                    const price = parseFloat(i.price) || 0;
+                    const qty = parseInt(i.quantity, 10) || 1;
+                    const itemTotal = price * qty;
+                    const itemImg = (i.img && typeof i.img === 'string') ? i.img.replace(/^http:\/\//i, 'https://') : '';
+                    return `
+                        <div class="d-flex align-items-center justify-content-between gap-2 pb-2 border-bottom border-secondary border-opacity-15">
+                            <div class="d-flex align-items-center gap-2 min-w-0">
+                                ${itemImg ? `<img src="${itemImg}" style="width:36px;height:36px;object-fit:cover;border-radius:3px;">` : ''}
+                                <div class="min-w-0">
+                                    <div class="text-truncate small fw-semibold text-parchment">${i.name}</div>
+                                    <span class="text-parchment-muted" style="font-size:11px;">Qty: ${qty} × $${price.toFixed(2)}</span>
+                                </div>
+                            </div>
+                            <span class="font-heading text-gold fw-bold small flex-shrink-0">$${itemTotal.toFixed(2)}</span>
                         </div>
-                    </div>
-                    <span class="font-heading text-gold fw-bold small flex-shrink-0">$${itemTotal.toFixed(2)}</span>
-                </div>
-            `;
-        }).join('');
+                    `;
+                }).join('');
+            }
+        }
 
         if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toFixed(2);
         if (deliveryFeeEl) deliveryFeeEl.textContent = fee > 0 ? '$' + fee.toFixed(2) : 'FREE';
         if (totalEl) totalEl.textContent = '$' + total.toFixed(2);
     }
 
+    // Initial render
     renderCheckoutItems();
+
+    // Show alert once on initial load if over limit (NO REDIRECT)
+    const { subtotal: initSubtotal } = getCartTotal();
+    if (initSubtotal > 50) {
+        const alertOptions = {
+            title: 'Order Limit Exceeded',
+            message: `Online checkout is limited to orders up to <strong>$50.00</strong>.<br><br>Your cart subtotal is <span class="text-gold fw-bold">$${initSubtotal.toFixed(2)}</span>.<br><br>Please adjust your cart items or reduce quantities to proceed with checkout.`,
+            icon: 'shield-lock',
+            confirmText: 'Understood'
+        };
+        if (typeof window.showAZAlert === 'function') {
+            window.showAZAlert(alertOptions);
+        }
+    }
+
+    // Dynamically update checkout whenever cart items change in drawer or storage
+    window.addEventListener('az-cart-updated', () => {
+        renderCheckoutItems();
+    });
+    window.addEventListener('storage', (e) => {
+        if (e.key === 'az_halal_cart_v1') {
+            renderCheckoutItems();
+        }
+    });
 
     // Delivery type change updates summary
     const dtInputs = document.querySelectorAll('input[name="delivery_type"]');
@@ -529,5 +747,6 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
 </script>
 @endpush

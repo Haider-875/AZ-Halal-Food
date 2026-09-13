@@ -10,7 +10,9 @@ class SectionController extends Controller
 {
     public function index()
     {
-        $sections = SiteSection::all()->groupBy('section_group');
+        $sections = SiteSection::all()
+            ->sortBy(fn ($s) => $s->section_group === 'delivery' ? 0 : 1)
+            ->groupBy('section_group');
 
         return view('admin.sections.index', compact('sections'));
     }

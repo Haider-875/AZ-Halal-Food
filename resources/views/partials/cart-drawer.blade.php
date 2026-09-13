@@ -8,9 +8,9 @@
         </div>
         <button type="button" class="btn-close btn-close-white" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
-    
+
     <div class="offcanvas-body d-flex flex-column justify-content-between">
-        
+
         <!-- Empty State -->
         <div id="cartEmptyState" class="text-center my-auto py-5" style="display: none;">
             <i class="bi bi-bag text-gold opacity-50" style="font-size: 3rem;"></i>
@@ -33,9 +33,15 @@
                 Free delivery within 10 miles. Call or WhatsApp for real-time delivery confirmation.
             </p>
 
+            <!-- Online Max $50 Order Notice -->
+                {{-- <div id="cartDrawerLimitNotice" class="alert alert-warning border border-warning py-2 px-2 mb-2 d-none" style="font-size: 11px; background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
+                    Online checkout is capped at <strong>$50.00</strong>. For larger orders, please use <strong>Order Via WhatsApp</strong> below.
+                </div> --}}
+
             <div class="d-flex flex-column gap-2">
                 <!-- Direct Checkout Link -->
-                <a href="{{ route('checkout') }}" class="btn-gold-outline w-100 text-center text-decoration-none">
+                <a href="{{ route('checkout') }}" id="btnProceedToCheckout" class="btn-gold-outline w-100 text-center text-decoration-none">
                     <span>Proceed to Checkout</span>
                 </a>
                 <!-- WhatsApp Quick Order -->

@@ -21,7 +21,21 @@
     init() {
       try {
         const saved = localStorage.getItem(this.key);
-        if (saved) this.items = JSON.parse(saved);
+        if (saved) {
+          this.items = JSON.parse(saved);
+          if (Array.isArray(this.items)) {
+            let changed = false;
+            this.items.forEach(item => {
+              if (item.img && typeof item.img === 'string' && item.img.startsWith('http://')) {
+                item.img = item.img.replace(/^http:\/\//i, 'https://');
+                changed = true;
+              }
+            });
+            if (changed) {
+              this.save();
+            }
+          }
+        }
       } catch (e) {
         this.items = [];
       }
@@ -32,6 +46,9 @@
     save() {
       localStorage.setItem(this.key, JSON.stringify(this.items));
       this.render();
+      window.dispatchEvent(new CustomEvent('az-cart-updated', {
+        detail: { items: this.items, subtotal: this.getSubtotal(), count: this.getCount() }
+      }));
     },
 
     addItem(product, qty = 1) {
@@ -39,12 +56,15 @@
       if (existing) {
         existing.quantity += qty;
       } else {
+        const imgSrc = (product.img && typeof product.img === 'string')
+          ? product.img.replace(/^http:\/\//i, 'https://')
+          : (product.img || '');
         this.items.push({
           id: product.id,
           name: product.name,
           price: parseFloat(product.price) || 0,
           sku: product.sku || '',
-          img: product.img || '',
+          img: imgSrc,
           quantity: qty,
         });
       }
@@ -122,11 +142,11 @@
           `;
         } else {
           container.innerHTML = `
-            <button type="button" class="btn-gold-outline py-2 px-3 btn-add-to-cart" 
-              data-id="${id}" 
-              data-name="${name}" 
-              data-price="${price}" 
-              data-sku="${sku}" 
+            <button type="button" class="btn-gold-outline py-2 px-3 btn-add-to-cart"
+              data-id="${id}"
+              data-name="${name}"
+              data-price="${price}"
+              data-sku="${sku}"
               data-img="${img}"
               style="font-size: 10px; letter-spacing: 0.2em;">
               <span>Add to Cart</span>
@@ -152,9 +172,28 @@
         if (footerState) footerState.style.display = 'block';
         if (subtotalEl) subtotalEl.textContent = '$' + subtotal.toFixed(2);
 
-        container.innerHTML = this.items.map(item => `
+        const limitNotice = document.getElementById('cartDrawerLimitNotice');
+        const btnProceed = document.getElementById('btnProceedToCheckout');
+        const isOverLimit = subtotal > 50;
+
+        if (limitNotice) {
+          limitNotice.classList.toggle('d-none', !isOverLimit);
+        }
+        if (btnProceed) {
+          if (isOverLimit) {
+            btnProceed.classList.add('opacity-50');
+            btnProceed.setAttribute('title', 'Online checkout limited to $50.00');
+          } else {
+            btnProceed.classList.remove('opacity-50');
+            btnProceed.removeAttribute('title');
+          }
+        }
+
+        container.innerHTML = this.items.map(item => {
+          const itemImg = (item.img && typeof item.img === 'string') ? item.img.replace(/^http:\/\//i, 'https://') : '';
+          return `
           <div class="cart-item-row">
-            <img src="${item.img}" alt="${item.name}" style="width:64px;height:64px;object-fit:cover;border:1px solid rgba(212,175,55,0.25);" class="flex-shrink-0">
+            ${itemImg ? `<img src="${itemImg}" alt="${item.name}" style="width:64px;height:64px;object-fit:cover;border:1px solid rgba(212,175,55,0.25);" class="flex-shrink-0">` : ''}
             <div class="flex-grow-1 min-w-0">
               <h6 class="font-heading text-gold mb-1 text-uppercase text-truncate" style="font-size:13px;letter-spacing:0.05em;">${item.name}</h6>
               <div class="text-parchment-muted" style="font-size:12px;">$${item.price.toFixed(2)} each</div>
@@ -170,7 +209,8 @@
               </div>
             </div>
           </div>
-        `).join('');
+        `;
+        }).join('');
       }
     },
 
@@ -216,6 +256,24 @@
         const btnClear = e.target.closest('#btnClearCart');
         if (btnClear) {
           this.clear();
+        }
+
+        const btnProceed = e.target.closest('#btnProceedToCheckout');
+        if (btnProceed) {
+          if (this.getSubtotal() > 50) {
+            e.preventDefault();
+            if (typeof window.showAZAlert === 'function') {
+              window.showAZAlert({
+                title: 'Order Limit Exceeded',
+                message: `Online checkout is limited to orders up to <strong>$50.00</strong>.<br><br>Your cart subtotal is <span class="text-gold fw-bold">$${this.getSubtotal().toFixed(2)}</span>.<br><br>Please reduce items in your cart to proceed with online checkout.`,
+                icon: 'shield-lock',
+                confirmText: 'Adjust Cart'
+              });
+            } else {
+              alert('Online checkout is limited to orders up to $50.00.\nYour cart subtotal is $' + this.getSubtotal().toFixed(2) + '.\n\nPlease reduce items to under $50 to proceed.');
+            }
+            return;
+          }
         }
 
         const btnWhatsAppCheckout = e.target.closest('#btnWhatsAppCheckout');

@@ -62,10 +62,26 @@ class Product extends Model
             return null;
         }
 
-        if (str_starts_with($value, 'data:') || str_starts_with($value, 'http://') || str_starts_with($value, 'https://')) {
+        if (str_starts_with($value, 'data:') || str_starts_with($value, 'https://')) {
             return $value;
         }
 
+        if (str_starts_with($value, 'http://')) {
+            return 'https://'.substr($value, 7);
+        }
+
         return asset(ltrim($value, '/'));
+    }
+
+    /**
+     * Set the product image URL, ensuring HTTPS for external links.
+     */
+    public function setImgAttribute(?string $value): void
+    {
+        if ($value && str_starts_with($value, 'http://')) {
+            $this->attributes['img'] = 'https://'.substr($value, 7);
+        } else {
+            $this->attributes['img'] = $value;
+        }
     }
 }
