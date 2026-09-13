@@ -112,8 +112,8 @@ class PageTest extends TestCase
                 [
                     'id' => 1,
                     'name' => 'T-Bone Steak',
-                    'price' => 18.99,
-                    'quantity' => 2,
+                    'price' => 26.00,
+                    'quantity' => 2, // 52.00 >= 50.00
                     'img' => 'https://images.unsplash.com/photo-1558030006-450675393462?w=600&q=80',
                 ],
             ],
@@ -139,8 +139,8 @@ class PageTest extends TestCase
                 [
                     'id' => 2,
                     'name' => 'Rib-Eye Steak',
-                    'price' => 22.99,
-                    'quantity' => 1,
+                    'price' => 27.50,
+                    'quantity' => 2, // 55.00 >= 50.00
                 ],
             ],
         ]);
@@ -153,7 +153,7 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function test_order_cannot_be_placed_exceeding_fifty_dollars(): void
+    public function test_order_cannot_be_placed_under_fifty_dollars(): void
     {
         $response = $this->postJson('/checkout', [
             'customer_name' => 'Tariq Mehmood',
@@ -166,7 +166,7 @@ class PageTest extends TestCase
                     'id' => 1,
                     'name' => 'T-Bone Steak',
                     'price' => 18.99,
-                    'quantity' => 3, // 3 * 18.99 = 56.97 > 50.00
+                    'quantity' => 1, // 18.99 < 50.00
                 ],
             ],
         ]);
@@ -176,7 +176,7 @@ class PageTest extends TestCase
             'success' => false,
         ]);
         $response->assertJsonFragment([
-            'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+            'message' => 'A minimum order of $50.00 is required for online checkout. Your current subtotal is $18.99. Please add more items to proceed.',
         ]);
 
         $this->assertDatabaseMissing('orders', [
@@ -184,7 +184,7 @@ class PageTest extends TestCase
         ]);
     }
 
-    public function test_paypal_order_cannot_be_created_exceeding_fifty_dollars(): void
+    public function test_paypal_order_cannot_be_created_under_fifty_dollars(): void
     {
         $response = $this->postJson('/checkout/paypal/create', [
             'items' => [
@@ -192,7 +192,7 @@ class PageTest extends TestCase
                     'id' => 1,
                     'name' => 'T-Bone Steak',
                     'price' => 20.00,
-                    'quantity' => 3, // 60.00 > 50.00
+                    'quantity' => 1, // 20.00 < 50.00
                 ],
             ],
         ]);

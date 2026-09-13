@@ -77,8 +77,8 @@ class CheckoutController extends Controller
         $deliveryFee = $this->calculateDeliveryFee($validated['delivery_type'], $subtotal);
         $totalAmount = $subtotal + $deliveryFee;
 
-        if ($subtotal > 50.00) {
-            $msg = 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.';
+        if ($subtotal < 50.00) {
+            $msg = 'A minimum order of $50.00 is required for online checkout. Your current subtotal is $'.number_format($subtotal, 2).'. Please add more items to proceed.';
             if ($request->wantsJson() || $request->ajax()) {
                 return response()->json([
                     'success' => false,
@@ -148,10 +148,10 @@ class CheckoutController extends Controller
         $deliveryFee = $this->calculateDeliveryFee($validated['delivery_type'] ?? 'delivery', $subtotal);
         $total = round($subtotal + $deliveryFee, 2);
 
-        if ($subtotal > 50.00) {
+        if ($subtotal < 50.00) {
             return response()->json([
                 'success' => false,
-                'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+                'message' => 'A minimum order of $50.00 is required for online checkout. Your current subtotal is $'.number_format($subtotal, 2).'. Please add more items to proceed.',
             ], 422);
         }
 
@@ -208,10 +208,10 @@ class CheckoutController extends Controller
         $deliveryFee = $this->calculateDeliveryFee($deliveryType, $subtotal);
         $totalAmount = $subtotal + $deliveryFee;
 
-        if ($subtotal > 50.00) {
+        if ($subtotal < 50.00) {
             return response()->json([
                 'success' => false,
-                'message' => 'Online orders cannot exceed $50.00. For wholesale, catering, or bulk orders, please contact us directly at (919) 244-8634.',
+                'message' => 'A minimum order of $50.00 is required for online checkout. Your current subtotal is $'.number_format($subtotal, 2).'. Please add more items to proceed.',
             ], 422);
         }
 

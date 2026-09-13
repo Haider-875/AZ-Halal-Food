@@ -143,6 +143,8 @@ class AdminTest extends TestCase
     public function test_customer_can_place_order_via_checkout(): void
     {
         $product = Product::first();
+        $price = (float) $product->price;
+        $quantity = (int) ceil(55.00 / max($price, 1));
 
         $response = $this->postJson('/checkout', [
             'customer_name' => 'Zubair Malik',
@@ -158,8 +160,8 @@ class AdminTest extends TestCase
                 [
                     'id' => $product->id,
                     'name' => $product->name,
-                    'price' => (float) $product->price,
-                    'quantity' => 2,
+                    'price' => $price,
+                    'quantity' => $quantity,
                     'img' => $product->img,
                 ],
             ],

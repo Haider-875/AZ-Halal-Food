@@ -17,64 +17,12 @@
             </p>
         </div>
 
-        <!-- Dedicated Bypass Lockout Screen when order > $50 -->
-        <div id="checkoutBypassLockoutScreen" class="d-none my-4">
-            <div class="luxury-card p-4 p-md-5 text-center mx-auto" style="max-width: 650px;">
-                <div class="mb-4">
-                    <span class="d-inline-flex align-items-center justify-content-center rounded-circle" style="width: 80px; height: 80px; background: rgba(239, 68, 68, 0.15); border: 2px solid rgba(239, 68, 68, 0.4);">
-                        <i class="bi bi-shield-slash-fill fs-1 text-danger"></i>
-                    </span>
-                </div>
-                <h3 class="font-heading text-gold fw-bold text-uppercase mb-2" style="letter-spacing: 0.05em;">Order Limit Exceeded</h3>
-                <p class="text-parchment fs-5 mb-2">Online orders cannot exceed <strong>$50.00</strong>.</p>
-                <p class="text-parchment-dim mb-4" style="font-size: 14px; line-height: 1.6;">
-                    Your cart subtotal is <strong class="text-danger fs-5" id="bypassBlockedTotalDisplay">$0.00</strong>.
-                    Online checkout is restricted for orders with items over $50. Please reduce items in your cart to proceed.
-                </p>
-                <div class="d-flex flex-wrap justify-content-center gap-3">
-                    <button type="button" class="btn btn-gold px-4 py-2" onclick="if(window.AZCart) window.AZCart.openDrawer()">
-                        <i class="bi bi-bag me-1"></i> Edit Cart Items
-                    </button>
-                    <a href="{{ route('catalog') }}" class="btn btn-gold-outline px-4 py-2">
-                        <i class="bi bi-arrow-left me-1"></i> Return to Catalog
-                    </a>
-                </div>
-            </div>
-        </div>
-
         <div class="row g-4" id="checkoutMainContainer">
 
             <!-- Checkout Form -->
             <div class="col-lg-7" data-aos="fade-right" data-aos-duration="750">
                 <div class="luxury-card p-4 p-md-5">
                     <h4 class="font-heading text-gold mb-4 fw-bold text-uppercase" style="letter-spacing: 0.1em;">1. Customer & Delivery Info</h4>
-
-                    <!-- Lockout Banner when order > $50 -->
-                    <div id="checkoutFormLockoutBanner" class="alert alert-warning border border-warning d-none mb-4 p-3 rounded" style="background: rgba(255, 193, 7, 0.12); color: #ffc107;" role="alert">
-                        <div class="d-flex align-items-start gap-3">
-                            <i class="bi bi-shield-lock-fill fs-2 text-warning flex-shrink-0 mt-1"></i>
-                            <div>
-                                <h5 class="font-heading text-uppercase fw-bold text-warning mb-1" style="letter-spacing: 0.05em; font-size: 15px;">Checkout Details Locked (Order > $50.00)</h5>
-                                <p class="mb-2 text-parchment small" style="line-height: 1.6;">
-                                    Online checkout details are disabled because orders cannot exceed <strong>$50.00</strong>. Your current cart subtotal is <strong class="text-gold fs-6" id="lockoutCartTotalDisplay">$0.00</strong>.
-                                </p>
-                                <p class="mb-2 text-parchment-dim small" style="line-height: 1.5;">
-                                    To place this order online, please reduce items in your cart to $50 or below:
-                                </p>
-                                <div class="d-flex flex-wrap gap-2 mt-2">
-                                    <button type="button" class="btn btn-sm btn-gold-outline py-1 px-3" style="font-size: 11px;" onclick="if(window.AZCart) window.AZCart.openDrawer()">
-                                        <i class="bi bi-bag me-1"></i> Edit Cart Items
-                                    </button>
-                                    <a href="{{ route('catalog') }}" class="btn btn-sm btn-gold-outline py-1 px-3" style="font-size: 11px;">
-                                        <i class="bi bi-arrow-left me-1"></i> Browse Catalog
-                                    </a>
-                                    <a href="tel:9192448634" class="btn btn-sm btn-outline-warning py-1 px-3 text-decoration-none d-flex align-items-center gap-1" style="font-size: 11px;">
-                                        <i class="bi bi-telephone"></i> Call: 919-244-8634
-                                    </a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
 
                     <form id="checkoutOrderForm">
                         @csrf
@@ -151,6 +99,25 @@
                                 </div>
                             </div>
 
+                            <!-- Minimum $50 Order Requirement Notice -->
+                            <div class="col-12 pt-3 d-none" id="checkoutMinOrderNotice">
+                                <div class="alert alert-warning border border-warning p-3 rounded mb-0" style="background: rgba(255, 193, 7, 0.12); color: #ffc107;" role="alert">
+                                    <div class="d-flex align-items-start gap-3">
+                                        <i class="bi bi-info-circle-fill fs-4 text-warning flex-shrink-0 mt-1"></i>
+                                        <div class="flex-grow-1">
+                                            <strong class="text-warning text-uppercase d-block mb-1" style="letter-spacing: 0.05em; font-size: 13px;">Minimum Order Requirement: $50.00</strong>
+                                            <p class="text-parchment small mb-2" style="line-height: 1.5;">
+                                                Online checkout requires a minimum order of <strong>$50.00</strong>. Your current subtotal is <span class="text-gold fw-bold" id="minNoticeSubtotalDisplay">$0.00</span>.
+                                                Please add at least <span class="text-warning fw-bold" id="minNoticeShortfallDisplay">$0.00</span> more to enable order placement via Cash on Delivery or PayPal.
+                                            </p>
+                                            <a href="{{ route('catalog') }}" class="btn btn-sm btn-gold text-decoration-none px-3 py-1" style="font-size: 11px;">
+                                                <i class="bi bi-cart-plus me-1"></i> Browse Catalog & Add Items
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
                             <!-- COD Submit Button Container -->
                             <div class="col-12 pt-4" id="cod-button-container">
                                 <button type="submit" id="btnSubmitOrder" class="btn-gold-outline w-100 py-3 text-center">
@@ -185,6 +152,11 @@
                                         <div class="text-parchment-muted mt-1" style="font-size: 11px;">
                                             Please do not refresh or close this window.
                                         </div>
+                                    </div>
+
+                                    <!-- PayPal Minimum Order Warning -->
+                                    <div id="paypalMinOrderWarning" class="alert alert-warning small py-2 px-3 mb-2 d-none" style="font-size: 12px; background: rgba(255, 193, 7, 0.12); color: #ffc107;">
+                                        <i class="bi bi-exclamation-triangle-fill me-1"></i> PayPal buttons are disabled until the <strong>$50.00</strong> minimum order requirement is met.
                                     </div>
 
                                     <!-- Real PayPal Smart Payment Buttons Mount Target -->
@@ -225,13 +197,13 @@
                         </div>
                     </div>
 
-                    <!-- Maximum $50 Order Limit Notice -->
+                    <!-- Minimum $50 Order Requirement Notice -->
                     <div id="checkoutLimitWarning" class="alert alert-warning border border-warning d-none mt-3 mb-0" style="font-size: 12px; background: rgba(255, 193, 7, 0.1); color: #ffc107;" role="alert">
                         <div class="d-flex align-items-start gap-2">
-                            <i class="bi bi-exclamation-triangle-fill fs-5 text-warning flex-shrink-0"></i>
+                            <i class="bi bi-info-circle-fill fs-5 text-warning flex-shrink-0"></i>
                             <div>
-                                <strong class="text-warning text-uppercase">Order Limit Exceeded:</strong><br>
-                                <span>Online orders cannot exceed <strong>$50.00</strong>. For bulk meat, whole goat, or catering orders, please call us at <a href="tel:9192448634" class="text-warning fw-bold text-decoration-underline">919-244-8634</a>.</span>
+                                <strong class="text-warning text-uppercase">Minimum Order: $50.00</strong><br>
+                                <span>Online checkout requires a minimum order of <strong>$50.00</strong>. Please add <strong id="sidebarShortfallDisplay">$0.00</strong> more to proceed.</span>
                             </div>
                         </div>
                     </div>
@@ -264,9 +236,6 @@
     let paypalButtonsRendered = false;
 
 function selectPaymentMethod(method) {
-    const { subtotal, total } = getCartTotal();
-    if (subtotal > 50 || total > 50) return;
-
     const pmCod = document.getElementById('pm_cod');
     const pmPaypal = document.getElementById('pm_paypal');
     const codContainer = document.getElementById('cod-button-container');
@@ -335,6 +304,14 @@ function renderPaypalSmartButtons() {
 
     paypalButtonsRendered = true;
     target.innerHTML = '';
+
+    const { subtotal } = getCartTotal();
+    if (subtotal < 50.00) {
+        target.style.opacity = '0.35';
+        target.style.pointerEvents = 'none';
+        const paypalWarning = document.getElementById('paypalMinOrderWarning');
+        if (paypalWarning) paypalWarning.classList.remove('d-none');
+    }
 
     paypal.Buttons({
         style: {
@@ -548,8 +525,18 @@ function validateCustomerForm() {
     }
 
     const { subtotal } = getCartTotal();
-    if (subtotal > 50) {
-        alert('Online orders cannot exceed $50.00. For wholesale or orders over $50, please call us directly at 919-244-8634.');
+    if (subtotal < 50) {
+        const shortfall = (50 - subtotal).toFixed(2);
+        if (typeof window.showAZAlert === 'function') {
+            window.showAZAlert({
+                title: 'Minimum Order Required',
+                message: `Online checkout requires a minimum order of <strong>$50.00</strong>.<br><br>Your cart subtotal is <span class="text-gold fw-bold">$${subtotal.toFixed(2)}</span>.<br><br>Please add at least <strong>$${shortfall}</strong> more to your cart to proceed with checkout.`,
+                icon: 'shield-lock',
+                confirmText: 'Add Items'
+            });
+        } else {
+            alert('A minimum order of $50.00 is required for online checkout.\nYour current subtotal is $' + subtotal.toFixed(2) + '.\nPlease add at least $' + shortfall + ' more to proceed.');
+        }
         return false;
     }
 
@@ -579,52 +566,48 @@ document.addEventListener('DOMContentLoaded', () => {
         items = Array.isArray(items) ? items : [];
 
         const { subtotal, fee, total } = getCartTotal();
-        const isOverLimit = (subtotal > 50.00);
+        const shortfall = Math.max(0, 50.00 - subtotal);
+        const shortfallStr = '$' + shortfall.toFixed(2);
+        const isUnderLimit = (items.length > 0 && subtotal < 50.00);
 
-        const mainContainer = document.getElementById('checkoutMainContainer');
-        const lockoutScreen = document.getElementById('checkoutBypassLockoutScreen');
-        const bypassTotalEl = document.getElementById('bypassBlockedTotalDisplay');
+        const minNotice = document.getElementById('checkoutMinOrderNotice');
+        const minNoticeSubtotal = document.getElementById('minNoticeSubtotalDisplay');
+        const minNoticeShortfall = document.getElementById('minNoticeShortfallDisplay');
         const limitWarning = document.getElementById('checkoutLimitWarning');
-        const lockoutBanner = document.getElementById('checkoutFormLockoutBanner');
-        const lockoutTotalDisplay = document.getElementById('lockoutCartTotalDisplay');
+        const sidebarShortfallEl = document.getElementById('sidebarShortfallDisplay');
+        const paypalWarning = document.getElementById('paypalMinOrderWarning');
+        const paypalContainer = document.getElementById('paypal-button-container');
 
-        if (isOverLimit) {
-            if (mainContainer) mainContainer.classList.add('d-none');
-            if (lockoutScreen) lockoutScreen.classList.remove('d-none');
-            if (bypassTotalEl) bypassTotalEl.textContent = '$' + subtotal.toFixed(2);
+        if (isUnderLimit) {
+            if (minNotice) minNotice.classList.remove('d-none');
+            if (minNoticeSubtotal) minNoticeSubtotal.textContent = '$' + subtotal.toFixed(2);
+            if (minNoticeShortfall) minNoticeShortfall.textContent = shortfallStr;
+
             if (limitWarning) limitWarning.classList.remove('d-none');
-            if (lockoutBanner) lockoutBanner.classList.remove('d-none');
-            if (lockoutTotalDisplay) lockoutTotalDisplay.textContent = '$' + subtotal.toFixed(2);
+            if (sidebarShortfallEl) sidebarShortfallEl.textContent = shortfallStr;
 
-            if (form) {
-                form.style.opacity = '0.4';
-                form.style.pointerEvents = 'none';
-                form.querySelectorAll('input, textarea, select, button').forEach(el => {
-                    el.disabled = true;
-                });
+            if (paypalWarning) paypalWarning.classList.remove('d-none');
+            if (paypalContainer) {
+                paypalContainer.style.opacity = '0.35';
+                paypalContainer.style.pointerEvents = 'none';
             }
 
             if (btnSubmit) {
                 btnSubmit.disabled = true;
                 btnSubmit.classList.add('opacity-50');
-                btnSubmit.innerHTML = '<span>Order Exceeds $50 Max Limit</span>';
+                btnSubmit.innerHTML = '<span>Place Order ($50.00 Min Required)</span>';
             }
         } else {
-            if (mainContainer) mainContainer.classList.remove('d-none');
-            if (lockoutScreen) lockoutScreen.classList.add('d-none');
+            if (minNotice) minNotice.classList.add('d-none');
             if (limitWarning) limitWarning.classList.add('d-none');
-            if (lockoutBanner) lockoutBanner.classList.add('d-none');
-
-            if (form) {
-                form.style.opacity = '1';
-                form.style.pointerEvents = 'auto';
-                form.querySelectorAll('input, textarea, select, button').forEach(el => {
-                    el.disabled = false;
-                });
+            if (paypalWarning) paypalWarning.classList.add('d-none');
+            if (paypalContainer) {
+                paypalContainer.style.opacity = '1';
+                paypalContainer.style.pointerEvents = 'auto';
             }
 
             if (btnSubmit) {
-                btnSubmit.disabled = false;
+                btnSubmit.disabled = (items.length === 0);
                 btnSubmit.classList.remove('opacity-50');
                 btnSubmit.innerHTML = '<span>Place Order (Cash on Delivery)</span>';
             }
@@ -663,20 +646,6 @@ document.addEventListener('DOMContentLoaded', () => {
 
     // Initial render
     renderCheckoutItems();
-
-    // Show alert once on initial load if over limit (NO REDIRECT)
-    const { subtotal: initSubtotal } = getCartTotal();
-    if (initSubtotal > 50) {
-        const alertOptions = {
-            title: 'Order Limit Exceeded',
-            message: `Online checkout is limited to orders up to <strong>$50.00</strong>.<br><br>Your cart subtotal is <span class="text-gold fw-bold">$${initSubtotal.toFixed(2)}</span>.<br><br>Please adjust your cart items or reduce quantities to proceed with checkout.`,
-            icon: 'shield-lock',
-            confirmText: 'Understood'
-        };
-        if (typeof window.showAZAlert === 'function') {
-            window.showAZAlert(alertOptions);
-        }
-    }
 
     // Dynamically update checkout whenever cart items change in drawer or storage
     window.addEventListener('az-cart-updated', () => {

@@ -174,19 +174,18 @@
 
         const limitNotice = document.getElementById('cartDrawerLimitNotice');
         const btnProceed = document.getElementById('btnProceedToCheckout');
-        const isOverLimit = subtotal > 50;
+        const isUnderLimit = (subtotal < 50);
+        const shortfall = Math.max(0, 50 - subtotal);
 
         if (limitNotice) {
-          limitNotice.classList.toggle('d-none', !isOverLimit);
+          limitNotice.classList.toggle('d-none', !isUnderLimit);
+          const shortfallEl = document.getElementById('cartDrawerShortfallText');
+          if (shortfallEl) {
+            shortfallEl.textContent = isUnderLimit ? ` Add $${shortfall.toFixed(2)} more to proceed.` : '';
+          }
         }
         if (btnProceed) {
-          if (isOverLimit) {
-            btnProceed.classList.add('opacity-50');
-            btnProceed.setAttribute('title', 'Online checkout limited to $50.00');
-          } else {
-            btnProceed.classList.remove('opacity-50');
-            btnProceed.removeAttribute('title');
-          }
+          btnProceed.classList.remove('opacity-50');
         }
 
         container.innerHTML = this.items.map(item => {
@@ -258,23 +257,7 @@
           this.clear();
         }
 
-        const btnProceed = e.target.closest('#btnProceedToCheckout');
-        if (btnProceed) {
-          if (this.getSubtotal() > 50) {
-            e.preventDefault();
-            if (typeof window.showAZAlert === 'function') {
-              window.showAZAlert({
-                title: 'Order Limit Exceeded',
-                message: `Online checkout is limited to orders up to <strong>$50.00</strong>.<br><br>Your cart subtotal is <span class="text-gold fw-bold">$${this.getSubtotal().toFixed(2)}</span>.<br><br>Please reduce items in your cart to proceed with online checkout.`,
-                icon: 'shield-lock',
-                confirmText: 'Adjust Cart'
-              });
-            } else {
-              alert('Online checkout is limited to orders up to $50.00.\nYour cart subtotal is $' + this.getSubtotal().toFixed(2) + '.\n\nPlease reduce items to under $50 to proceed.');
-            }
-            return;
-          }
-        }
+        // btnProceedToCheckout naturally navigates to /checkout so customer can view proper checkout page
 
         const btnWhatsAppCheckout = e.target.closest('#btnWhatsAppCheckout');
         if (btnWhatsAppCheckout) {

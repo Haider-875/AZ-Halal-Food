@@ -33,11 +33,11 @@
                 Free delivery within 10 miles. Call or WhatsApp for real-time delivery confirmation.
             </p>
 
-            <!-- Online Max $50 Order Notice -->
-                {{-- <div id="cartDrawerLimitNotice" class="alert alert-warning border border-warning py-2 px-2 mb-2 d-none" style="font-size: 11px; background: rgba(255, 193, 7, 0.1); color: #ffc107;">
-                    <i class="bi bi-exclamation-triangle-fill me-1"></i>
-                    Online checkout is capped at <strong>$50.00</strong>. For larger orders, please use <strong>Order Via WhatsApp</strong> below.
-                </div> --}}
+            <!-- Minimum $50 Order Notice -->
+            <div id="cartDrawerLimitNotice" class="alert alert-warning border border-warning py-2 px-2 mb-2 d-none" style="font-size: 11px; background: rgba(255, 193, 7, 0.1); color: #ffc107;">
+                <i class="bi bi-info-circle-fill me-1"></i>
+                Minimum order for online checkout is <strong>$50.00</strong>.<span id="cartDrawerShortfallText"></span>
+            </div>
 
             <div class="d-flex flex-column gap-2">
                 <!-- Direct Checkout Link -->
