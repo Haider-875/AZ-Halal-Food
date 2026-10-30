@@ -53,14 +53,14 @@
                     <i class="bi bi-telephone fs-3 text-gold mb-3"></i>
                     <h3 class="font-heading text-uppercase text-gold fw-bold fs-5 mb-3" style="letter-spacing: 0.1em;">Phone & Social</h3>
                     <div class="d-flex flex-column gap-2 mb-4">
-                        <a href="tel:9192448634" class="text-parchment-dim text-decoration-none hover-gold small">
-                            📞 919-244-8634
+                        <a href="tel:9192448634" class="text-parchment-dim text-decoration-none hover-gold small d-flex align-items-center gap-2">
+                            <i class="bi bi-telephone text-gold"></i> 919-244-8634
                         </a>
-                        <a href="tel:9193441125" class="text-parchment-dim text-decoration-none hover-gold small">
-                            📞 919-344-1125
+                        <a href="tel:9193441125" class="text-parchment-dim text-decoration-none hover-gold small d-flex align-items-center gap-2">
+                            <i class="bi bi-telephone text-gold"></i> 919-344-1125
                         </a>
-                        <a href="https://wa.me/19192448634" target="_blank" rel="noopener noreferrer" class="text-gold text-decoration-none small">
-                            💬 WhatsApp Order
+                        <a href="https://wa.me/19192448634" target="_blank" rel="noopener noreferrer" class="text-gold text-decoration-none small d-flex align-items-center gap-2">
+                            <i class="bi bi-whatsapp"></i> WhatsApp Order
                         </a>
                     </div>
                     <div class="d-flex gap-3 mt-auto pt-3 border-top" style="border-color: rgba(212,175,55,0.15) !important;">

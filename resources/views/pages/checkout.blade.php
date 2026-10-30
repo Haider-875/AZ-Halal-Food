@@ -79,8 +79,8 @@
                                     <div class="p-3 border border-secondary border-opacity-25 rounded bg-dark bg-opacity-50 payment-method-card cursor-pointer" id="card_pm_cod" onclick="selectPaymentMethod('cash_on_delivery')">
                                         <div class="form-check">
                                             <input class="form-check-input" type="radio" name="payment_method" id="pm_cod" value="cash_on_delivery" checked onchange="selectPaymentMethod('cash_on_delivery')">
-                                            <label class="form-check-label text-parchment fw-semibold" for="pm_cod">
-                                                💵 Cash on Delivery / Store Pickup
+                                            <label class="form-check-label text-parchment fw-semibold d-flex align-items-center gap-2" for="pm_cod">
+                                                <i class="bi bi-cash-stack text-gold fs-5"></i> Cash on Delivery / Store Pickup
                                             </label>
                                         </div>
                                         <p class="text-parchment-muted small mb-0 ps-4">Pay in cash or card upon delivery to your doorstep, or at the store counter upon pickup.</p>

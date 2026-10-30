@@ -54,15 +54,15 @@
             <div class="d-flex flex-column gap-2 small text-parchment-dim mt-3 pt-3 border-top border-secondary border-opacity-25">
                 @if(!empty($order) && $order->payment_method)
                 <div>
-                    <strong>💳 Payment Method:</strong>
+                    <strong><i class="bi bi-credit-card text-gold me-1"></i> Payment Method:</strong>
                     <span class="text-parchment">
                         {{ $order->payment_method === 'cash_on_delivery' ? 'Cash on Delivery / Pickup' : 'Online Payment (Credit/Debit Card)' }}
                     </span>
                 </div>
                 @endif
-                <div><strong>📍 Location:</strong> 716 Slash Pine Dr, Cary, NC 27519</div>
-                <div><strong>📞 Direct Line:</strong> <a href="tel:9192448634" class="text-gold text-decoration-none">919-244-8634</a></div>
-                <div><strong>🚚 Delivery Service:</strong> Free within 10 miles. Our driver will call prior to arrival.</div>
+                <div><strong><i class="bi bi-geo-alt text-gold me-1"></i> Location:</strong> 716 Slash Pine Dr, Cary, NC 27519</div>
+                <div><strong><i class="bi bi-telephone text-gold me-1"></i> Direct Line:</strong> <a href="tel:9192448634" class="text-gold text-decoration-none">919-244-8634</a></div>
+                <div><strong><i class="bi bi-truck text-gold me-1"></i> Delivery Service:</strong> Free within 10 miles. Our driver will call prior to arrival.</div>
             </div>
         </div>
 

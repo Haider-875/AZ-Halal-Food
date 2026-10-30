@@ -110,7 +110,7 @@
                         </span>
                         @else
                         <span class="badge bg-secondary bg-opacity-25 text-parchment border border-secondary">
-                            💵 COD
+                            <i class="bi bi-cash-stack me-1"></i> COD
                         </span>
                         @endif
                     </td>

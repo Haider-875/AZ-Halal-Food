@@ -40,7 +40,7 @@
                             @if($order->payment_method === 'paypal')
                             <span class="text-info"><i class="bi bi-paypal me-1"></i> PayPal Express</span>
                             @else
-                            <span>💵 Cash on Delivery / Pickup</span>
+                            <span><i class="bi bi-cash-stack text-gold me-1"></i> Cash on Delivery / Pickup</span>
                             @endif
                         </div>
                     </div>

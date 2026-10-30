@@ -7,17 +7,17 @@
                 <div class="mb-3">
                     <span class="font-heading font-black text-gold text-uppercase fw-bold fs-4" style="letter-spacing: 0.2em;">AZ Halal Marts</span>
                 </div>
-                <p class="text-parchment-dim small pe-lg-4 mb-4" style="line-height: 1.8;">
+                <p class="text-parchment small pe-lg-4 mb-4" style="line-height: 1.8;">
                     Premium halal butchery & groceries. Serving the Cary–Triangle community with excellence, fresh Zabiha cuts, exotic South Asian seafood, and seasonal Royal Pakistani mangoes.
                 </p>
                 <div class="d-flex gap-3">
-                    <a href="https://instagram.com/azhalalmarts" target="_blank" rel="noopener noreferrer" class="text-parchment-muted fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='rgba(245,240,232,0.45)'">
+                    <a href="https://instagram.com/azhalalmarts" target="_blank" rel="noopener noreferrer" class="text-parchment fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">
                         <i class="bi bi-instagram"></i>
                     </a>
-                    <a href="https://facebook.com/AZHALALMARTS" target="_blank" rel="noopener noreferrer" class="text-parchment-muted fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='rgba(245,240,232,0.45)'">
+                    <a href="https://facebook.com/AZHALALMARTS" target="_blank" rel="noopener noreferrer" class="text-parchment fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">
                         <i class="bi bi-facebook"></i>
                     </a>
-                    <a href="https://wa.me/19192448634" target="_blank" rel="noopener noreferrer" class="text-parchment-muted fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='#D4AF37'" onmouseout="this.style.color='rgba(245,240,232,0.45)'">
+                    <a href="https://wa.me/19192448634" target="_blank" rel="noopener noreferrer" class="text-parchment fs-5 text-decoration-none" style="transition: color 0.3s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">
                         <i class="bi bi-whatsapp"></i>
                     </a>
                 </div>
@@ -27,12 +27,12 @@
             <div class="col-lg-2 col-md-6" data-aos="fade-up" data-aos-delay="100">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Navigate</h6>
                 <ul class="list-unstyled d-flex flex-column gap-2 small">
-                    <li><a href="{{ route('home') }}" class="text-parchment-dim text-decoration-none hover-gold">Home</a></li>
-                    <li><a href="{{ route('about') }}" class="text-parchment-dim text-decoration-none hover-gold">About Us</a></li>
-                    <li><a href="{{ route('products') }}" class="text-parchment-dim text-decoration-none hover-gold">Products & Pricing</a></li>
-                    <li><a href="{{ route('catalog') }}" class="text-parchment-dim text-decoration-none hover-gold">Catalog</a></li>
-                    <li><a href="{{ route('gallery') }}" class="text-parchment-dim text-decoration-none hover-gold">Gallery</a></li>
-                    <li><a href="{{ route('contact') }}" class="text-parchment-dim text-decoration-none hover-gold">Contact</a></li>
+                    <li><a href="{{ route('home') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">Home</a></li>
+                    <li><a href="{{ route('about') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">About Us</a></li>
+                    <li><a href="{{ route('products') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">Products & Pricing</a></li>
+                    <li><a href="{{ route('catalog') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">Catalog</a></li>
+                    <li><a href="{{ route('gallery') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">Gallery</a></li>
+                    <li><a href="{{ route('contact') }}" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">Contact</a></li>
                 </ul>
             </div>
 
@@ -40,43 +40,43 @@
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="150">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Our Specialties</h6>
                 <ul class="list-unstyled d-flex flex-column gap-2 small">
-                    <li class="text-parchment-dim">100% Hand-Slaughtered Zabiha Beef</li>
-                    <li class="text-parchment-dim">Fresh Whole & Cut Goat / Lamb</li>
-                    <li class="text-parchment-dim">Rohu, Katla & Hilsa (Ilish) Seafood</li>
-                    <li class="text-parchment-dim">Royal Pakistani Mangoes (Chaunsa & Sindhri)</li>
-                    <li class="text-parchment-dim">Aged Basmati Rice & Specialty Spices</li>
-                    <li class="text-parchment-dim">Wholesale & Restaurant Supply</li>
+                    <li class="text-parchment">100% Hand-Slaughtered Zabiha Beef</li>
+                    <li class="text-parchment">Fresh Whole & Cut Goat / Lamb</li>
+                    <li class="text-parchment">Rohu, Katla & Hilsa (Ilish) Seafood</li>
+                    <li class="text-parchment">Royal Pakistani Mangoes (Chaunsa & Sindhri)</li>
+                    <li class="text-parchment">Aged Basmati Rice & Specialty Spices</li>
+                    <li class="text-parchment">Wholesale & Restaurant Supply</li>
                 </ul>
             </div>
 
             <!-- Contact & Hours Info -->
             <div class="col-lg-3 col-md-6" data-aos="fade-up" data-aos-delay="200">
                 <h6 class="text-gold text-uppercase small fw-bold mb-4" style="letter-spacing: 0.25em;">Store Info</h6>
-                <p class="text-parchment-dim small mb-2">
+                <p class="text-parchment small mb-2">
                     <i class="bi bi-geo-alt text-gold me-2"></i> 716 Slash Pine Dr, Cary, NC 27519
                 </p>
-                <p class="text-parchment-dim small mb-2">
-                    <i class="bi bi-telephone text-gold me-2"></i> <a href="tel:9192448634" class="text-parchment-dim text-decoration-none">919-244-8634</a>
+                <p class="text-parchment small mb-2">
+                    <i class="bi bi-telephone text-gold me-2"></i> <a href="tel:9192448634" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">919-244-8634</a>
                 </p>
-                <p class="text-parchment-dim small mb-3">
-                    <i class="bi bi-telephone text-gold me-2"></i> <a href="tel:9193441125" class="text-parchment-dim text-decoration-none">919-344-1125</a>
+                <p class="text-parchment small mb-3">
+                    <i class="bi bi-telephone text-gold me-2"></i> <a href="tel:9193441125" class="text-parchment text-decoration-none" style="transition: color 0.2s;" onmouseover="this.style.color='var(--gold)'" onmouseout="this.style.color='var(--parchment)'">919-344-1125</a>
                 </p>
-                <p class="text-parchment-muted small">
-                    <strong class="text-parchment">Hours:</strong> Mon–Sun: 10:00 AM – 8:00 PM (Fri–Sat until 8:30 PM)
+                <p class="text-parchment small">
+                    <strong class="text-white">Hours:</strong> Mon–Sun: 10:00 AM – 8:00 PM (Fri–Sat until 8:30 PM)
                 </p>
             </div>
 
         </div>
 
         <!-- Copyright Sub-footer -->
-        <div class="pt-4 border-top d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3 small text-parchment-muted" style="border-color: rgba(212,175,55,0.15) !important;">
+        <div class="pt-4 border-top d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3 small text-parchment" style="border-color: rgba(212,175,55,0.15) !important;">
             <div class="text-center text-lg-start">
-                <span>© {{ date('Y') }} <strong class="text-parchment fw-semibold">AZ Halal Marts</strong>. All rights reserved.</span>
+                <span>© {{ date('Y') }} <strong class="text-white fw-semibold">AZ Halal Marts</strong>. All rights reserved.</span>
             </div>
             <div class="text-center">
                 <span>Designed by <a href="https://azorasolution.com/" target="_blank" rel="noopener noreferrer" class="text-gold fw-semibold text-decoration-none" style="transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Azora Solutions</a></span>
             </div>
-            <div class="text-gold-light opacity-75 text-center text-lg-end">
+            <div class="text-gold-light opacity-90 text-center text-lg-end">
                 <span>716 Slash Pine Dr, West Cary, NC · 100% Zabiha Halal Certified</span>
             </div>
         </div>

@@ -23,9 +23,9 @@
             --admin-card-hover: #152B15;
             --gold: #D4AF37;
             --gold-light: #E8C84A;
-            --parchment: #F5F0E8;
-            --parchment-dim: rgba(245, 240, 232, 0.7);
-            --parchment-muted: rgba(245, 240, 232, 0.45);
+            --parchment: #FFFFFF;
+            --parchment-dim: #FFFFFF;
+            --parchment-muted: rgba(255, 255, 255, 0.90);
             --border-gold: rgba(212, 175, 55, 0.2);
             --font-heading: 'Playfair Display', Georgia, serif;
             --font-body: 'Inter', system-ui, sans-serif;

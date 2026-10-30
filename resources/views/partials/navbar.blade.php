@@ -55,7 +55,8 @@
 
         <div class="pt-4 border-top border-secondary border-opacity-25">
             <a href="tel:9192448634" class="btn-gold-outline w-100 text-center mb-2">
-                <span>📞 919-244-8634</span>
+                <i class="bi bi-telephone-fill fs-6"></i>
+                <span>919-244-8634</span>
             </a>
         </div>
     </div>

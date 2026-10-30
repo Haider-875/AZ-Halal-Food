@@ -97,19 +97,19 @@
         @csrf
         
         <div class="mb-3">
-            <label for="email" class="form-label small text-uppercase fw-semibold" style="letter-spacing: 0.1em; color: rgba(245,240,232,0.7);">Email Address</label>
+            <label for="email" class="form-label small text-uppercase fw-semibold" style="letter-spacing: 0.1em; color: #FFFFFF;">Email Address</label>
             <input type="email" name="email" id="email" class="form-control gold-input" value="{{ old('email', 'admin@azhalal.com') }}" required autofocus>
         </div>
 
         <div class="mb-3">
-            <label for="password" class="form-label small text-uppercase fw-semibold" style="letter-spacing: 0.1em; color: rgba(245,240,232,0.7);">Password</label>
+            <label for="password" class="form-label small text-uppercase fw-semibold" style="letter-spacing: 0.1em; color: #FFFFFF;">Password</label>
             <input type="password" name="password" id="password" class="form-control gold-input" value="password123" required>
         </div>
 
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div class="form-check">
                 <input class="form-check-input" type="checkbox" name="remember" id="remember" checked>
-                <label class="form-check-label small" for="remember" style="color: rgba(245,240,232,0.7);">Remember Me</label>
+                <label class="form-check-label small" for="remember" style="color: #FFFFFF;">Remember Me</label>
             </div>
             <a href="{{ route('home') }}" class="small text-decoration-none" style="color: #D4AF37;">Back to Store</a>
         </div>

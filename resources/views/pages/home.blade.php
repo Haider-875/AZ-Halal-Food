@@ -179,8 +179,8 @@
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7;">
                             Dry-aged, heavily marbled cut from the rib section. Rich flavor, ideal for grilling, searing, and special occasions.
                         </p>
-                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none d-flex align-items-center gap-2" style="letter-spacing: 0.2em; font-size: 11px;">
-                            View Details <i class="bi bi-arrow-right"></i>
+                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none" style="letter-spacing: 0.2em; font-size: 11px;">
+                            View Details
                         </a>
                     </div>
                 </div>
@@ -199,8 +199,8 @@
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7;">
                             Whole halal goat, freshly slaughtered. Custom hand-cut to your exact specification. Perfect for biryani, curry, and feasts.
                         </p>
-                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none d-flex align-items-center gap-2" style="letter-spacing: 0.2em; font-size: 11px;">
-                            View Details <i class="bi bi-arrow-right"></i>
+                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none" style="letter-spacing: 0.2em; font-size: 11px;">
+                            View Details
                         </a>
                     </div>
                 </div>
@@ -219,8 +219,8 @@
                         <p class="text-parchment-dim small flex-grow-1 mb-4" style="line-height: 1.7;">
                             The finest Indian and Bangladeshi freshwater fish varieties. Prized for traditional fish curries, mustard gravy, and fry recipes.
                         </p>
-                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none d-flex align-items-center gap-2" style="letter-spacing: 0.2em; font-size: 11px;">
-                            View Details <i class="bi bi-arrow-right"></i>
+                        <a href="{{ route('products') }}" class="text-gold text-uppercase fw-semibold small text-decoration-none" style="letter-spacing: 0.2em; font-size: 11px;">
+                            View Details
                         </a>
                     </div>
                 </div>

@@ -8,9 +8,9 @@
   --gold-light: #E8C84A;
   --gold-bright: #F3E5AB;
   --saffron: #FFCA28;
-  --parchment: #F5F0E8;
-  --parchment-dim: rgba(245, 240, 232, 0.65);
-  --parchment-muted: rgba(245, 240, 232, 0.42);
+  --parchment: #FFFFFF;
+  --parchment-dim: #FFFFFF;
+  --parchment-muted: rgba(255, 255, 255, 0.90);
   --border-gold: rgba(212, 175, 55, 0.2);
   --border-gold-bright: rgba(212, 175, 55, 0.5);
   --font-heading: 'Playfair Display', Georgia, serif;
@@ -169,7 +169,7 @@ p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, 
 }
 
 .nav-link-custom {
-  color: rgba(245, 240, 232, 0.65);
+  color: #FFFFFF;
   font-size: 11px;
   letter-spacing: 0.25em;
   text-transform: uppercase;
@@ -234,7 +234,7 @@ p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, 
   font-weight: 700;
   text-transform: uppercase;
   letter-spacing: 0.18em;
-  color: rgba(245, 240, 232, 0.7);
+  color: #FFFFFF;
   text-decoration: none;
   padding: 1rem 0;
   display: block;
