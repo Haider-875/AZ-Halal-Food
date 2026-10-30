@@ -293,10 +293,12 @@
             </p>
             <div class="d-flex flex-column flex-sm-row gap-3 justify-content-center" data-aos="zoom-in-up" data-aos-delay="300">
                 <a href="tel:9192448634" class="btn-gold-outline">
-                    <span>📞 919-244-8634</span>
+                    <i class="bi bi-telephone-fill fs-6"></i>
+                    <span>919-244-8634</span>
                 </a>
                 <a href="https://wa.me/19192448634" target="_blank" rel="noopener noreferrer" class="btn-gold-outline">
-                    <span>💬 WhatsApp Order</span>
+                    <i class="bi bi-whatsapp fs-6"></i>
+                    <span>WhatsApp Order</span>
                 </a>
             </div>
         </div>

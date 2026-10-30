@@ -69,9 +69,16 @@
         </div>
 
         <!-- Copyright Sub-footer -->
-        <div class="pt-4 border-top d-flex flex-column flex-md-row align-items-center justify-content-between gap-3 small text-parchment-muted" style="border-color: rgba(212,175,55,0.15) !important;">
-            <span>© {{ date('Y') }} Copyright  Az Halal all rights reserved. Designed By <a class="link fw-bold"  href="https://azorasolution.com/">Azora Solutions.</a></span>
-            <span class="text-gold-light opacity-75">716 Slash Pine Dr, West Cary, NC · 100% Zabiha Halal Certified</span>
+        <div class="pt-4 border-top d-flex flex-column flex-lg-row align-items-center justify-content-between gap-3 small text-parchment-muted" style="border-color: rgba(212,175,55,0.15) !important;">
+            <div class="text-center text-lg-start">
+                <span>© {{ date('Y') }} <strong class="text-parchment fw-semibold">AZ Halal Marts</strong>. All rights reserved.</span>
+            </div>
+            <div class="text-center">
+                <span>Designed by <a href="https://azorasolution.com/" target="_blank" rel="noopener noreferrer" class="text-gold fw-semibold text-decoration-none" style="transition: opacity 0.2s;" onmouseover="this.style.opacity='0.8'" onmouseout="this.style.opacity='1'">Azora Solutions</a></span>
+            </div>
+            <div class="text-gold-light opacity-75 text-center text-lg-end">
+                <span>716 Slash Pine Dr, West Cary, NC · 100% Zabiha Halal Certified</span>
+            </div>
         </div>
     </div>
 </footer>
