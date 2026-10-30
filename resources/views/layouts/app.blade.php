@@ -25,7 +25,7 @@
     <link rel="stylesheet" href="/css/fonts.css">
 
     <!-- Custom Theme CSS (Critical theme styles) -->
-    <link rel="stylesheet" href="/css/custom.css">
+    <link rel="stylesheet" href="/css/custom.css?v={{ file_exists(public_path('css/custom.css')) ? filemtime(public_path('css/custom.css')) : time() }}">
 
     <!-- Bootstrap Icons (Non-render-blocking async load) -->
     <link rel="stylesheet" href="/css/bootstrap-icons.min.css" media="print" onload="this.media='all'">

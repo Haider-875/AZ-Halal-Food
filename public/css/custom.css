@@ -10,7 +10,7 @@
   --saffron: #FFCA28;
   --parchment: #FFFFFF;
   --parchment-dim: #FFFFFF;
-  --parchment-muted: rgba(255, 255, 255, 0.90);
+  --parchment-muted: #FFFFFF;
   --border-gold: rgba(212, 175, 55, 0.2);
   --border-gold-bright: rgba(212, 175, 55, 0.5);
   --font-heading: 'Playfair Display', Georgia, serif;
@@ -29,9 +29,9 @@ html {
 
 body {
   background-color: var(--obsidian);
-  color: var(--parchment);
+  color: #FFFFFF;
   font-family: var(--font-body);
-  font-weight: 300;
+  font-weight: 400;
   overflow-x: hidden;
   margin: 0;
   padding: 0;
@@ -72,11 +72,12 @@ h3, h4, h5, h6 {
   font-weight: 600;
 }
 
-/* Paragraphs & Body Copy: Thin & Refined */
+/* Paragraphs & Body Copy: Crisp & Clear */
 p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, .card-desc {
-  font-weight: 300;
+  font-weight: 400;
   letter-spacing: 0.02em;
   line-height: 1.8;
+  color: #FFFFFF;
 }
 
 .fw-light {
@@ -96,15 +97,15 @@ p, .text-parchment-dim, .text-parchment-muted, .section-desc, .lead, li, label, 
 }
 
 .text-parchment {
-  color: var(--parchment) !important;
+  color: #FFFFFF !important;
 }
 
 .text-parchment-dim {
-  color: var(--parchment-dim) !important;
+  color: #FFFFFF !important;
 }
 
 .text-parchment-muted {
-  color: var(--parchment-muted) !important;
+  color: #FFFFFF !important;
 }
 
 .section-label {
